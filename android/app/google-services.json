@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "817390492252",
+    "project_id": "audio-quan-hon-ngon-tinh",
+    "storage_bucket": "audio-quan-hon-ngon-tinh.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817390492252:android:dbdec40d9c0fd8582f2499",
+        "android_client_info": {
+          "package_name": "hit.coder.ttsaudioquanhonngontinh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817390492252-thdifhslip712ia339hlm4lul7bj8qm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hit.coder.ttsaudioquanhonngontinh",
+            "certificate_hash": "fe475e54201d40ec0535b69833bcfc69ea2284dc"
+          }
+        },
+        {
+          "client_id": "817390492252-0douf6rkcbl55nbuk35gh441jti1fnj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARxlvRhvDO_-xDL-vn6Rsk_PB9Kh09Cxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817390492252-0douf6rkcbl55nbuk35gh441jti1fnj0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "817390492252-2aeke0rivo4pa5bls3jo52hm3ukqtrvt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "hit.coder.ttsaudioquanhonngontinh"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

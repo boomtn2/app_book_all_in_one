@@ -1,0 +1,22 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "audio-quan-hon-ngon-tinh",
+                    "appId": "1:817390492252:android:dbdec40d9c0fd8582f2499",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "audio-quan-hon-ngon-tinh",
+                    "configurations": {
+                        "android": "1:817390492252:android:dbdec40d9c0fd8582f2499",
+                        "ios": "1:817390492252:ios:23aff5ccd84f94d52f2499"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,80 @@
+name: audio_youtube
+description: "A new Flutter project."
+ 
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+ 
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  get_cli: ^1.8.1
+  get: ^4.6.6
+  dio: ^5.6.0
+  shared_preferences: ^2.3.2
+  logger: ^2.4.0
+  pretty_dio_logger: ^1.4.0
+  fluttertoast: ^8.2.8
+  flutter_svg: ^2.0.10+1
+  firebase_core: ^3.3.0
+  google_sign_in: ^6.2.1
+  firebase_auth: ^5.1.4
+  card_swiper: ^3.0.1
+  firebase_messaging: ^15.1.0
+  cached_network_image: ^3.3.1
+  youtube_player_flutter: ^8.1.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.11
+  flutter_gen_runner: 5.7.0
+  flutter_localizations:
+    sdk: flutter
+
+ 
+flutter_gen:
+  output: lib/gen/ # Optional (default: lib/gen/)
+  line_length: 80 # Optional (default: 80)
+
+  # Optional
+  integrations:
+    flutter_svg: true
+    flare_flutter: true
+    rive: true
+    lottie: true
+
+
+flutter:
+ 
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+    - family: Afacad
+      fonts:
+        - asset: assets/fonts/afacad/Afacad-Regular.ttf
+          weight: 200
+        - asset: assets/fonts/afacad/Afacad-Medium.ttf
+          weight: 300
+        - asset: assets/fonts/afacad/Afacad-MediumItalic.ttf
+          weight: 300
+          style: italic  
+        - asset: assets/fonts/afacad/Afacad-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/afacad/Afacad-SemiBoldItalic.ttf
+          weight: 600
+          style: italic 
+        - asset: assets/fonts/afacad/Afacad-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/afacad/Afacad-BoldItalic.ttf
+          weight: 700
+          style: italic  
+        - asset: assets/fonts/afacad/Afacad-Italic.ttf
+          style: italic  
+   
