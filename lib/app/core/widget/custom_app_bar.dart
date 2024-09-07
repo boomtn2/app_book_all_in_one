@@ -9,12 +9,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final bool isBackButtonEnabled;
 
-  CustomAppBar({
-    Key? key,
+  const CustomAppBar({
+    super.key,
     required this.appBarTitleText,
     this.actions,
     this.isBackButtonEnabled = true,
-  }) : super(key: key);
+  });
 
   @override
   Size get preferredSize => AppBar().preferredSize;

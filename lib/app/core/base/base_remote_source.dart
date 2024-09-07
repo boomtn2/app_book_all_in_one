@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../const.dart';
 import '/app/network/dio_provider.dart';

@@ -10,20 +10,6 @@ class LoginController extends GetxController {
   final TextEditingController cAccount = TextEditingController();
   final TextEditingController cPass = TextEditingController();
   String errorAuth = '';
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   Future<UserCredential?> _authenticateWithEmail({
     required String emailAddress,

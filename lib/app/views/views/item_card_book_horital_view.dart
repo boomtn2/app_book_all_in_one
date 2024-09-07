@@ -1,3 +1,4 @@
+import 'package:audio_youtube/app/core/const.dart';
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
 
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import '../../data/model/book_model.dart';
 import 'cache_image_view.dart';
 
 class ItemCardBookHoritalView extends StatelessWidget {
-  const ItemCardBookHoritalView({super.key, this.book});
+  const ItemCardBookHoritalView(
+      {super.key, this.book, required this.openDetail});
   final BookModel? book;
+  final Function(BookModel) openDetail;
   @override
   Widget build(BuildContext context) {
     return book == null
@@ -19,7 +22,9 @@ class ItemCardBookHoritalView extends StatelessWidget {
             width: 5,
           ))
         : InkWell(
-            onTap: () {},
+            onTap: () {
+              if (book != null) openDetail(book!);
+            },
             child: SizedBox(
               height: 125,
               width: 220,
@@ -28,12 +33,34 @@ class ItemCardBookHoritalView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (book?.img != null)
-                    CacheImage(
-                      height: 125,
-                      width: 80,
-                      borderRadius: AppBorders.borderCardItem,
-                      url: book?.img,
-                    ),
+                    book!.type.contains(Const.typePlayList)
+                        ? Stack(
+                            children: [
+                              const Card(
+                                color: Colors.grey,
+                                child: SizedBox(
+                                  height: 125,
+                                  width: 80,
+                                ),
+                              ),
+                              Positioned(
+                                top: 5,
+                                right: 5,
+                                child: CacheImage(
+                                  height: 120,
+                                  width: 70,
+                                  borderRadius: AppBorders.borderCardItem,
+                                  url: book?.img,
+                                ),
+                              ),
+                            ],
+                          )
+                        : CacheImage(
+                            height: 125,
+                            width: 80,
+                            borderRadius: AppBorders.borderCardItem,
+                            url: book?.img,
+                          ),
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,

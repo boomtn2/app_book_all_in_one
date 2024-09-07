@@ -10,12 +10,12 @@ class ElevatedContainer extends StatelessWidget {
   final double borderRadius;
 
   const ElevatedContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.bgColor = AppColors.pageBackground,
     this.padding,
     this.borderRadius = AppValues.smallRadius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

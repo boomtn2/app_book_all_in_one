@@ -13,6 +13,5 @@ class BackGroundLoginPage extends StatelessWidget {
         fit: BoxFit.fill,
       ),
     );
-    ;
   }
 }

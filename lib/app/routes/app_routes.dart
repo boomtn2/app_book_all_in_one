@@ -9,6 +9,7 @@ abstract class Routes {
   static const READ_BOOK = _Paths.READ_BOOK;
   static const SEARCH = _Paths.SEARCH;
   static const AUDIO = _Paths.AUDIO;
+  static const PLAYER_YOUTUBE = _Paths.PLAYER_YOUTUBE;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const READ_BOOK = '/read-book';
   static const SEARCH = '/search';
   static const AUDIO = '/audio';
+  static const PLAYER_YOUTUBE = '/player-youtube';
 }

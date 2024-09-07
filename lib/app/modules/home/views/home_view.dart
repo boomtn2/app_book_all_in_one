@@ -1,17 +1,19 @@
 import 'package:audio_youtube/app/core/extension/list_extention.dart';
+import 'package:audio_youtube/app/core/extension/num_extention.dart';
 import 'package:audio_youtube/app/core/values/app_values.dart';
 import 'package:audio_youtube/app/core/widget/loading.dart';
-
 import 'package:audio_youtube/app/data/model/book_model.dart';
 import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
+import 'package:audio_youtube/app/modules/player_youtube/views/player_youtube_view.dart';
+import 'package:audio_youtube/app/views/views/cache_image_view.dart';
 import 'package:audio_youtube/app/views/views/item_card_book_view.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../data_test/data_test.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../core/values/app_borders.dart';
 import '../../../core/values/text_styles.dart';
+import '../../../data/repository/player_youtube_repository.dart';
 import '../../../views/folder/tabbar_folder.dart';
 import '../../../views/views/item_card_book_horital_view.dart';
 
@@ -20,22 +22,178 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          _itemAppBar(context),
-          _space(),
-          _title(),
-          Obx(
-            () => _itemNew(
-                controller.videoYoutube, MediaQuery.sizeOf(context).height),
+    return Obx(
+      () => Scaffold(
+        body: PopScope(
+          onPopInvoked: (didPop) {
+            // controller.panelController.hide();
+          },
+          child: SlidingUpPanel(
+            maxHeight: MediaQuery.sizeOf(context).height,
+            minHeight: 80,
+            parallaxEnabled: true,
+            parallaxOffset: .5,
+            controller: controller.panelController,
+            defaultPanelState: PanelState.CLOSED,
+            body: _body(context),
+            onPanelClosed: () {
+              controller.hideBottomNavigator();
+            },
+            onPanelOpened: () {
+              controller.showBottomNavigator();
+
+              //show full
+            },
+            onPanelSlide: (position) {
+              // print('onPanelSlide');
+            },
+            collapsed: Container(
+              color: Colors.black,
+              height: 80,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  CacheImage(
+                    url: PlayerYoutubeRepository.instance.bookListen?.img ?? '',
+                    borderRadius: BorderRadius.circular(4),
+                    height: 80,
+                    width: 100,
+                  ),
+                  10.w,
+                  Expanded(
+                    child: Text(
+                      PlayerYoutubeRepository.instance.bookListen?.title ?? '',
+                      maxLines: 1,
+                      style: titleStyleWhite,
+                    ),
+                  ),
+                  10.w,
+                  IconButton(
+                      onPressed: () {
+                        controller.closedPannel();
+                      },
+                      icon: const Icon(
+                        Icons.pause,
+                        color: Colors.white,
+                      )),
+                  20.w,
+                ],
+              ),
+            ),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(18.0),
+                topRight: Radius.circular(18.0)),
+            panelBuilder: (sc) => PlayerYoutubeView(
+              sc: sc,
+            ),
           ),
-        ],
+        ),
+        bottomNavigationBar: controller.isHideBottomNavigator.value
+            ? null
+            : Container(
+                color: Colors.yellow,
+                child: SafeArea(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: IconButton(
+                          icon: Icon(Icons.home),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                          icon: Icon(Icons.person_2_outlined),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                          icon: Icon(Icons.favorite),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }
 
-  Widget _title() {
+  Widget _body(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        _itemAppBar(context),
+        _space(),
+        _title({'Đề xuất': true, 'Chọn lọc': false, 'Đã tải': false}),
+        Obx(
+          () => _itemNew(controller.videoYoutube,
+              MediaQuery.sizeOf(context).height, controller.openDetail),
+        ),
+        _space(),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: AppValues.paddingLeft, right: AppValues.paddingRight),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Truyện Dịch',
+                      style: titleStyle,
+                    ),
+                  ],
+                ),
+                5.h,
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      child: Row(
+                        children: [
+                          for (int i = 0;
+                              i < controller.videoRSS.length / 2;
+                              ++i)
+                            Row(
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ItemCardBookView(
+                                      book: controller.videoRSS
+                                          .getNullIndex(i * 2),
+                                    ),
+                                    10.h,
+                                    ItemCardBookView(
+                                      book: controller.videoRSS
+                                          .getNullIndex((i * 2) + 1),
+                                    ),
+                                  ],
+                                ),
+                                5.w,
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        _space(),
+        _itemListBook(context),
+      ],
+    );
+  }
+
+  Widget _title(Map<String, bool> tabs) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -44,134 +202,10 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TabbarFolder(
-              tabs: dataTestNew,
+              tabs: tabs,
               fct: (value) {},
             ),
             5.h,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _itemCategory(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: const EdgeInsets.only(
-            left: AppValues.paddingLeft, right: AppValues.paddingRight),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TabbarFolder(
-              tabs: dataTestCategory,
-              fct: (value) {},
-            ),
-            5.h,
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  borderRadius: AppBorders.borderCardItem,
-                  border: const Border(
-                    bottom: BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    left: BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    right: BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                  )),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                    ],
-                  ),
-                  10.h,
-                  _buttonLoadmore(),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _itemWebsite(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: const EdgeInsets.only(
-            left: AppValues.paddingLeft, right: AppValues.paddingRight),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TabbarFolder(
-              tabs: dataTestWebsite,
-              fct: (value) {},
-            ),
-            5.h,
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  borderRadius: AppBorders.borderCardItem,
-                  border: const Border(
-                    bottom: BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    left: BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    right: BorderSide(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                  )),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                    ],
-                  ),
-                  5.h,
-                  Row(
-                    children: [
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                      10.w,
-                      const ItemCardBookView(),
-                    ],
-                  ),
-                  10.h,
-                  _buttonLoadmore(),
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -333,7 +367,8 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _itemNew(List<BookModel> ytb, double sizeMax) {
+  Widget _itemNew(
+      List<BookModel> ytb, double sizeMax, Function(BookModel) openDetail) {
     return SliverToBoxAdapter(
         child: ytb.isEmpty
             ? const Loading()
@@ -374,10 +409,12 @@ class HomeView extends GetView<HomeController> {
                                       children: [
                                         ItemCardBookHoritalView(
                                           book: ytb.getNullIndex(i * 2),
+                                          openDetail: openDetail,
                                         ),
                                         10.h,
                                         ItemCardBookHoritalView(
                                           book: ytb.getNullIndex((i * 2) + 1),
+                                          openDetail: openDetail,
                                         ),
                                       ],
                                     ),
@@ -564,15 +601,6 @@ class SliverExpandedView extends StatelessWidget {
       ),
     );
   }
-}
-
-extension SizedBoxView on num {
-  Widget get h => SizedBox(
-        height: toDouble(),
-      );
-  Widget get w => SizedBox(
-        width: toDouble(),
-      );
 }
 
 class ImageBookView extends StatelessWidget {

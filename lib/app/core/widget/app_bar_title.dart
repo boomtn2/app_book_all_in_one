@@ -5,7 +5,7 @@ import '/app/core/values/text_styles.dart';
 class AppBarTitle extends StatelessWidget {
   final String text;
 
-  const AppBarTitle({Key? key, required this.text}) : super(key: key);
+  const AppBarTitle({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

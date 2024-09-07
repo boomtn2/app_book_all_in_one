@@ -67,7 +67,7 @@ abstract class BaseController extends GetxController {
     Function? onStart,
     Function? onComplete,
   }) async {
-    Exception? _exception;
+    Exception? exception;
 
     onStart == null ? showLoading() : onStart();
 
@@ -79,35 +79,35 @@ abstract class BaseController extends GetxController {
       onComplete == null ? hideLoading() : onComplete();
 
       return response;
-    } on ServiceUnavailableException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message);
-    } on UnauthorizedException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message);
-    } on TimeoutException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message ?? 'Timeout exception');
-    } on NetworkException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message);
-    } on JsonFormatException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message);
-    } on NotFoundException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message);
-    } on ApiException catch (exception) {
-      _exception = exception;
-    } on AppException catch (exception) {
-      _exception = exception;
-      showErrorMessage(exception.message);
+    } on ServiceUnavailableException catch (e) {
+      exception = e;
+      showErrorMessage(e.message);
+    } on UnauthorizedException catch (e) {
+      exception = e;
+      showErrorMessage(e.message);
+    } on TimeoutException catch (e) {
+      exception = e;
+      showErrorMessage(e.message ?? 'Timeout exception');
+    } on NetworkException catch (e) {
+      exception = e;
+      showErrorMessage(e.message);
+    } on JsonFormatException catch (e) {
+      exception = e;
+      showErrorMessage(e.message);
+    } on NotFoundException catch (e) {
+      exception = e;
+      showErrorMessage(e.message);
+    } on ApiException catch (e) {
+      exception = e;
+    } on AppException catch (e) {
+      exception = e;
+      showErrorMessage(e.message);
     } catch (error) {
-      _exception = AppException(message: "$error");
+      exception = AppException(message: "$error");
       logger.e("Controller>>>>>> error $error");
     }
 
-    if (onError != null) onError(_exception);
+    if (onError != null) onError(exception);
 
     onComplete == null ? hideLoading() : onComplete();
   }

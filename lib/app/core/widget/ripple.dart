@@ -9,12 +9,12 @@ class Ripple extends StatelessWidget {
   final double rippleRadius;
 
   const Ripple({
-    Key? key,
+    super.key,
     this.child,
     required this.onTap,
     this.rippleColor = AppColors.defaultRippleColor,
     this.rippleRadius = AppValues.smallRadius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

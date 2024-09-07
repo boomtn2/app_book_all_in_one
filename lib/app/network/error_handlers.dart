@@ -67,7 +67,6 @@ Exception _parseDioErrorResponse(DioException dioError) {
       // Print an emoji for each log message
     ),
   );
-  ;
 
   int statusCode = dioError.response?.statusCode ?? -1;
   String? status;

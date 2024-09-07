@@ -3,14 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AssetImageView extends StatelessWidget {
   const AssetImageView({
-    Key? key,
+    super.key,
     required this.fileName,
     this.height,
     this.width,
     this.color,
     this.scale,
     this.fit,
-  }) : super(key: key);
+  });
 
   final String fileName;
   final double? height;
@@ -42,7 +42,9 @@ class AssetImageView extends StatelessWidget {
           path,
           height: height,
           width: width,
-          colorFilter: color == null? null: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+          colorFilter: color == null
+              ? null
+              : ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
           fit: fit ?? BoxFit.contain,
         );
       case "png":

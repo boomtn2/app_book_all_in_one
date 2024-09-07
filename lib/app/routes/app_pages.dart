@@ -8,6 +8,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/player_youtube/bindings/player_youtube_binding.dart';
+import '../modules/player_youtube/views/player_youtube_view.dart';
 import '../modules/read_book/bindings/read_book_binding.dart';
 import '../modules/read_book/views/read_book_view.dart';
 import '../modules/search/bindings/search_binding.dart';
@@ -51,5 +53,10 @@ class AppPages {
       page: () => const AudioView(),
       binding: AudioBinding(),
     ),
+    // GetPage(
+    //   name: _Paths.PLAYER_YOUTUBE,
+    //   page: () => const PlayerYoutubeView(),
+    //   binding: PlayerYoutubeBinding(),
+    // ),
   ];
 }

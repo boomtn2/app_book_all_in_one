@@ -13,12 +13,13 @@ class ItemCardBookView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return book == null
-        ? const Expanded(
-            child: SizedBox(
-            height: 5,
-            width: 5,
-          ))
-        : Expanded(
+        ? const SizedBox(
+            height: 180,
+            width: 100,
+          )
+        : SizedBox(
+            height: 180,
+            width: 100,
             child: InkWell(
               onTap: () {},
               child: Column(
@@ -27,8 +28,8 @@ class ItemCardBookView extends StatelessWidget {
                 children: [
                   if (book?.img != null)
                     CacheImage(
-                      height: 100,
-                      width: 180,
+                      height: 130,
+                      width: 90,
                       borderRadius: AppBorders.borderCardItem,
                       url: book?.img,
                     ),

@@ -1,18 +1,18 @@
-class YoutubeSearchParamModel {
+class YoutubePlaylistParamModel {
   String part;
   String? channelId;
-  String? q;
+  String playlistId;
   String key;
   String type;
   String order;
   int maxResults;
 
-  YoutubeSearchParamModel(
+  YoutubePlaylistParamModel(
       {this.part = 'snippet',
-      required this.q,
+      required this.playlistId,
       this.channelId,
       this.key = 'AIzaSyCUXDfE40L7OY9OqYsKOfQP6ivLWGjc4sg',
-      this.type = 'playlist',
+      this.type = 'video',
       this.order = 'date',
       this.maxResults = 50});
   Map<String, dynamic>? toJson() {
@@ -21,12 +21,9 @@ class YoutubeSearchParamModel {
     if (channelId != null) {
       data['channelId'] = channelId ?? '';
     }
-    if (q != null) {
-      data['q'] = q;
-    }
-
+    data['playlistId'] = playlistId;
     data['key'] = key;
-    // data['type'] = type;
+    data['type'] = type;
     data['order'] = order;
     data['maxResults'] = maxResults;
 
