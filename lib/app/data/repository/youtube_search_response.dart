@@ -122,16 +122,22 @@ class Snippet {
   });
 
   factory Snippet.fromJson(Map<String, dynamic> json) => Snippet(
-        publishedAt: DateTime.tryParse(json["publishedAt"] ?? ''),
+        publishedAt: json["publishedAt"] == null
+            ? null
+            : DateTime.tryParse(json["publishedAt"]),
         channelId: json["channelId"],
         title: json["title"],
         description: json["description"],
-        thumbnails: Thumbnails.fromJson(json["thumbnails"]),
-        channelTitle: json["channelTitle"] ?? '',
-        liveBroadcastContent: json["liveBroadcastContent"] ?? '',
-        publishTime: DateTime.tryParse(json["publishTime"] ?? ''),
+        thumbnails: json["thumbnails"] == null
+            ? null
+            : Thumbnails.fromJson(json["thumbnails"]),
+        channelTitle: json["channelTitle"],
+        liveBroadcastContent: json["liveBroadcastContent"],
+        publishTime: json["publishTime"] == null
+            ? null
+            : DateTime.tryParse(json["publishTime"]),
         resourceId: json["resourceId"] != null
-            ? ResourceId.fromJson(json["resourceId"] ?? '')
+            ? ResourceId.fromJson(json["resourceId"])
             : null,
       );
 
@@ -158,11 +164,13 @@ class Thumbnails {
     required this.high,
   });
 
-  factory Thumbnails.fromJson(Map<String, dynamic> json) => Thumbnails(
-        thumbnailsDefault: Default.fromJson(json["default"]),
-        medium: Default.fromJson(json["medium"]),
-        high: Default.fromJson(json["high"]),
-      );
+  factory Thumbnails.fromJson(Map<String, dynamic> json) => json.isEmpty
+      ? Thumbnails(thumbnailsDefault: null, medium: null, high: null)
+      : Thumbnails(
+          thumbnailsDefault: Default.fromJson(json["default"]),
+          medium: Default.fromJson(json["medium"]),
+          high: Default.fromJson(json["high"]),
+        );
 
   Map<String, dynamic> toJson() => {
         "default": thumbnailsDefault?.toJson(),

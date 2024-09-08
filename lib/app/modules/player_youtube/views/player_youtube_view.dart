@@ -1,6 +1,7 @@
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
 import 'package:audio_youtube/app/core/values/app_values.dart';
 import 'package:audio_youtube/app/core/values/text_styles.dart';
+import 'package:audio_youtube/app/core/widget/paging_view.dart';
 
 import 'package:audio_youtube/app/views/views/cache_image_view.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,8 @@ import '../../../data/repository/player_youtube_repository.dart';
 import '../controllers/player_youtube_controller.dart';
 
 class PlayerYoutubeView extends StatefulWidget {
-  const PlayerYoutubeView({super.key, required this.sc});
-  final ScrollController sc;
+  const PlayerYoutubeView({super.key});
+  // final ScrollController sc;
   @override
   State<PlayerYoutubeView> createState() => _PlayerYoutubeViewState();
 }
@@ -40,14 +41,20 @@ class _PlayerYoutubeViewState extends State<PlayerYoutubeView>
         backgroundColor: Colors.black,
         clipBehavior: Clip.none,
       ),
-      body: SingleChildScrollView(
-        controller: widget.sc,
+      body: SizedBox(
+        height: MediaQuery.sizeOf(context).height,
+        width: MediaQuery.sizeOf(context).width,
         child: Column(
           children: [
             VideoPlayer(),
-            _detail(),
-            const Divider(),
-            _playList(),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(child: _detail()),
+                  SliverToBoxAdapter(child: _playList())
+                ],
+              ),
+            ),
           ],
         ),
       ),

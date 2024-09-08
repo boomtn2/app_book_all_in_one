@@ -20,7 +20,7 @@ class Const {
     ),
   );
 
-  static String typePlayList = 'youtube#playlistItem';
+  static String typePlayList = 'youtube#playlist';
   static String typeVideo = 'youtube#video';
   static String typeMP3 = 'mp3';
   static String typeText = 'text';

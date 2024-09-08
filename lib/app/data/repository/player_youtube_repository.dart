@@ -28,7 +28,9 @@ class PlayerYoutubeRepository {
     viewController.hideViewPlayer();
     playerController?.dispose();
     playerController = null;
-    viewController.dispose();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   viewController.dispose();
+    // });
   }
 
   BookModel? bookListen;

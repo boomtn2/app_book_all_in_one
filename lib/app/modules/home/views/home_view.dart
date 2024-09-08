@@ -44,6 +44,7 @@ class HomeView extends GetView<HomeController> {
             onPanelSlide: (position) {
               // print('onPanelSlide');
             },
+            isDraggable: true,
             collapsed: Container(
               color: Colors.black,
               height: 80,
@@ -80,9 +81,9 @@ class HomeView extends GetView<HomeController> {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
-            panelBuilder: (sc) => PlayerYoutubeView(
-              sc: sc,
-            ),
+
+            // panelBuilder: (sc) =>
+            panel: PlayerYoutubeView(),
           ),
         ),
         bottomNavigationBar: controller.isHideBottomNavigator.value

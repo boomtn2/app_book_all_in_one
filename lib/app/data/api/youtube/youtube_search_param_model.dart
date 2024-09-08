@@ -26,7 +26,7 @@ class YoutubeSearchParamModel {
     }
 
     data['key'] = key;
-    // data['type'] = type;
+    data['type'] = type;
     data['order'] = order;
     data['maxResults'] = maxResults;
 

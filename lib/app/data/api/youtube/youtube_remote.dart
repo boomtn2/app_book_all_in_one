@@ -17,7 +17,7 @@ class YoutubeRemoteDataSoureImpl extends BaseRemoteSource
   @override
   Future<YoutubeSearchResponse> searchYoutubeVideo(String search) {
     var endpoint = "$path/search/";
-    final param = YoutubeSearchParamModel(q: search);
+    final param = YoutubeSearchParamModel(q: search, type: 'playlist');
     var dioCall = dioClient.get(endpoint, queryParameters: param.toJson());
 
     try {
@@ -50,7 +50,10 @@ class YoutubeRemoteDataSoureImpl extends BaseRemoteSource
   @override
   Future<YoutubeSearchResponse> getPlayListChannel(String idChannel) {
     var endpoint = "$path/search/";
-    final param = YoutubeSearchParamModel(q: null, channelId: idChannel);
+    final param = YoutubeSearchParamModel(
+      q: null,
+      channelId: idChannel,
+    );
     var dioCall = dioClient.get(endpoint, queryParameters: param.toJson());
 
     try {
