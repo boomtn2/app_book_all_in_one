@@ -25,9 +25,6 @@ class HomeView extends GetView<HomeController> {
     return Obx(
       () => Scaffold(
         body: PopScope(
-          onPopInvoked: (didPop) {
-            // controller.panelController.hide();
-          },
           child: SlidingUpPanel(
             maxHeight: MediaQuery.sizeOf(context).height,
             minHeight: 80,
