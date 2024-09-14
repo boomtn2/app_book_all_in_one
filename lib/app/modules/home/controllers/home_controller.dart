@@ -1,20 +1,21 @@
 import 'package:audio_youtube/app/core/const.dart';
-import 'package:audio_youtube/app/data/api/gist/rss_remote.dart';
-import 'package:audio_youtube/app/data/api/youtube/youtube_remote.dart';
+import 'package:audio_youtube/app/data/remote/gist/rss_remote.dart';
+
 import 'package:audio_youtube/app/data/model/rss_model.dart';
+import 'package:audio_youtube/app/data/repository/youtube_repository.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../data/model/book_model.dart';
-import '../../../data/repository/player_youtube_repository.dart';
-import '../../../data/repository/youtube_search_response.dart';
 
 class HomeController extends GetxController {
   RxList<BookModel> videoYoutube = <BookModel>[].obs;
   RxList<BookModel> videoRSS = <BookModel>[].obs;
-  YoutubeSearchResponse? responseYoutube;
+
+  final YoutubeRepository _ytbRepository =
+      Get.find(tag: (YoutubeRepository).toString());
   PodcastList? podcastList;
   RxMap<String, bool> titleTabPrenium = {
     'Đề xuất': false,
@@ -29,29 +30,20 @@ class HomeController extends GetxController {
   void onInit() {
     init();
     super.onInit();
+    _loadHotSearchYoutube();
   }
 
   @override
   void onClose() {
+    _ytbRepository.dispose();
     videoYoutube.clear();
     super.onClose();
   }
 
   Future _loadHotSearchYoutube() async {
-    responseYoutube =
-        await YoutubeRemoteDataSoureImpl().searchYoutubeVideo('Thập niên');
-
-    responseYoutube?.items.forEach((element) {
-      final book = BookModel(
-          title: element.snippet?.title ?? '',
-          author: element.snippet?.channelTitle ?? '',
-          img: element.snippet?.thumbnails?.thumbnailsDefault?.url ?? '',
-          id: element.id?.videoId ?? element.id?.playlistId,
-          type: element.id?.kind ?? '',
-          snippet: element.snippet,
-          detail: element.snippet?.description);
-      videoYoutube.add(book);
-    });
+    List<BookModel> list = [];
+    list = await _ytbRepository.search('Thập niên 70');
+    videoYoutube.value = list;
   }
 
   Future _loadRSS() async {
@@ -77,30 +69,9 @@ class HomeController extends GetxController {
     _loadRSS();
   }
 
-  void selectTab(String tabName) {
-    switch (tabName) {
-      case 'Đề xuất':
-        responseYoutube?.items.forEach((element) {
-          final book = BookModel(
-              title: element.snippet?.title ?? '',
-              author: element.snippet?.channelTitle ?? '',
-              img: element.snippet?.thumbnails?.thumbnailsDefault?.url ?? '',
-              id: element.id?.videoId ?? element.id?.playlistId,
-              type: element.id?.kind ?? '',
-              snippet: element.snippet,
-              detail: element.snippet?.description);
-          videoYoutube.add(book);
-        });
-        break;
-      case 'Chọn lọc':
-        break;
-    }
-  }
+  void selectTab(String tabName) {}
 
   void openDetail(BookModel model) async {
-    PlayerYoutubeRepository.instance.panelController = panelController;
-    await PlayerYoutubeRepository.instance.loadPlayListVideo(model);
-
     await panelController.show();
     await panelController.open();
   }
@@ -119,7 +90,5 @@ class HomeController extends GetxController {
     isHideBottomNavigator.value = true;
   }
 
-  void closedPannel() {
-    PlayerYoutubeRepository.instance.dispose();
-  }
+  void closedPannel() {}
 }

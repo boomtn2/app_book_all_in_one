@@ -12,10 +12,10 @@ class RSSRemoteDataSoureImpl extends BaseRemoteSource
     implements RSSRemoteDataSoure {
   final String _path =
       'https://gist.githubusercontent.com/boomtn2/f8ff9d6d8c9d3b2904dde93afdbcb395/raw';
+
   @override
   Future<PodcastList> fetchDataRSS() {
     var endpoint = _path;
-
     var dioCall = dioClient.get(endpoint);
 
     try {

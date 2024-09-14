@@ -1,67 +1,64 @@
-import 'package:audio_youtube/app/data/model/book_model.dart';
-import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+// import 'package:audio_youtube/app/data/model/book_model.dart';
 
-import '../../modules/player_youtube/controllers/player_youtube_controller.dart';
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
+// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class PlayerYoutubeRepository {
-  static PlayerYoutubeRepository get instance => _getInstance();
-  static PlayerYoutubeRepository? _instance;
+// import '../../modules/player_youtube/controllers/player_youtube_controller.dart';
 
-  static PlayerYoutubeRepository _getInstance() {
-    return _instance ??= PlayerYoutubeRepository._internal();
-  }
+// class PlayerYoutubeRepository {
+//   static PlayerYoutubeRepository get instance => _getInstance();
+//   static PlayerYoutubeRepository? _instance;
 
-  factory PlayerYoutubeRepository() => _getInstance();
+//   static PlayerYoutubeRepository _getInstance() {
+//     return _instance ??= PlayerYoutubeRepository._internal();
+//   }
 
-  PlayerYoutubeRepository._internal();
+//   factory PlayerYoutubeRepository() => _getInstance();
 
-  YoutubePlayerController? playerController;
+//   PlayerYoutubeRepository._internal();
 
-  PlayerYoutubeController viewController = PlayerYoutubeController();
+//   YoutubePlayerController? playerController;
 
-  PanelController? panelController;
+//   PlayerYoutubeController viewController = PlayerYoutubeController();
 
-  dispose() {
-    panelController?.hide();
-    viewController.hideViewPlayer();
-    playerController?.dispose();
-    playerController = null;
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   viewController.dispose();
-    // });
-  }
+//   PanelController? panelController;
 
-  BookModel? bookListen;
+//   dispose() {
+//     panelController?.hide();
+//     viewController.hideViewPlayer();
+//     playerController?.dispose();
+//     playerController = null;
+//   }
 
-  void loadVideoID(String id) {
-    playerController?.pause();
-    playerController?.load(id);
-  }
+//   BookModel? bookListen;
 
-  Future loadPlayListVideo(BookModel book) async {
-    if (viewController.isClosed) {
-      viewController = PlayerYoutubeController();
-    }
+//   void loadVideoID(String id) {
+//     playerController?.pause();
+//     playerController?.load(id);
+//   }
 
-    viewController.inforPlayList = book;
-    await viewController.getListVideo();
+//   Future loadPlayListVideo(BookModel book) async {
+//     if (viewController.isClosed) {
+//       viewController = PlayerYoutubeController();
+//     }
 
-    if (panelController?.isPanelShown != true &&
-        panelController?.isPanelOpen != true) {
-      bookListen = viewController.video.value;
-      playerController = YoutubePlayerController(
-        initialVideoId: bookListen?.id ?? '',
-        flags: const YoutubePlayerFlags(autoPlay: true),
-      );
-      viewController.showViewPlayer();
-      panelController?.show();
-    } else {
-      playerController?.pause();
-      playerController?.load(viewController.video.value?.id ?? '');
-    }
+//     viewController.inforPlayList = book;
+//     await viewController.getListVideo();
 
-    panelController?.open();
-  }
-}
+//     if (panelController?.isPanelShown != true &&
+//         panelController?.isPanelOpen != true) {
+//       bookListen = viewController.video.value;
+//       playerController = YoutubePlayerController(
+//         initialVideoId: bookListen?.id ?? '',
+//         flags: const YoutubePlayerFlags(autoPlay: true),
+//       );
+//       viewController.showViewPlayer();
+//       panelController?.show();
+//     } else {
+//       playerController?.pause();
+//       playerController?.load(viewController.video.value?.id ?? '');
+//     }
+
+//     panelController?.open();
+//   }
+// }

@@ -4,17 +4,18 @@ import 'package:audio_youtube/app/core/values/app_values.dart';
 import 'package:audio_youtube/app/core/widget/loading.dart';
 import 'package:audio_youtube/app/data/model/book_model.dart';
 import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
-import 'package:audio_youtube/app/modules/player_youtube/views/player_youtube_view.dart';
-import 'package:audio_youtube/app/views/views/cache_image_view.dart';
+
 import 'package:audio_youtube/app/views/views/item_card_book_view.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../core/values/app_borders.dart';
 import '../../../core/values/text_styles.dart';
-import '../../../data/repository/player_youtube_repository.dart';
+
 import '../../../views/folder/tabbar_folder.dart';
+import '../../../views/navigator/navigator.dart';
 import '../../../views/views/item_card_book_horital_view.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -22,8 +23,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
+    return Obx(() => Scaffold(
         body: PopScope(
           child: SlidingUpPanel(
             maxHeight: MediaQuery.sizeOf(context).height,
@@ -51,20 +51,6 @@ class HomeView extends GetView<HomeController> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  CacheImage(
-                    url: PlayerYoutubeRepository.instance.bookListen?.img ?? '',
-                    borderRadius: BorderRadius.circular(4),
-                    height: 80,
-                    width: 100,
-                  ),
-                  10.w,
-                  Expanded(
-                    child: Text(
-                      PlayerYoutubeRepository.instance.bookListen?.title ?? '',
-                      maxLines: 1,
-                      style: titleStyleWhite,
-                    ),
-                  ),
                   10.w,
                   IconButton(
                       onPressed: () {
@@ -81,42 +67,10 @@ class HomeView extends GetView<HomeController> {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
-
-            // panelBuilder: (sc) =>
-            panel: PlayerYoutubeView(),
+            panel: Container(),
           ),
         ),
-        bottomNavigationBar: controller.isHideBottomNavigator.value
-            ? null
-            : Container(
-                color: Colors.yellow,
-                child: SafeArea(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: IconButton(
-                          icon: Icon(Icons.home),
-                          onPressed: () {},
-                        ),
-                      ),
-                      Expanded(
-                        child: IconButton(
-                          icon: Icon(Icons.person_2_outlined),
-                          onPressed: () {},
-                        ),
-                      ),
-                      Expanded(
-                        child: IconButton(
-                          icon: Icon(Icons.favorite),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-      ),
-    );
+        bottomNavigationBar: const AppNavigationBar()));
   }
 
   Widget _body(BuildContext context) {
@@ -126,8 +80,11 @@ class HomeView extends GetView<HomeController> {
         _space(),
         _title({'Đề xuất': true, 'Chọn lọc': false, 'Đã tải': false}),
         Obx(
-          () => _itemNew(controller.videoYoutube,
-              MediaQuery.sizeOf(context).height, controller.openDetail),
+          () => _itemNew(
+              controller.videoYoutube,
+              MediaQuery.sizeOf(context).height,
+              controller.openDetail,
+              Theme.of(context).colorScheme.secondaryContainer),
         ),
         _space(),
         SliverToBoxAdapter(
@@ -365,8 +322,8 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _itemNew(
-      List<BookModel> ytb, double sizeMax, Function(BookModel) openDetail) {
+  Widget _itemNew(List<BookModel> ytb, double sizeMax,
+      Function(BookModel) openDetail, Color color) {
     return SliverToBoxAdapter(
         child: ytb.isEmpty
             ? const Loading()
@@ -376,17 +333,17 @@ class HomeView extends GetView<HomeController> {
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     borderRadius: AppBorders.borderCardItem,
-                    border: const Border(
+                    border: Border(
                       bottom: BorderSide(
-                        color: Colors.black,
+                        color: color,
                         width: 2,
                       ),
                       left: BorderSide(
-                        color: Colors.black,
+                        color: color,
                         width: 2,
                       ),
                       right: BorderSide(
-                        color: Colors.black,
+                        color: color,
                         width: 2,
                       ),
                     )),

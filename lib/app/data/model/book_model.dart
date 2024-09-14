@@ -1,4 +1,4 @@
-import 'package:audio_youtube/app/data/repository/youtube_search_response.dart';
+import 'package:audio_youtube/app/data/model/youtube_search_response.dart';
 
 class BookModel {
   String title;

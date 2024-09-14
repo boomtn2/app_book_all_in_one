@@ -28,37 +28,44 @@ class _TabbarFolderState extends State<TabbarFolder> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-          borderRadius: AppBorders.borderCardItem,
-          border: const Border(
-            top: BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
-            left: BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
-            right: BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
-          )),
+        borderRadius: AppBorders.borderCardItem,
+        border: Border(
+          top: BorderSide(
+            color: theme.colorScheme.secondaryContainer,
+            width: 2,
+          ),
+          left: BorderSide(
+            color: theme.colorScheme.secondaryContainer,
+            width: 2,
+          ),
+          right: BorderSide(
+            color: theme.colorScheme.secondaryContainer,
+            width: 2,
+          ),
+        ),
+      ),
       child: Wrap(
-          children:
-              tabs.entries.map((e) => _buttonFolder(e.key, e.value)).toList()),
+          children: tabs.entries
+              .map((e) => _buttonFolder(
+                  e.key,
+                  e.value,
+                  theme.colorScheme.primary,
+                  theme.colorScheme.secondaryContainer))
+              .toList()),
     );
   }
 
-  Widget _buttonFolder(String title, bool enable) {
+  Widget _buttonFolder(String title, bool enable, Color color, Color hide) {
     final borderSide = enable
-        ? const BorderSide(
-            color: Colors.blue,
+        ? BorderSide(
+            color: color,
             width: 3,
           )
-        : const BorderSide(
-            color: Color.fromARGB(86, 158, 158, 158),
+        : BorderSide(
+            color: hide,
             width: 1,
           );
     return InkWell(
@@ -78,8 +85,7 @@ class _TabbarFolderState extends State<TabbarFolder> {
             )),
         child: Text(
           title.toUpperCase(),
-          style:
-              headerStyle.copyWith(color: enable ? Colors.blue : Colors.grey),
+          style: headerStyle.copyWith(color: enable ? color : hide),
         ),
       ),
     );
