@@ -1,16 +1,16 @@
+import 'package:audio_youtube/app/core/base/base_controller.dart';
 import 'package:audio_youtube/app/core/const.dart';
 import 'package:audio_youtube/app/data/remote/gist/rss_remote.dart';
 
 import 'package:audio_youtube/app/data/model/rss_model.dart';
 import 'package:audio_youtube/app/data/repository/youtube_repository.dart';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../data/model/book_model.dart';
 
-class HomeController extends GetxController {
+class HomeController extends BaseController {
   RxList<BookModel> videoYoutube = <BookModel>[].obs;
   RxList<BookModel> videoRSS = <BookModel>[].obs;
 
@@ -41,9 +41,17 @@ class HomeController extends GetxController {
   }
 
   Future _loadHotSearchYoutube() async {
-    List<BookModel> list = [];
-    list = await _ytbRepository.search('Thập niên 70');
-    videoYoutube.value = list;
+    callDataService<List<BookModel>>(
+      _ytbRepository.search('Thập niên 70'),
+      onStart: () => showLoading(),
+      onComplete: () => hideLoading(),
+      onError: (exception) {
+        showErrorMessage('Tìm kiếm thất bại!');
+      },
+      onSuccess: (response) {
+        videoYoutube.value = response;
+      },
+    );
   }
 
   Future _loadRSS() async {
@@ -62,9 +70,6 @@ class HomeController extends GetxController {
   }
 
   void init() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      panelController.hide();
-    });
     await _loadHotSearchYoutube();
     _loadRSS();
   }

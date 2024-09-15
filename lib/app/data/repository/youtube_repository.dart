@@ -23,7 +23,7 @@ extension FormatBookModel on BasePagedList<Video> {
         list.add(BookModel(
             title: p0.title,
             author: p0.author,
-            img: p0.thumbnails.lowResUrl,
+            img: p0.thumbnails.mediumResUrl,
             type: '',
             snippet: Snippet(
                 publishedAt: p0.publishDate,
