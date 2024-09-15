@@ -7,6 +7,7 @@ import 'package:audio_youtube/app/modules/home/widgets/sli_expend.dart';
 import 'package:audio_youtube/app/modules/home/widgets/title.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/values/app_borders.dart';
 import '../../../core/values/app_values.dart';
@@ -33,38 +34,41 @@ class NewView extends GetView<HomeController> {
               child: Column(
                 children: [
                   const TitleView(title: 'Đề xuất'),
-                  SizedBox(
-                    width: sizeMax,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        child: Row(
-                          children: [
-                            for (int i = 0;
-                                i < controller.videoYoutube.length / 2;
-                                ++i)
-                              Row(
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ItemCardBookHoritalView(
-                                        book: controller.videoYoutube
-                                            .getNullIndex(i * 2),
-                                        openDetail: openDetail,
-                                      ),
-                                      5.h,
-                                      ItemCardBookHoritalView(
-                                        book: controller.videoYoutube
-                                            .getNullIndex((i * 2) + 1),
-                                        openDetail: openDetail,
-                                      ),
-                                    ],
-                                  ),
-                                  10.w,
-                                ],
-                              ),
-                          ],
+                  Skeletonizer(
+                    enabled: true,
+                    child: SizedBox(
+                      width: sizeMax,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          child: Row(
+                            children: [
+                              for (int i = 0;
+                                  i < controller.videoYoutube.length / 2;
+                                  ++i)
+                                Row(
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ItemCardBookHoritalView(
+                                          book: controller.videoYoutube
+                                              .getNullIndex(i * 2),
+                                          openDetail: openDetail,
+                                        ),
+                                        5.h,
+                                        ItemCardBookHoritalView(
+                                          book: controller.videoYoutube
+                                              .getNullIndex((i * 2) + 1),
+                                          openDetail: openDetail,
+                                        ),
+                                      ],
+                                    ),
+                                    10.w,
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -74,14 +78,17 @@ class NewView extends GetView<HomeController> {
                     title: 'Kênh hay:',
                     style: boldTitleStyle,
                   ),
-                  SizedBox(
-                    height: 60,
-                    width: MediaQuery.sizeOf(context).width,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => 10.w,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, index) => channel('$index'),
+                  Skeletonizer(
+                    enabled: true,
+                    child: SizedBox(
+                      height: 60,
+                      width: MediaQuery.sizeOf(context).width,
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) => 10.w,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) => channel('$index'),
+                      ),
                     ),
                   ),
                   20.h,

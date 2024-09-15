@@ -43,8 +43,6 @@ class HomeController extends BaseController {
   Future _loadHotSearchYoutube() async {
     callDataService<List<BookModel>>(
       _ytbRepository.search('Thập niên 70'),
-      onStart: () => showLoading(),
-      onComplete: () => hideLoading(),
       onError: (exception) {
         showErrorMessage('Tìm kiếm thất bại!');
       },

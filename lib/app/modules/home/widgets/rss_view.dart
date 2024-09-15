@@ -5,6 +5,7 @@ import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart'
 import 'package:audio_youtube/app/modules/home/widgets/title.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/values/app_values.dart';
 import '../../../views/views/item_card_book_view.dart';
@@ -27,30 +28,33 @@ class RssView extends GetView<HomeController> {
             style: bigTitleStyle.s20,
           ),
           5.h,
-          Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: ItemCardBookView(
-                      book: controller.videoRSS.getNullIndex(0),
+          Skeletonizer(
+            enabled: true,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: ItemCardBookView(
+                        book: controller.videoRSS.getNullIndex(0),
+                      ),
                     ),
-                  ),
-                  10.w,
-                  Expanded(
-                    child: ItemCardBookView(
-                      book: controller.videoRSS.getNullIndex(0),
+                    10.w,
+                    Expanded(
+                      child: ItemCardBookView(
+                        book: controller.videoRSS.getNullIndex(0),
+                      ),
                     ),
-                  ),
-                  10.w,
-                  Expanded(
-                    child: ItemCardBookView(
-                      book: controller.videoRSS.getNullIndex(0),
+                    10.w,
+                    Expanded(
+                      child: ItemCardBookView(
+                        book: controller.videoRSS.getNullIndex(0),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ],
       ),
