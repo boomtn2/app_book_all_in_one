@@ -1,8 +1,10 @@
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../data/repository/data_repository.dart';
 import '../../views/navigator/navigator.dart';
 
 class RootApp extends StatelessWidget {
@@ -21,7 +23,7 @@ class RootApp extends StatelessWidget {
             minHeight: 60,
             parallaxEnabled: true,
             parallaxOffset: .5,
-            controller: PanelController(),
+            controller: DataRepository.instance.panelController,
             defaultPanelState: PanelState.CLOSED,
             body: child,
             onPanelClosed: () {},

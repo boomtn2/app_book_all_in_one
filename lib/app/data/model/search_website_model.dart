@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class NextPage {
   final String param;
   final int begin;
@@ -314,16 +312,5 @@ class ListSearchName {
     } else {
       return ListSearchName(listSearchName: []);
     }
-  }
-}
-
-class Tag {
-  final String name;
-  final String id;
-  final String tag;
-  Tag({required this.name, required this.id, required this.tag});
-
-  Map toMap() {
-    return {tag: id};
   }
 }

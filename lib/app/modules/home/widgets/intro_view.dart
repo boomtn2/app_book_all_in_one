@@ -20,6 +20,7 @@ class IntroView extends StatelessWidget {
             TitleView(
               title: 'Giới thiệu',
               style: bigTitleStyle.s20,
+              funtion: () {},
             ),
           ],
         ),

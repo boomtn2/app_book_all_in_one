@@ -1,8 +1,15 @@
+import 'package:audio_youtube/app/core/extension/list_extention.dart';
+import 'package:audio_youtube/app/core/extension/num_extention.dart';
+import 'package:audio_youtube/app/core/values/text_styles.dart';
+import 'package:audio_youtube/app/data/model/category_model.dart';
+import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
 import 'package:audio_youtube/app/modules/home/widgets/title.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/values/app_values.dart';
+import '../../../views/text/text_loadmore.dart';
 
 class CategoryView extends StatefulWidget {
   const CategoryView({super.key});
@@ -18,10 +25,13 @@ class _CategoryViewState extends State<CategoryView>
   late TabController _tabController;
 
   int _currentPageIndex = 0;
+
+  final controller = Get.find<HomeController>();
   @override
   void initState() {
     super.initState();
     _pageViewController = PageController();
+
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -34,40 +44,94 @@ class _CategoryViewState extends State<CategoryView>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.only(
           left: AppValues.paddingLeft,
           right: AppValues.paddingLeft,
         ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const TitleView(title: 'Thể loại'),
-                TabPageSelector(
+        child: Obx(
+          () => Column(
+            children: [
+              TitleView(
+                title: 'Thể loại',
+                child: TabPageSelector(
                   controller: _tabController,
                   color: Colors.blue,
                   selectedColor: Colors.black,
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 100,
-              width: MediaQuery.sizeOf(context).width,
-              child: PageView(
-                controller: PageController(
-                  initialPage: _currentPageIndex,
-                ),
-                children: const [
-                  Text('1'),
-                  Text('2'),
-                  Text('3'),
-                ],
+                funtion: () => controller.loadMoreCategory(context),
               ),
+              Skeletonizer(
+                enabled: !controller.isCategoryLoading.value,
+                child: SizedBox(
+                  height: 100,
+                  width: size.width,
+                  child: PageView(
+                    onPageChanged: (value) {
+                      setState(() {
+                        _tabController.animateTo(value);
+                      });
+                    },
+                    controller: PageController(
+                      initialPage: _currentPageIndex,
+                    ),
+                    children: [
+                      for (int i = 0; i < controller.tags.length / 4; ++i)
+                        _page(
+                          Size(size.width, 100),
+                          controller.tags.getNullIndex((i * 4)),
+                          controller.tags.getNullIndex((i * 4) + 1),
+                          controller.tags.getNullIndex((i * 4) + 2),
+                          controller.tags.getNullIndex((i * 4) + 3),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _page(Size size, Tag? tag1, Tag? tag2, Tag? tag3, Tag? tag4) {
+    return SizedBox(
+      height: size.height,
+      width: size.width,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              _item(tag1),
+              10.w,
+              _item(tag2),
+            ],
+          ),
+          5.h,
+          Row(
+            children: [_item(tag3), 10.w, _item(tag4)],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _item(Tag? tag) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {},
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Text(
+              tag?.name ?? '',
+              style: afaca.copyWith(fontWeight: FontWeight.w500),
             ),
-          ],
+          ),
         ),
       ),
     );

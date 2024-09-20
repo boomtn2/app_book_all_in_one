@@ -16,11 +16,10 @@ class ItemCardBookHoritalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return book == null
-        ? const Expanded(
-            child: SizedBox(
-            height: 5,
-            width: 5,
-          ))
+        ? const SizedBox(
+            height: 150,
+            width: 120,
+          )
         : Container(
             decoration: BoxDecoration(
                 borderRadius: AppBorders.borderCardItem,

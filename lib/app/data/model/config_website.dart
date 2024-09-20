@@ -11,6 +11,18 @@ class ConfigWebsiteModel {
       ConfigWebsiteModel(
         configWebsite: configWebsite ?? this.configWebsite,
       );
+
+  factory ConfigWebsiteModel.fromJson(Map<String, dynamic> json) {
+    return ConfigWebsiteModel(
+      configWebsite: (json['config-website'] as List)
+          .map((e) => ConfigWebsite.fromJson(e))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'config-website': configWebsite.map((e) => e.toJson()).toList(),
+      };
 }
 
 class ConfigWebsite {
@@ -42,6 +54,24 @@ class ConfigWebsite {
         chapterhtml: chapterhtml ?? this.chapterhtml,
         jsleak: jsleak ?? this.jsleak,
       );
+
+  factory ConfigWebsite.fromJson(Map<String, dynamic> json) {
+    return ConfigWebsite(
+      type: json['type'],
+      website: json['website'],
+      listbookhtml: Listbookhtml.fromJson(json['listbookhtml']),
+      chapterhtml: Chapterhtml.fromJson(json['chapterhtml']),
+      jsleak: Jsleak.fromJson(json['jsleak']),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'website': website,
+        'listbookhtml': listbookhtml.toJson(),
+        'chapterhtml': chapterhtml.toJson(),
+        'jsleak': jsleak.toJson(),
+      };
 }
 
 class Chapterhtml {
@@ -69,6 +99,22 @@ class Chapterhtml {
         querryTextChapter: querryTextChapter ?? this.querryTextChapter,
         querryTitle: querryTitle ?? this.querryTitle,
       );
+
+  factory Chapterhtml.fromJson(Map<String, dynamic> json) {
+    return Chapterhtml(
+      querryLinkNext: json['querryLinkNext'],
+      querryLinkPre: json['querryLinkPre'],
+      querryTextChapter: json['querryTextChapter'],
+      querryTitle: json['querryTitle'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'querryLinkNext': querryLinkNext,
+        'querryLinkPre': querryLinkPre,
+        'querryTextChapter': querryTextChapter,
+        'querryTitle': querryTitle,
+      };
 }
 
 class Jsleak {
@@ -104,6 +150,26 @@ class Jsleak {
         jsCategory: jsCategory ?? this.jsCategory,
         jsOther: jsOther ?? this.jsOther,
       );
+
+  factory Jsleak.fromJson(Map<String, dynamic> json) {
+    return Jsleak(
+      jsIndexing: json['jsIndexing'],
+      jsListChapter: json['jsListChapter'],
+      jsActionNext: json['jsActionNext'],
+      jsDescription: json['jsDescription'],
+      jsCategory: json['jsCategory'],
+      jsOther: json['jsOther'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'jsIndexing': jsIndexing,
+        'jsListChapter': jsListChapter,
+        'jsActionNext': jsActionNext,
+        'jsDescription': jsDescription,
+        'jsCategory': jsCategory,
+        'jsOther': jsOther,
+      };
 }
 
 class Listbookhtml {
@@ -139,4 +205,24 @@ class Listbookhtml {
         queryview: queryview ?? this.queryview,
         queryHref: queryHref ?? this.queryHref,
       );
+
+  factory Listbookhtml.fromJson(Map<String, dynamic> json) {
+    return Listbookhtml(
+      querryList: json['querryList'],
+      queryText: json['queryText'],
+      queryScr: json['queryScr'],
+      queryAuthor: json['queryAuthor'],
+      queryview: json['queryview'],
+      queryHref: json['queryHref'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'querryList': querryList,
+        'queryText': queryText,
+        'queryScr': queryScr,
+        'queryAuthor': queryAuthor,
+        'queryview': queryview,
+        'queryHref': queryHref,
+      };
 }

@@ -1,61 +1,85 @@
+import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
+import 'package:audio_youtube/app/modules/search/views/search_view.dart';
+import 'package:audio_youtube/app/modules/webview/controllers/webview_book_controller.dart';
+import 'package:audio_youtube/app/modules/webview/views/webview_book_view.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../modules/audio/bindings/audio_binding.dart';
-import '../modules/audio/views/audio_view.dart';
-import '../modules/book/bindings/book_binding.dart';
-import '../modules/book/views/book_view.dart';
-import '../modules/home/bindings/home_binding.dart';
+import 'package:go_router/go_router.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-
-import '../modules/read_book/bindings/read_book_binding.dart';
-import '../modules/read_book/views/read_book_view.dart';
-import '../modules/search/bindings/search_binding.dart';
-import '../modules/search/views/search_view.dart';
-
+import '../modules/root/app_root.dart';
+import '../modules/search/controllers/search_controller.dart';
 part 'app_routes.dart';
+
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+final shellRouteNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  // static const INITIAL = Routes.HOME;
+  static final routes = GoRouter(navigatorKey: rootNavigatorKey, routes: [
+    ShellRoute(
+        navigatorKey: shellRouteNavigatorKey,
+        builder: (context, state, child) => RootApp(child: child),
+        routes: [
+          GoRoute(
+              path: "/",
+              name: HomeView.name,
+              // redirect: (context, state) {
+              //   //if khởi động lần đầu thì mở màn giới thiệu
 
-  static final routes = [
-    GetPage(
-      name: _Paths.HOME,
-      page: () => HomeView(),
-      binding: HomeBinding(),
+              //   // if (auth == null && !KVStoreService.doneGettingStarted) {
+              //   //   return "/getting-started";
+              //   // }
+
+              //   return null;
+              // },
+              builder: (context, state) => GetBuilder(
+                    init: HomeController(),
+                    dispose: (state) {
+                      Get.delete<HomeController>();
+                    },
+                    builder: (controller) => HomeView(),
+                  ),
+              routes: [
+                GoRoute(
+                    path: "search",
+                    name: SearchView.name,
+                    builder: (context, state) => GetBuilder(
+                          init: SearchBookController(),
+                          dispose: (state) {
+                            Get.delete<SearchBookController>();
+                          },
+                          builder: (controller) => const SearchView(),
+                        ),
+                    routes: [
+                      GoRoute(
+                          path: "webview",
+                          name: WebViewBookView.name,
+                          builder: (context, state) {
+                            assert(state.extra is String);
+                            String url = state.extra as String;
+                            debugPrint(url);
+                            return GetBuilder(
+                              init: WebViewBookController(url: url),
+                              dispose: (state) {
+                                Get.delete<WebViewBookController>();
+                              },
+                              builder: (controller) => const WebViewBookView(),
+                            );
+                          }),
+                    ]),
+              ]),
+        ]),
+    GoRoute(
+      path: "/login",
+      name: LoginView.name,
+      builder: (context, state) {
+        LoginBinding();
+        return const LoginView();
+      },
     ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
-    GetPage(
-      name: _Paths.BOOK,
-      page: () => const BookView(),
-      binding: BookBinding(),
-    ),
-    GetPage(
-      name: _Paths.READ_BOOK,
-      page: () => const ReadBookView(),
-      binding: ReadBookBinding(),
-    ),
-    GetPage(
-      name: _Paths.SEARCH,
-      page: () => const SearchView(),
-      binding: SearchBinding(),
-    ),
-    GetPage(
-      name: _Paths.AUDIO,
-      page: () => const AudioView(),
-      binding: AudioBinding(),
-    ),
-    // GetPage(
-    //   name: _Paths.PLAYER_YOUTUBE,
-    //   page: () => const PlayerYoutubeView(),
-    //   binding: PlayerYoutubeBinding(),
-    // ),
-  ];
+  ]);
 }

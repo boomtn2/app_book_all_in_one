@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/values/app_values.dart';
+import '../../../data/model/models_export.dart';
 import '../../../views/views/item_card_book_view.dart';
 
 class RssView extends GetView<HomeController> {
@@ -15,49 +16,72 @@ class RssView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return SliverToBoxAdapter(
-        child: Padding(
-      padding: const EdgeInsets.only(
-        left: AppValues.paddingLeft,
-        right: AppValues.paddingLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: AppValues.paddingLeft,
+          right: AppValues.paddingLeft,
+        ),
+        child: Obx(
+          () => Column(
+            children: [
+              TitleView(
+                title: 'Dịch Việt',
+                style: bigTitleStyle.s20,
+                funtion: () {},
+              ),
+              5.h,
+              Skeletonizer(
+                enabled: controller.isRSSLoading.value,
+                child: controller.isRSSLoading.value
+                    ? _body(size, controller.dataFake(), 6)
+                    : _body(size, controller.videoRSS,
+                        controller.count(2, controller.videoRSS.length)),
+              ),
+            ],
+          ),
+        ),
       ),
-      child: Column(
+    );
+  }
+
+  Widget _body(Size size, List<BookModel> books, int lenght) {
+    return SizedBox(
+      height: 180,
+      width: size.width,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
         children: [
-          TitleView(
-            title: 'Dịch Việt',
-            style: bigTitleStyle.s20,
-          ),
-          5.h,
-          Skeletonizer(
-            enabled: true,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: ItemCardBookView(
-                        book: controller.videoRSS.getNullIndex(0),
-                      ),
+          for (int i = 0; i < lenght; i++)
+            SizedBox(
+              height: 180,
+              width: size.width,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: ItemCardBookView(
+                      book: books.getNullIndex(i * 3),
                     ),
-                    10.w,
-                    Expanded(
-                      child: ItemCardBookView(
-                        book: controller.videoRSS.getNullIndex(0),
-                      ),
+                  ),
+                  10.w,
+                  Expanded(
+                    child: ItemCardBookView(
+                      book: books.getNullIndex((i * 3) + 1),
                     ),
-                    10.w,
-                    Expanded(
-                      child: ItemCardBookView(
-                        book: controller.videoRSS.getNullIndex(0),
-                      ),
+                  ),
+                  10.w,
+                  Expanded(
+                    child: ItemCardBookView(
+                      book: books.getNullIndex((i * 3) + 2),
                     ),
-                  ],
-                )
-              ],
-            ),
-          ),
+                  ),
+                ],
+              ),
+            )
         ],
       ),
-    ));
+    );
   }
 }

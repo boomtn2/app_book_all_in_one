@@ -8,9 +8,9 @@ class SliSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
+    return const SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.only(
+        padding: EdgeInsets.only(
           left: AppValues.paddingLeft,
           right: AppValues.paddingLeft,
         ),

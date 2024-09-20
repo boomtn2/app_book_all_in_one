@@ -1,36 +1,49 @@
+import 'dart:async';
 import 'package:audio_youtube/app/core/base/base_controller.dart';
 import 'package:audio_youtube/app/core/const.dart';
-import 'package:audio_youtube/app/data/remote/gist/rss_remote.dart';
-
-import 'package:audio_youtube/app/data/model/rss_model.dart';
+import 'package:audio_youtube/app/core/utils/util.dart';
+import 'package:audio_youtube/app/data/repository/data_repository.dart';
+import 'package:audio_youtube/app/data/repository/gist_repository.dart';
 import 'package:audio_youtube/app/data/repository/youtube_repository.dart';
+import 'package:audio_youtube/app/modules/search/views/search_view.dart';
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-
-import '../../../data/model/book_model.dart';
+import '../../../data/model/models_export.dart';
 
 class HomeController extends BaseController {
-  RxList<BookModel> videoYoutube = <BookModel>[].obs;
-  RxList<BookModel> videoRSS = <BookModel>[].obs;
-
   final YoutubeRepository _ytbRepository =
       Get.find(tag: (YoutubeRepository).toString());
-  PodcastList? podcastList;
-  RxMap<String, bool> titleTabPrenium = {
-    'Đề xuất': false,
-    'Chọn lọc': false,
-  }.obs;
+  final GistRepository _gistRepository =
+      Get.find(tag: (GistRepository).toString());
+  DataRepository get _dataRepository => DataRepository.instance;
 
-  Rx<BookModel> book = BookModel(title: '', author: '', img: '', type: '').obs;
+  RxList<BookModel> videoYoutube = <BookModel>[].obs;
+  RxList<BookModel> videoRSS = <BookModel>[].obs;
+  RxList<Tag> tags = <Tag>[].obs;
+  RxList<ChannelModel> channel = <ChannelModel>[].obs;
 
-  PanelController panelController = PanelController();
+  ConfigWebsiteModel? configWebsite;
+  ListSearchTag? tagSearch;
+  ListSearchName? nameSearch;
+
+  RxBool isCategoryLoading = true.obs;
+  RxBool isHotLoading = true.obs;
+  RxBool isChannelLoading = true.obs;
+  RxBool isRSSLoading = true.obs;
+  RxBool isDtruyenLoading = true.obs;
 
   @override
-  void onInit() {
-    init();
+  void onInit() async {
     super.onInit();
-    _loadHotSearchYoutube();
+    debugPrint("Home int");
+    await _getCategory();
+    await _getSearch();
+    await _getChannel();
+    await _loadRSS();
+    await _loadHotSearchYoutube();
+    await _loadConfigWebsite();
+    _saveData();
   }
 
   @override
@@ -40,58 +53,113 @@ class HomeController extends BaseController {
     super.onClose();
   }
 
+  void _saveData() {
+    _dataRepository.configWebsite = configWebsite;
+    _dataRepository.nameSearch = nameSearch;
+    _dataRepository.tagSearch = tagSearch;
+  }
+
+  Future _loadConfigWebsite() async {
+    configWebsite = await _gistRepository.getConfigWebsite();
+  }
+
   Future _loadHotSearchYoutube() async {
-    callDataService<List<BookModel>>(
-      _ytbRepository.search('Thập niên 70'),
-      onError: (exception) {
-        showErrorMessage('Tìm kiếm thất bại!');
-      },
-      onSuccess: (response) {
-        videoYoutube.value = response;
-      },
-    );
+    try {
+      isHotLoading.value = true;
+      final response = await _ytbRepository.search('Thập niên 70');
+      videoYoutube.value = response;
+      await Future.delayed(const Duration(seconds: 1));
+      isHotLoading.value = false;
+    } catch (e) {
+      showErrorMessage('Đề xuất bị lỗi!');
+    }
   }
 
   Future _loadRSS() async {
-    podcastList = await RSSRemoteDataSoureImpl().fetchDataRSS();
-
-    podcastList?.rss.forEach((element) {
-      final book = BookModel(
-          title: element.name,
-          author: '',
-          img: element.img,
-          id: element.link,
-          type: Const.typeMP3,
-          detail: '');
-      videoRSS.add(book);
-    });
+    try {
+      isRSSLoading.value = true;
+      final response = await _gistRepository.getRSS();
+      List<BookModel> list = [];
+      for (var element in response.rss) {
+        final book = BookModel(
+            title: element.name,
+            author: '',
+            img: element.img,
+            id: element.link,
+            type: Const.typeMP3,
+            detail: '');
+        list.add(book);
+      }
+      videoRSS.value = list;
+      await Future.delayed(const Duration(seconds: 1));
+      isRSSLoading.value = false;
+    } catch (e) {
+      showErrorMessage('Tải dữ liệu Dịch việt thất bại!');
+    }
   }
 
-  void init() async {
-    await _loadHotSearchYoutube();
-    _loadRSS();
+  Future _getSearch() async {
+    final list = await _gistRepository.getConfigSearch();
+
+    if (list[0] is ListSearchTag) {
+      tagSearch = list[0];
+    }
+
+    if (list[1] is ListSearchName) {
+      nameSearch = list[1];
+    }
+  }
+
+  Future _getCategory() async {
+    final websitesTag = await _gistRepository.getCategorySearch();
+    if (websitesTag.isNotEmpty) {
+      _dataRepository.tagWebsite = websitesTag as List<WebsiteTag>;
+    }
+
+    List<Tag> tag = [];
+    if (websitesTag[0] is WebsiteTag) {
+      tag.addAll(websitesTag[0].hotTag.tags);
+      for (GroupTag item in websitesTag[0].tags) {
+        tag.addAll(item.tags);
+      }
+    }
+    tags.value = tag;
+  }
+
+  Future _getChannel() async {
+    final channelResponse = await _gistRepository.getChannel();
+    if (channelResponse is List<ChannelModel>) {
+      channel.value = channelResponse;
+    }
   }
 
   void selectTab(String tabName) {}
 
-  void openDetail(BookModel model) async {
-    await panelController.show();
-    await panelController.open();
+  int count(int n, int length) {
+    if (length == 0) {
+      return 6;
+    }
+
+    if (length % n == 0) {
+      return length % n;
+    } else {
+      return (length % n) + 1;
+    }
   }
 
-  void onPanelClosed() {}
-
-  void onPanelOpened() {}
-
-  RxBool isHideBottomNavigator = false.obs;
-
-  void hideBottomNavigator() {
-    isHideBottomNavigator.value = false;
+  List<BookModel> dataFake() {
+    return List.filled(
+        7,
+        BookModel(
+          author: "",
+          img: '',
+          title: '',
+          type: '',
+          detail: '',
+        ));
   }
 
-  void showBottomNavigator() {
-    isHideBottomNavigator.value = true;
+  void loadMoreCategory(BuildContext context) {
+    Util.pushNamed(context, SearchView.name);
   }
-
-  void closedPannel() {}
 }

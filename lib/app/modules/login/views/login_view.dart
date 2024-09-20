@@ -11,6 +11,7 @@ import '../widgets/social_login_button.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
+  static const String name = 'login';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
