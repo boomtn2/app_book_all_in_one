@@ -42,6 +42,18 @@ dependencies:
   skeletonizer: ^1.4.2
   flutter_inappwebview: ^6.0.0
   flutter_speed_dial: ^7.0.0
+  audio_service: ^0.18.15
+  audio_session: ^0.1.21
+  rxdart: ^0.27.7
+  flutter_tts: ^3.8.5	
+  audio_video_progress_bar: ^2.0.3
+  fluentui_system_icons: ^1.1.257
+  modal_bottom_sheet: ^3.0.0
+
+  flowery_tts:
+    git:
+      url: https://github.com/boomtn2/flowery_api_tts.git
+      ref: fix_model
  
   
 dev_dependencies:
@@ -61,7 +73,7 @@ flutter_gen:
   # Optional
   integrations:
     flutter_svg: true
-    flare_flutter: true
+    # flare_flutter: true
     rive: true
     lottie: true
 

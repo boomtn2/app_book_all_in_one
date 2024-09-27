@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:audio_youtube/app/core/utils/icons.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -29,11 +30,11 @@ class AppNavigationBar extends StatelessWidget {
             animationDuration: const Duration(milliseconds: 350),
             items: const [
               Icon(
-                Icons.home,
+                AppIcons.naviHome,
                 size: 18,
               ),
-              Icon(Icons.library_books_outlined, size: 18),
-              Icon(Icons.account_balance, size: 18)
+              Icon(AppIcons.naviStore, size: 18),
+              Icon(AppIcons.naviAccount, size: 18)
             ],
             index: 0,
             onTap: (i) {},

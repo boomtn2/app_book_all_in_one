@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:audio_youtube/app/core/base/base_controller.dart';
+import 'package:audio_youtube/app/data/model/config_website.dart';
 import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:get/get.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WebViewBookController extends BaseController {
   DataRepository get _dataRepository => DataRepository.instance;
+  ConfigWebsiteModel? get _configWebsite => _dataRepository.configWebsite;
 
   final String url;
 
@@ -77,12 +81,16 @@ class WebViewBookController extends BaseController {
                 ".banner, .banners, .ads, .ad, .advert, .widget-ads, .ad-unit")));
   }
 
-  void onWebViewCreated(InAppWebViewController controller) {}
+  void onWebViewCreated(InAppWebViewController controller) {
+    print('onWebViewCreated');
+    webViewController = controller;
+  }
+
   void onLoadStart(InAppWebViewController controller, WebUri? url) {
     loading.value = true;
   }
 
-  void onProgressChanged(InAppWebViewController controller, int process) {
+  void onProgressChanged(InAppWebViewController controller, int process) async {
     processUI.value = process;
     if (process < 10) {
       loading.value = true;
@@ -104,7 +112,13 @@ class WebViewBookController extends BaseController {
     }
   }
 
-  void onLoadStop(InAppWebViewController controller, WebUri? url) {}
+  void onLoadStop(InAppWebViewController controller, WebUri? url) async {
+    await Future.delayed(Duration(seconds: 3));
+    String st = """document.querySelector('div.description');""";
+    print(st);
+    final text = await controller.evaluateJavascript(source: st);
+    print(text);
+  }
 
   void onReceivedError(InAppWebViewController controller, WebResourceRequest rq,
       WebResourceError error) {
@@ -127,4 +141,33 @@ class WebViewBookController extends BaseController {
     webViewController?.stopLoading();
     loading.value = false;
   }
+
+  void getText() async {
+    await Future.delayed(Duration(seconds: 3));
+    String st = """(function() {
+  const paragraphs = document.querySelectorAll('#bookContentBody p');
+  const textArray = [];
+
+  paragraphs.forEach((p) => {
+    textArray.push(p.textContent.trim());
+  });
+
+  const jsonResult = JSON.stringify(textArray);
+return  jsonResult;
+})();
+ 
+
+""";
+    final text = await webViewController?.evaluateJavascript(source: st);
+    final json = jsonDecode(text.toString()) as List;
+    json.forEach(
+      (element) => print('$element'),
+    );
+  }
+
+  void autoLeakChapter() {}
+
+  void textToVoice() {}
+
+  void leakText() {}
 }

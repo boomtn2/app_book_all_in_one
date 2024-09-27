@@ -1,4 +1,6 @@
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
+import 'package:audio_youtube/app/modules/audio/controllers/audio_controller.dart';
+import 'package:audio_youtube/app/modules/audio/views/mini_audio_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,6 +8,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../data/repository/data_repository.dart';
 import '../../views/navigator/navigator.dart';
+import '../audio/views/audio_view.dart';
 
 class RootApp extends StatelessWidget {
   final Widget child;
@@ -18,49 +21,37 @@ class RootApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       child: Scaffold(
-          body: SlidingUpPanel(
-            maxHeight: MediaQuery.sizeOf(context).height,
-            minHeight: 60,
-            parallaxEnabled: true,
-            parallaxOffset: .5,
-            controller: DataRepository.instance.panelController,
-            defaultPanelState: PanelState.CLOSED,
-            body: child,
-            onPanelClosed: () {},
-            onPanelOpened: () {
-              //show full
-            },
-            onPanelSlide: (position) {
-              // print('onPanelSlide');
-            },
-            isDraggable: true,
-            collapsed: Container(
-              color: Theme.of(context)
-                  .colorScheme
-                  .secondaryContainer
-                  .withOpacity(0.72),
-              height: 60,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  10.w,
-                  IconButton(
-                      onPressed: () {
-                        // controller.closedPannel();
-                      },
-                      icon: const Icon(
-                        Icons.pause,
-                        color: Colors.white,
-                      )),
-                  20.w,
-                ],
-              ),
-            ),
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(18.0),
-                topRight: Radius.circular(18.0)),
-            panel: Container(),
-          ),
+          body: GetBuilder<AudioController>(
+              init: AudioController(),
+              dispose: (state) {
+                Get.delete<AudioController>();
+              },
+              builder: (controller) {
+                return SlidingUpPanel(
+                    maxHeight: MediaQuery.sizeOf(context).height,
+                    minHeight: 60,
+                    parallaxEnabled: true,
+                    parallaxOffset: .5,
+                    controller: DataRepository.instance.panelController,
+                    defaultPanelState: PanelState.CLOSED,
+                    body: child,
+                    onPanelClosed: () {
+                      controller.showAppBar.value = false;
+                    },
+                    onPanelOpened: () {
+                      controller.showAppBar.value = true;
+                      //show full
+                    },
+                    onPanelSlide: (position) {
+                      // print('onPanelSlide');
+                    },
+                    isDraggable: true,
+                    collapsed: MiniAudioView(instanceController: controller),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(18.0),
+                        topRight: Radius.circular(18.0)),
+                    panel: AudioView(controller));
+              }),
           bottomNavigationBar: const AppNavigationBar()),
     );
   }

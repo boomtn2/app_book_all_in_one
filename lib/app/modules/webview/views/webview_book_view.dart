@@ -54,8 +54,9 @@ class WebViewBookView extends GetView<WebViewBookController> {
         isOpenOnStart: true,
         children: [
           SpeedDialChild(
-            label: 'Phông chữ',
-            child: const Icon(Icons.settings),
+            label: 'Text',
+            child: const Icon(Icons.abc),
+            onTap: () => controller.getText(),
           ),
           SpeedDialChild(
               label: 'Tập tiếp theo',
