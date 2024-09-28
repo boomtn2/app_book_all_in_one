@@ -1,6 +1,7 @@
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
 import 'package:audio_youtube/app/core/utils/icons.dart';
 import 'package:audio_youtube/app/modules/audio/views/widgets/button_audio.dart';
+import 'package:audio_youtube/app/views/views/cache_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,9 +20,16 @@ class MiniAudioView extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
+          5.w,
           SizedBox(
-            height: 60,
-            width: 60,
+            height: 50,
+            width: 50,
+            child: CacheImage(
+              url: instanceController.thumble.value,
+              height: 50,
+              width: 50,
+              borderRadius: BorderRadius.circular(50),
+            ),
           ),
           Expanded(
               child: Obx(() => Text(
@@ -29,7 +37,7 @@ class MiniAudioView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     instanceController.title.value,
-                    style: afaca,
+                    style: afaca.copyWith(fontWeight: FontWeight.w700),
                   ))),
           _playState(),
         ],
@@ -72,9 +80,11 @@ class MiniAudioView extends StatelessWidget {
           Visibility(
               visible: (instanceController.state.value == PlayState.Playing),
               child: ButtonAudio(
-                  icon: AppIcons.audioStop,
-                  title: 'Dừng',
-                  callback: () => instanceController.pause())),
+                icon: AppIcons.audioStop,
+                title: 'Dừng',
+                callback: () => instanceController.pause(),
+                color: Colors.red,
+              )),
         ],
       ),
     );

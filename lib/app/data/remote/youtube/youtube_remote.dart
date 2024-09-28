@@ -107,7 +107,9 @@ class YoutubeExplodeRemoteDataSoureImpl extends BaseRemoteSource
   @override
   Future<ChannelUploadsList> getVideosChannelUpload(
       String id, VideoSorting? sort, VideoType? type) async {
-    return youtubeExplode.channels.getUploadsFromPage(id);
+    return youtubeExplode.channels.getUploadsFromPage(
+      id,
+    );
   }
 
   @override
@@ -162,7 +164,12 @@ class YoutubeExplodeRemoteDataSoureImpl extends BaseRemoteSource
 
   @override
   Future<RelatedVideosList?> getRelated(String id) async {
-    var video = await youtubeExplode.videos.get(id);
-    return youtubeExplode.videos.getRelatedVideos(video);
+    try {
+      Video _video = await youtubeExplode.videos.get(id);
+
+      return youtubeExplode.videos.getRelatedVideos(_video);
+    } catch (e) {
+      return null;
+    }
   }
 }

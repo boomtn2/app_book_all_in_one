@@ -49,14 +49,14 @@ class RssView extends GetView<HomeController> {
   Widget _body(Size size, List<BookModel> books, int lenght) {
     return SizedBox(
       height: 180,
-      width: size.width,
+      width: size.width - 40,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
           for (int i = 0; i < lenght; i++)
             SizedBox(
               height: 180,
-              width: size.width,
+              width: size.width - 40,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [

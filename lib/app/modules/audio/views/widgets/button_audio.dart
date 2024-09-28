@@ -7,14 +7,20 @@ class ButtonAudio extends StatelessWidget {
       {super.key,
       required this.icon,
       required this.title,
-      required this.callback});
+      required this.callback,
+      this.color});
   final IconData icon;
   final String title;
   final GestureTapCallback? callback;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(50), // Đảm bảo ripple có viền tròn
+      focusColor: Colors.blue,
+      hoverColor: Colors.blue,
+      highlightColor: Colors.blue,
+      overlayColor: const WidgetStatePropertyAll(Colors.black),
       onTap: callback,
       child: SizedBox(
         height: 60,
@@ -22,7 +28,10 @@ class ButtonAudio extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon),
+            Icon(
+              icon,
+              color: color,
+            ),
             Text(
               title,
               style: afaca.s10,

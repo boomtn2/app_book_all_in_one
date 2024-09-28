@@ -34,11 +34,11 @@ class SingletonAudiohanle with WidgetsBindingObserver {
     try {
       audioHandler = await AudioService.init(
           builder: () => handle,
-          config: const AudioServiceConfig(
+          config: AudioServiceConfig(
             androidNotificationChannelId: 'hit.coder.ttsaudioquanhonngontinh',
             androidNotificationChannelName: 'Audio',
             androidNotificationOngoing: true,
-            // androidStopForegroundOnPause: false,
+            androidStopForegroundOnPause: false,
           ));
     } catch (e) {
       audioHandler = handle;

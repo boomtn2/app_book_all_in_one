@@ -6,6 +6,7 @@ import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:audio_youtube/app/data/repository/gist_repository.dart';
 import 'package:audio_youtube/app/data/repository/youtube_repository.dart';
 import 'package:audio_youtube/app/modules/search/views/search_view.dart';
+import 'package:audio_youtube/app/modules/youtube/detail_video/view/detail_video_youtube_view.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -160,6 +161,12 @@ class HomeController extends BaseController {
   }
 
   void loadMoreCategory(BuildContext context) {
-    Util.pushNamed(context, SearchView.name);
+    Util.navigateNamed(context, SearchView.name);
+  }
+
+  void openDetail(BookModel book, BuildContext? context) {
+    if (context != null) {
+      Util.navigateNamed(context, DetailVideoYoutubeView.name, extra: book);
+    }
   }
 }

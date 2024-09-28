@@ -1,3 +1,4 @@
+import 'package:audio_youtube/app/core/values/app_values.dart';
 import 'package:audio_youtube/app/data/model/book_model.dart';
 import 'package:audio_youtube/app/data/remote/youtube/youtube_remote.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,9 @@ abstract class YoutubeRepository {
   Future<List<BookModel>> searchIDChannel(String search);
   Future<Uri> getUriMp3(String id);
   Future<List<BookModel>> getVideosRelated(String id);
+  Future<List<BookModel>> getChannelUpload(String id);
+  Future<List<BookModel>> getPlayListChannel(String id);
+  Future<List<BookModel>> getVideoPlayList(String id);
   Future<bool> downloadMp3(String id);
   void dispose();
 }
@@ -67,7 +71,6 @@ class YoutubeRepositoryImpl implements YoutubeRepository {
   @override
   Future<List<BookModel>> search(String search) async {
     final data = await remote.searchYoutubeVideo(search);
-
     return _adapterListModel(data);
   }
 
@@ -76,10 +79,11 @@ class YoutubeRepositoryImpl implements YoutubeRepository {
 
     for (var element in response.items) {
       list.add(BookModel(
+          id: element.id?.videoId ?? element.id?.playlistId,
           title: element.snippet?.title ?? '',
           author: element.snippet?.channelTitle ?? '',
           img: element.snippet?.thumbnails?.thumbnailsDefault?.url ?? '',
-          type: element.kind ?? '',
+          type: element.id?.kind ?? '',
           snippet: element.snippet));
     }
     return list;
@@ -129,5 +133,41 @@ class YoutubeRepositoryImpl implements YoutubeRepository {
   @override
   void dispose() {
     youtubeExplode.close();
+  }
+
+  @override
+  Future<List<BookModel>> getChannelUpload(String id) async {
+    try {
+      final data = await remoteExtra.getVideosChannelUpload(id, null, null);
+      return data.getListBookModel();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  @override
+  Future<List<BookModel>> getPlayListChannel(String id) async {
+    final data = await remoteExtra.getVideosChannelUpload(id, null, null);
+    return data.getListBookModel();
+  }
+
+  @override
+  Future<List<BookModel>> getVideoPlayList(String id) async {
+    final _stream = remoteExtra.getVideosPlayList(id);
+    final list = await _stream.toList();
+    return _adapterListVideoToListBook(list);
+  }
+
+  List<BookModel> _adapterListVideoToListBook(List<Video> videos) {
+    List<BookModel> books = [];
+    for (var element in videos) {
+      books.add(BookModel(
+          id: element.id.value,
+          title: element.title,
+          author: '',
+          img: element.thumbnails.lowResUrl,
+          type: AppValues.typeVideoYoutube));
+    }
+    return books;
   }
 }

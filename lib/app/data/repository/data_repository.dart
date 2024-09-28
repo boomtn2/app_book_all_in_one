@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../model/models_export.dart';
@@ -19,4 +20,14 @@ class DataRepository {
   ListSearchName? nameSearch;
   List<WebsiteTag>? tagWebsite;
   final PanelController panelController = PanelController();
+  AnimationController? animationController;
+  BookModel? model;
+
+  void avatarPlay() {
+    animationController?.repeat();
+  }
+
+  void avatarStop() {
+    animationController?.stop();
+  }
 }

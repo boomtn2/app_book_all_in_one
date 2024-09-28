@@ -3,6 +3,9 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../../model/error_auth.dart';
 
 class Const {
   static const String customActionSetVoice = 'voice';
@@ -15,9 +18,21 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
   int _index = 0;
   bool _running = false;
   final Sleeper _sleeper = Sleeper();
-
+  final PublishSubject<dynamic> _dataSubject = PublishSubject<dynamic>();
   CTextPlayerHandler() {
     _initSession();
+    _initTTS();
+  }
+
+  void _initTTS() {
+    controllerTextToSpeech._flutterTts.setErrorHandler((msg) {
+      _pushEror('$msg (Vui lòng đổi giọng đọc)', '');
+    });
+  }
+
+  void _pushEror(String mess, String code) {
+    _dataSubject
+        .add(ErorrBase(message: mess, code: '[EROR] [TTS HANDLE] $code'));
   }
 
   List<Map<String, String>> voices = [];
@@ -65,13 +80,16 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
     });
   }
 
+  @override
+  PublishSubject get customEvent => _dataSubject;
+
   Future getVoice() async {
     //Save database
     //if(database == null)
     try {
       voices = await controllerTextToSpeech.getVoices();
     } catch (e) {
-      print(e);
+      _pushEror('Lỗi danh sách giọng đọc', '');
     }
   }
 
@@ -120,7 +138,9 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
         st = st.trim();
         mediaItem.add(queue.value[_index]);
       } catch (e) {
-        debugPrint('TTS - $e');
+        _pushEror(
+            'Lỗi danh sách phát \n (Vui lòng kiểm tra lại nội dung danh sách phát)',
+            '');
       }
 
       if (controllerTextToSpeech.state == StateTTS.stop) {

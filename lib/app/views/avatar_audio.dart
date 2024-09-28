@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'animation_totate_image.dart';
 
 class AvatarAudio extends StatelessWidget {
-  const AvatarAudio({super.key});
-
+  const AvatarAudio({super.key, required this.url});
+  final String url;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,6 +28,7 @@ class AvatarAudio extends StatelessWidget {
         children: [
           RotateImage(
             voiCallback: () {},
+            url: url,
           ),
           Center(
             child: Container(

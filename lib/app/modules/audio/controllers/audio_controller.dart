@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_youtube/app/core/base/base_controller.dart';
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
+import 'package:audio_youtube/app/core/utils/icons.dart';
 import 'package:audio_youtube/app/core/values/text_styles.dart';
+import 'package:audio_youtube/app/data/model/error_auth.dart';
+import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:audio_youtube/app/data/service/audio/custom_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,18 +16,28 @@ import '../../../data/service/audio/model/position_data.dart';
 
 enum PlayState { Playing, Pause, Stop, Loading }
 
-class AudioController extends GetxController {
+class AudioController extends BaseController {
   RxString title = ' '.obs;
+  RxString thumble = ''.obs;
   StreamSubscription<PlaybackState>? _streamSubscription;
   Rx<PlayState> state = PlayState.Stop.obs;
   AudioHandler? get controllerAudio =>
       SingletonAudiohanle.instance.audioHandler;
   RxBool showAppBar = false.obs;
-  AudioController() {
+  RxBool initService = false.obs;
+  final BuildContext rootContext;
+  BuildContext? context;
+  AudioController(this.rootContext) {
     _init();
   }
 
-  void _init() {
+  void _init() async {
+    if (SingletonAudiohanle.instance.audioHandler == null) {
+      initService.value = true;
+      await SingletonAudiohanle.instance.init();
+      initService.value = false;
+    }
+
     _streamSubscription =
         SingletonAudiohanle.instance.audioHandler?.playbackState.listen(
       (event) {
@@ -44,13 +58,70 @@ class AudioController extends GetxController {
 
     SingletonAudiohanle.instance.audioHandler?.mediaItem.listen(
       (event) {
-        title.value = event?.title ?? 'Rỗng';
+        if (event != null) {
+          title.value = event.title;
+          thumble.value = event.artUri.toString();
+        }
+      },
+    );
+
+    state.listen(
+      (p0) {
+        if (p0 == PlayState.Playing) {
+          DataRepository.instance.avatarPlay();
+        } else {
+          DataRepository.instance.avatarStop();
+        }
+      },
+    );
+
+    SingletonAudiohanle.instance.audioHandler?.customEvent.listen(
+      (event) {
+        if (event is ErorrBase) {
+          if (rootContext.mounted) {
+            showAdaptiveDialog(
+              context: rootContext,
+              builder: (context) => AlertDialog(
+                title: Row(
+                  children: [
+                    const Icon(
+                      AppIcons.error,
+                      color: Colors.red,
+                    ),
+                    10.w,
+                    const Text('Lỗi'),
+                  ],
+                ),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(
+                        event.message,
+                        style: titleStyle,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Đóng'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+        }
       },
     );
   }
 
   @override
   void dispose() {
+    state.close();
     title.close();
     _streamSubscription?.cancel();
     super.dispose();
@@ -136,10 +207,13 @@ class AudioController extends GetxController {
   }
 
   void addDataTest() {
-    SingletonAudiohanle.instance.audioHandler?.updateQueue(const [
+    SingletonAudiohanle.instance.audioHandler?.updateQueue([
       MediaItem(
-          id: 'https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3',
+          id:
+              'https://d3ctxlq1ktw2nl.cloudfront.net/staging/2024-7-25/1508ddd0-8a8f-76d6-d033-8be70ee51271.mp3',
           title: 'Datatest',
+          artUri: Uri.parse(
+              'https://i.pinimg.com/originals/19/da/e8/19dae8ad303ccedef09da8f6b0fb58ae.jpg'),
           extras: {
             'number':
                 """Có tiền có nhan kiều kiều phú bà mỹ nhân X ngoài lạnh trong nóng tuấn mỹ thần y ca ca
@@ -153,8 +227,11 @@ class AudioController extends GetxController {
     Niên đại hiện đại ngôn tình làm ruộng trọng sinh không gian"""
           }),
       MediaItem(
-          id: 'https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3',
+          id:
+              'https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3',
           title: "A Salute To Head-Scratching Science",
+          artUri: Uri.parse(
+              'https://i.pinimg.com/originals/11/1a/b0/111ab055f76ea4e07684d797d94a48a6.jpg'),
           extras: {
             'number':
                 """Có tiền có nhan kiều kiều phú bà mỹ nhân X ngoài lạnh trong nóng tuấn mỹ thần y ca ca

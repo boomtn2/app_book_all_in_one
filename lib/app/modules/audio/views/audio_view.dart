@@ -18,7 +18,15 @@ class AudioView extends GetView<AudioController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
+          backgroundColor: Theme.of(context)
+              .colorScheme
+              .secondaryContainer
+              .withOpacity(0.72),
           appBar: AppBar(
+            backgroundColor: Theme.of(context)
+                .colorScheme
+                .secondaryContainer
+                .withOpacity(0.72),
             leading: instanceController.showAppBar.value
                 ? const ButtonAudio(
                     icon: AppIcons.appClose,
@@ -36,56 +44,54 @@ class AudioView extends GetView<AudioController> {
                   ]
                 : [],
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                children: [
-                  10.h,
-                  Card(
+          body: instanceController.initService.value
+              ? Center(
+                  child: Column(
+                    children: [
+                      const Loading(),
+                      10.h,
+                      const Text(
+                        'Đang khởi tạo hệ thống',
+                        style: titleStyle,
+                      ),
+                    ],
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     child: Column(
                       children: [
-                        20.h,
-                        const AvatarAudio(),
-                        5.h,
-                        _avatar(),
-                        PositionBar(
-                          instanceController: instanceController,
+                        Card(
+                          child: Column(
+                            children: [
+                              10.h,
+                              AvatarAudio(
+                                url: instanceController.thumble.value,
+                              ),
+                              5.h,
+                              _title(),
+                              PositionBar(
+                                instanceController: instanceController,
+                              ),
+                              5.h,
+                              _playState(),
+                            ],
+                          ),
                         ),
-                        5.h,
-                        _playState(),
+                        20.h,
+                        _moreFuntion(),
+                        20.h,
+                        _buttonAction(
+                            AppIcons.audioPlaylist,
+                            'Danh sách phát',
+                            () =>
+                                instanceController.showBottomPlayList(context)),
                       ],
                     ),
                   ),
-                  20.h,
-                  _moreFuntion(),
-                  20.h,
-                  Row(
-                    children: [
-                      ButtonAudio(
-                        icon: Icons.place,
-                        title: 'AUDIO',
-                        callback: () {
-                          instanceController.changeAudio();
-                        },
-                      ),
-                      ButtonAudio(
-                        icon: Icons.place,
-                        title: 'Text',
-                        callback: () {
-                          instanceController.changeText();
-                        },
-                      )
-                    ],
-                  ),
-                  _buttonAction(AppIcons.audioPlaylist, 'Danh sách phát',
-                      () => instanceController.showBottomPlayList(context)),
-                  _buttonAction(AppIcons.audioBackGround, 'Nghe nền',
-                      () => instanceController.addDataTest()),
-                ],
-              ),
-            ),
-          )),
+                )),
     );
   }
 
@@ -147,13 +153,18 @@ class AudioView extends GetView<AudioController> {
         return Row(
           children: [
             ButtonAudio(
-                icon: AppIcons.audioStop,
-                title: 'Dừng',
-                callback: () => instanceController.stop()),
+              icon: AppIcons.audioPause,
+              title: 'Tạm dừng',
+              callback: () => instanceController.pause(),
+              color: Colors.green,
+            ),
+            10.w,
             ButtonAudio(
-                icon: AppIcons.audioPause,
-                title: 'Tạm dừng',
-                callback: () => instanceController.pause())
+              icon: AppIcons.audioStop,
+              title: 'Dừng',
+              callback: () => instanceController.stop(),
+              color: Colors.red,
+            ),
           ],
         );
       case PlayState.Pause:
@@ -188,7 +199,7 @@ class AudioView extends GetView<AudioController> {
     );
   }
 
-  Widget _avatar() {
+  Widget _title() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
@@ -196,7 +207,7 @@ class AudioView extends GetView<AudioController> {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
-        style: afaca.copyWith(fontWeight: FontWeight.w600),
+        style: afaca.copyWith(fontSize: 16, fontWeight: FontWeight.w700),
       ),
     );
   }

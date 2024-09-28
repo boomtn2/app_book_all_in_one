@@ -46,7 +46,7 @@ class SearchBookController extends BaseController {
     String? url = tagSearch?.listSearchTag[0].getLink(_toJsonTag());
 
     if (url != null) {
-      Util.pushNamed(context, WebViewBookView.name, extra: url);
+      Util.navigateNamed(context, WebViewBookView.name, extra: url);
     } else {
       showErrorMessage('Lỗi tạo đường dẫn website');
     }

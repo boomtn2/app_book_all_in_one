@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:audio_youtube/app/data/model/error_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,8 +14,8 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
   final _player = AudioPlayer();
   ConcatenatingAudioSource? playlist;
   StreamSubscription<PositionData>? _positionDataSubscription;
-  final PublishSubject<PositionData> _positionDataSubject =
-      PublishSubject<PositionData>();
+  final PublishSubject<dynamic> _positionDataSubject =
+      PublishSubject<dynamic>();
   bool isPause = false;
   AudioSession? session;
   CAudioHandle() {
@@ -21,12 +23,20 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
   }
 
   void init() {
-    _player.playbackEventStream.listen(_broadcastState);
+    _player.playbackEventStream.listen(_broadcastState,
+        onError: (Object e, StackTrace st) {
+      if (e is PlatformException) {
+        _pushEror(
+            'Lỗi ${e.details?["index"]} \n ${e.message} \n(Vui lòng chuyển tập)',
+            e.code);
+      } else {
+        _pushEror('Lỗi không xác định \n $e (Báo với Admin!)', '[Unkown]');
+      }
+    });
     _player.currentIndexStream.listen(
       (event) {
         if (event != null) {
           mediaItem.add(queue.value[event]);
-          debugPrint("DEBUG mediaItem.add ${queue.value[event].title}");
         }
       },
     );
@@ -113,16 +123,38 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
   Future<void> play() async {
     session?.setActive(true);
     if (playlist != null) {
-      if (!isPause) {
-        await _player.setAudioSource(playlist!,
-            initialIndex: 0, initialPosition: Duration.zero);
-      }
+      try {
+        if (!isPause) {
+          await _player.setAudioSource(playlist!,
+              initialIndex: 0, initialPosition: Duration.zero);
+        }
 
-      if (_positionDataSubscription == null) {
-        _listen();
+        if (_positionDataSubscription == null) {
+          _listen();
+        }
+        await _player.play();
+      } on PlayerException catch (e) {
+        _pushEror(
+            'Đường dẫn âm thanh bị lỗi \n ${e.message} \n (Vui lòng chuyển sang tập khác!)',
+            ' [PlayerException] ${e.code}');
+      } on PlayerInterruptedException catch (e) {
+        _pushEror(
+            'Lỗi thực hiện quá nhiều thao tác đồng thời \n ${e.message} \n (Thoát ứng dụng vào lại!)',
+            '  [PlayerInterruptedException]');
+      } catch (e) {
+        _pushEror('Lỗi không xác định \n $e \n (Vui lòng báo lỗi với Admin!)',
+            ' [Unkown]  ');
       }
-      await _player.play();
+    } else {
+      _pushEror(
+          "Danh sách phát bị trống \n (Vui lòng kiểm tra lại danh sách phát)",
+          "PlayList == null");
     }
+  }
+
+  void _pushEror(String mess, String code) {
+    _positionDataSubject
+        .add(ErorrBase(message: mess, code: '[EROR] [AUDIO HANDLE] $code'));
   }
 
   @override

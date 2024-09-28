@@ -21,7 +21,9 @@ class NewView extends GetView<HomeController> {
   final Color color = Colors.black;
   final double sizeMax = 1800;
 
-  void openDetail(BookModel model) {}
+  void openDetail(BookModel model, BuildContext context) {
+    controller.openDetail(model, context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,25 +43,31 @@ class NewView extends GetView<HomeController> {
                   Skeletonizer(
                       enabled: controller.isHotLoading.value,
                       child: controller.isHotLoading.value
-                          ? _videos(controller.dataFake())
-                          : _videos(controller.videoYoutube)),
+                          ? _videos(controller.dataFake(), context)
+                          : _videos(controller.videoYoutube, context)),
                   5.h,
-                  TitleView(
-                    title: 'Kênh hay:',
-                    style: boldTitleStyle,
-                    funtion: () {},
-                  ),
-                  Skeletonizer(
-                    enabled: false,
-                    child: SizedBox(
-                      height: 60,
-                      width: MediaQuery.sizeOf(context).width,
-                      child: ListView.separated(
-                        separatorBuilder: (context, index) => 10.w,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.channel.length,
-                        itemBuilder: (context, index) =>
-                            channel(controller.channel[index]),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          TitleView(
+                            title: 'Kênh hay:',
+                            style: boldTitleStyle,
+                            funtion: () {},
+                          ),
+                          SizedBox(
+                            height: 60,
+                            width: MediaQuery.sizeOf(context).width,
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) => 10.w,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: controller.channel.length,
+                              itemBuilder: (context, index) =>
+                                  channel(controller.channel[index]),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -70,7 +78,7 @@ class NewView extends GetView<HomeController> {
     );
   }
 
-  Widget _videos(List<BookModel> books) {
+  Widget _videos(List<BookModel> books, BuildContext context) {
     return SizedBox(
         width: sizeMax,
         child: SingleChildScrollView(
@@ -86,13 +94,13 @@ class NewView extends GetView<HomeController> {
                           children: [
                             ItemCardBookHoritalView(
                               book: books.getNullIndex(i * 2),
-                              openDetail: openDetail,
+                              openDetail: (p0) => openDetail(p0, context),
                             ),
                             5.h,
                             ItemCardBookHoritalView(
                               book: controller.videoYoutube
                                   .getNullIndex((i * 2) + 1),
-                              openDetail: openDetail,
+                              openDetail: (p0) => openDetail(p0, context),
                             ),
                           ],
                         ),
@@ -124,7 +132,7 @@ class NewView extends GetView<HomeController> {
           Expanded(
             child: Text(
               channel.name,
-              style: titleStyle,
+              style: titleStyle.s14,
               maxLines: 1,
             ),
           ),

@@ -44,34 +44,34 @@ class Util {
     router.push(location, extra: extra);
   }
 
-  //Dùng chuyển page
-  static void pushNamed(
-    BuildContext context,
-    String name, {
-    Object? extra,
-    Map<String, String> pathParameters = const {},
-    Map<String, String> queryParameters = const {},
-  }) {
-    final router = GoRouter.of(context);
-    final routerState = GoRouterState.of(context);
-    final routerStack = router.routerDelegate.currentConfiguration.matches
-        .map((e) => e.matchedLocation);
+  // //Dùng chuyển page
+  // static void pushNamed(
+  //   BuildContext context,
+  //   String name, {
+  //   Object? extra,
+  //   Map<String, String> pathParameters = const {},
+  //   Map<String, String> queryParameters = const {},
+  // }) {
+  //   final router = GoRouter.of(context);
+  //   final routerState = GoRouterState.of(context);
+  //   final routerStack = router.routerDelegate.currentConfiguration.matches
+  //       .map((e) => e.matchedLocation);
 
-    final nameLocation = routerState.namedLocation(
-      name,
-      pathParameters: pathParameters,
-      queryParameters: queryParameters,
-    );
+  //   final nameLocation = routerState.namedLocation(
+  //     name,
+  //     pathParameters: pathParameters,
+  //     queryParameters: queryParameters,
+  //   );
 
-    if (routerState.matchedLocation == nameLocation ||
-        routerStack.contains(nameLocation)) {
-      return;
-    }
-    router.pushNamed(
-      name,
-      pathParameters: pathParameters,
-      queryParameters: queryParameters,
-      extra: extra,
-    );
-  }
+  //   if (routerState.matchedLocation == nameLocation ||
+  //       routerStack.contains(nameLocation)) {
+  //     return;
+  //   }
+  //   router.pushNamed(
+  //     name,
+  //     pathParameters: pathParameters,
+  //     queryParameters: queryParameters,
+  //     extra: extra,
+  //   );
+  // }
 }

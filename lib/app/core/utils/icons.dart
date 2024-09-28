@@ -24,4 +24,5 @@ class AppIcons {
   static const IconData audioReport = Icons.error;
   static const IconData audioFavorite = FluentIcons.bookmark_32_regular;
   static const IconData donate = Icons.money;
+  static const IconData error = FluentIcons.error_circle_48_regular;
 }

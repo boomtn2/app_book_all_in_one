@@ -1,7 +1,11 @@
+import 'package:audio_youtube/app/data/model/book_model.dart';
 import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
 import 'package:audio_youtube/app/modules/search/views/search_view.dart';
 import 'package:audio_youtube/app/modules/webview/controllers/webview_book_controller.dart';
 import 'package:audio_youtube/app/modules/webview/views/webview_book_view.dart';
+import 'package:audio_youtube/app/modules/youtube/detail_video/bindings/detail_video_youtube_binding.dart';
+import 'package:audio_youtube/app/modules/youtube/detail_video/controller/detail_video_youtube_controller.dart';
+import 'package:audio_youtube/app/modules/youtube/detail_video/view/detail_video_youtube_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -20,58 +24,70 @@ class AppPages {
 
   // static const INITIAL = Routes.HOME;
   static final routes = GoRouter(navigatorKey: rootNavigatorKey, routes: [
-    ShellRoute(
-        navigatorKey: shellRouteNavigatorKey,
+    StatefulShellRoute.indexedStack(
         builder: (context, state, child) => RootApp(child: child),
-        routes: [
-          GoRoute(
-              path: "/",
-              name: HomeView.name,
-              // redirect: (context, state) {
-              //   //if khởi động lần đầu thì mở màn giới thiệu
-
-              //   // if (auth == null && !KVStoreService.doneGettingStarted) {
-              //   //   return "/getting-started";
-              //   // }
-
-              //   return null;
-              // },
-              builder: (context, state) => GetBuilder(
-                    init: HomeController(),
-                    dispose: (state) {
-                      Get.delete<HomeController>();
-                    },
-                    builder: (controller) => HomeView(),
-                  ),
-              routes: [
-                GoRoute(
-                    path: "search",
-                    name: SearchView.name,
-                    builder: (context, state) => GetBuilder(
-                          init: SearchBookController(),
+        branches: [
+          StatefulShellBranch(navigatorKey: shellRouteNavigatorKey, routes: [
+            GoRoute(
+                parentNavigatorKey: shellRouteNavigatorKey,
+                path: "/",
+                name: HomeView.name,
+                builder: (context, state) => GetBuilder(
+                      init: HomeController(),
+                      dispose: (state) {
+                        Get.delete<HomeController>();
+                      },
+                      builder: (controller) => HomeView(),
+                    ),
+                routes: [
+                  GoRoute(
+                      parentNavigatorKey: shellRouteNavigatorKey,
+                      path: "search",
+                      name: SearchView.name,
+                      builder: (context, state) => GetBuilder(
+                            init: SearchBookController(),
+                            dispose: (state) {
+                              Get.delete<SearchBookController>();
+                            },
+                            builder: (controller) => const SearchView(),
+                          ),
+                      routes: [
+                        GoRoute(
+                            parentNavigatorKey: shellRouteNavigatorKey,
+                            path: "webview",
+                            name: WebViewBookView.name,
+                            builder: (context, state) {
+                              assert(state.extra is String);
+                              String url = state.extra as String;
+                              debugPrint(url);
+                              return GetBuilder(
+                                init: WebViewBookController(url: url),
+                                dispose: (state) {
+                                  Get.delete<WebViewBookController>();
+                                },
+                                builder: (controller) =>
+                                    const WebViewBookView(),
+                              );
+                            }),
+                      ]),
+                  GoRoute(
+                      parentNavigatorKey: shellRouteNavigatorKey,
+                      path: "detailytb",
+                      name: DetailVideoYoutubeView.name,
+                      builder: (context, state) {
+                        assert(state.extra is BookModel);
+                        BookModel model = state.extra as BookModel;
+                        return GetBuilder(
+                          init: DetailVideoYoutubeController(bookModel: model),
                           dispose: (state) {
-                            Get.delete<SearchBookController>();
+                            Get.delete<DetailVideoYoutubeController>();
                           },
-                          builder: (controller) => const SearchView(),
-                        ),
-                    routes: [
-                      GoRoute(
-                          path: "webview",
-                          name: WebViewBookView.name,
-                          builder: (context, state) {
-                            assert(state.extra is String);
-                            String url = state.extra as String;
-                            debugPrint(url);
-                            return GetBuilder(
-                              init: WebViewBookController(url: url),
-                              dispose: (state) {
-                                Get.delete<WebViewBookController>();
-                              },
-                              builder: (controller) => const WebViewBookView(),
-                            );
-                          }),
-                    ]),
-              ]),
+                          builder: (controller) =>
+                              DetailVideoYoutubeView(controller),
+                        );
+                      }),
+                ]),
+          ])
         ]),
     GoRoute(
       path: "/login",
