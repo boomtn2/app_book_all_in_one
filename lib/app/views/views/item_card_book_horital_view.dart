@@ -1,19 +1,15 @@
-import 'package:audio_youtube/app/core/const.dart';
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
 import 'package:audio_youtube/app/views/avatar_audio.dart';
-
 import 'package:flutter/material.dart';
-
-import '../../core/values/app_borders.dart';
 import '../../core/values/text_styles.dart';
 import '../../data/model/book_model.dart';
-import 'cache_image_view.dart';
 
 class ItemCardBookHoritalView extends StatelessWidget {
   const ItemCardBookHoritalView(
       {super.key, this.book, required this.openDetail});
   final BookModel? book;
   final Function(BookModel) openDetail;
+
   @override
   Widget build(BuildContext context) {
     return book == null

@@ -4,8 +4,8 @@ import '../../../core/values/app_borders.dart';
 import '../../../core/values/text_styles.dart';
 
 class PriceWidget extends StatelessWidget {
-  const PriceWidget({super.key});
-
+  const PriceWidget({super.key, required this.price});
+  final int price;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +22,7 @@ class PriceWidget extends StatelessWidget {
           )),
       child: Center(
         child: Text(
-          'Giá: 350.000VND',
+          'Giá: $price Linh thạch',
           style: headerStyle.copyWith(color: Colors.red),
         ),
       ),

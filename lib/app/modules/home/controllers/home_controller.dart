@@ -4,8 +4,12 @@ import 'package:audio_youtube/app/core/const.dart';
 import 'package:audio_youtube/app/core/utils/util.dart';
 import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:audio_youtube/app/data/repository/gist_repository.dart';
+import 'package:audio_youtube/app/data/repository/html_repository.dart';
+import 'package:audio_youtube/app/data/repository/news_repository.dart';
 import 'package:audio_youtube/app/data/repository/youtube_repository.dart';
+import 'package:audio_youtube/app/modules/book/views/book_view.dart';
 import 'package:audio_youtube/app/modules/search/views/search_view.dart';
+import 'package:audio_youtube/app/modules/webview/views/webview_book_view.dart';
 import 'package:audio_youtube/app/modules/youtube/detail_video/view/detail_video_youtube_view.dart';
 
 import 'package:flutter/widgets.dart';
@@ -18,9 +22,13 @@ class HomeController extends BaseController {
   final GistRepository _gistRepository =
       Get.find(tag: (GistRepository).toString());
   DataRepository get _dataRepository => DataRepository.instance;
+  final HtmlRepository _htmlRepository = HtmlRepositoryImpl();
+  final NewsRepository _newsRepository = NewsRepositoryImpl();
 
   RxList<BookModel> videoYoutube = <BookModel>[].obs;
   RxList<BookModel> videoRSS = <BookModel>[].obs;
+  RxList<BookModel> dtruyenListBook = <BookModel>[].obs;
+  RxList<BookModel> newsListBook = <BookModel>[].obs;
   RxList<Tag> tags = <Tag>[].obs;
   RxList<ChannelModel> channel = <ChannelModel>[].obs;
 
@@ -37,14 +45,16 @@ class HomeController extends BaseController {
   @override
   void onInit() async {
     super.onInit();
-    debugPrint("Home int");
-    await _getCategory();
-    await _getSearch();
-    await _getChannel();
+    await _loadDtruyen();
+
     await _loadRSS();
     await _loadHotSearchYoutube();
-    await _loadConfigWebsite();
-    _saveData();
+    // await _loadNews();
+    // await _getChannel();
+    // await _loadConfigWebsite();
+    // await _getCategory();
+    // await _getSearch();
+    // _saveData();
   }
 
   @override
@@ -87,7 +97,8 @@ class HomeController extends BaseController {
             author: '',
             img: element.img,
             id: element.link,
-            type: Const.typeMP3,
+            type: Const.typeRSS,
+            price: element.price,
             detail: '');
         list.add(book);
       }
@@ -97,6 +108,14 @@ class HomeController extends BaseController {
     } catch (e) {
       showErrorMessage('Tải dữ liệu Dịch việt thất bại!');
     }
+  }
+
+  Future _loadDtruyen() async {
+    try {
+      final list = await _htmlRepository
+          .dtruyenFetchListBook("https://dtruyen.net/truyen-nu-cuong-hay/");
+      dtruyenListBook.value = list;
+    } catch (e) {}
   }
 
   Future _getSearch() async {
@@ -109,6 +128,10 @@ class HomeController extends BaseController {
     if (list[1] is ListSearchName) {
       nameSearch = list[1];
     }
+  }
+
+  Future _loadNews() async {
+    newsListBook.value = await _newsRepository.fetchNews();
   }
 
   Future _getCategory() async {
@@ -164,9 +187,21 @@ class HomeController extends BaseController {
     Util.navigateNamed(context, SearchView.name);
   }
 
+  void openDtruyen(BookModel book, BuildContext? context) {
+    if (context != null) {
+      Util.navigateNamed(context, BookView.name, extra: book);
+    }
+  }
+
   void openDetail(BookModel book, BuildContext? context) {
     if (context != null) {
-      Util.navigateNamed(context, DetailVideoYoutubeView.name, extra: book);
+      if (book.type == Const.typePlayList) {
+        Util.navigateNamed(context, DetailVideoYoutubeView.name, extra: book);
+      } else if (book.type == Const.typeRSS) {
+        Util.navigateNamed(context, BookView.name, extra: book);
+      } else if (book.type == Const.typeText) {
+        Util.navigateNamed(context, WebViewBookView.name, extra: book.id);
+      }
     }
   }
 }

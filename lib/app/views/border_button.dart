@@ -9,11 +9,13 @@ class BorderButton extends StatelessWidget {
       required this.title,
       required this.fct,
       this.gradient,
-      this.color = Colors.black});
+      this.color = Colors.black,
+      this.icon});
   final String title;
   final Function fct;
   final Gradient? gradient;
   final Color color;
+  final IconData? icon;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -38,9 +40,14 @@ class BorderButton extends StatelessWidget {
             ),
           ),
         ),
-        child: Text(
-          title,
-          style: headerStyle.copyWith(color: Colors.black),
+        child: Row(
+          children: [
+            icon != null ? Icon(icon) : const SizedBox.shrink(),
+            Text(
+              title,
+              style: headerStyle.copyWith(color: Colors.black),
+            ),
+          ],
         ),
       ),
     );

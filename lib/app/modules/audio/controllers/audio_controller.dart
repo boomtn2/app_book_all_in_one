@@ -27,7 +27,7 @@ class AudioController extends BaseController {
   RxBool initService = false.obs;
   final BuildContext rootContext;
   BuildContext? context;
-  AudioController(this.rootContext) {
+  AudioController(this.rootContext){
     _init();
   }
 
@@ -190,7 +190,7 @@ class AudioController extends BaseController {
           if (list == null) {
             return const SizedBox.shrink();
           } else {
-            return Column(
+            return ListView(
               children: [
                 for (int i = 0; i < list.length; ++i) _itemPlayList(list[i], i)
               ],
@@ -202,7 +202,25 @@ class AudioController extends BaseController {
   Widget _itemPlayList(MediaItem item, int index) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(item.title),
+      child: ListTile(
+        leading: Text(
+          "$index",
+          style: afaca,
+        ),
+        title: Text(
+          "$index: ${item.title}",
+          style: afaca,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: const Icon(Icons.circle_rounded),
+        subtitle: Text(
+          item.extras?['number'] ?? '',
+          style: afaca,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
     );
   }
 

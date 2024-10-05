@@ -27,7 +27,7 @@ class RssView extends GetView<HomeController> {
           () => Column(
             children: [
               TitleView(
-                title: 'Dịch Việt',
+                title: 'Chọn lọc',
                 style: bigTitleStyle.s20,
                 funtion: () {},
               ),
@@ -35,9 +35,12 @@ class RssView extends GetView<HomeController> {
               Skeletonizer(
                 enabled: controller.isRSSLoading.value,
                 child: controller.isRSSLoading.value
-                    ? _body(size, controller.dataFake(), 6)
-                    : _body(size, controller.videoRSS,
-                        controller.count(2, controller.videoRSS.length)),
+                    ? _body(size, controller.dataFake(), 6, context)
+                    : _body(
+                        size,
+                        controller.videoRSS,
+                        controller.count(2, controller.videoRSS.length),
+                        context),
               ),
             ],
           ),
@@ -46,7 +49,8 @@ class RssView extends GetView<HomeController> {
     );
   }
 
-  Widget _body(Size size, List<BookModel> books, int lenght) {
+  Widget _body(
+      Size size, List<BookModel> books, int lenght, BuildContext context) {
     return SizedBox(
       height: 180,
       width: size.width - 40,
@@ -62,18 +66,27 @@ class RssView extends GetView<HomeController> {
                 children: [
                   Expanded(
                     child: ItemCardBookView(
+                      callback: (book) {
+                        controller.openDetail(book, context);
+                      },
                       book: books.getNullIndex(i * 3),
                     ),
                   ),
                   10.w,
                   Expanded(
                     child: ItemCardBookView(
+                      callback: (book) {
+                        controller.openDetail(book, context);
+                      },
                       book: books.getNullIndex((i * 3) + 1),
                     ),
                   ),
                   10.w,
                   Expanded(
                     child: ItemCardBookView(
+                      callback: (book) {
+                        controller.openDetail(book, context);
+                      },
                       book: books.getNullIndex((i * 3) + 2),
                     ),
                   ),

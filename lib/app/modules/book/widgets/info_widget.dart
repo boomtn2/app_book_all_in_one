@@ -1,20 +1,18 @@
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
-
+import 'package:audio_youtube/app/data/model/book_model.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../data_test/data_test.dart';
 import '../../../core/values/text_styles.dart';
 
 class InfoWidget extends StatelessWidget {
-  const InfoWidget({super.key});
-
+  const InfoWidget({super.key, required this.model});
+  final BookModel model;
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          dataTestInfo['name'] ?? '',
+          model.title,
           style: titleStyle.s16,
           textAlign: TextAlign.center,
         ),
@@ -23,11 +21,15 @@ class InfoWidget extends StatelessWidget {
           children: [
             Text(
               'Tác giả: ',
+              maxLines: 1,
               style: titleStyle.s14,
             ),
-            Text(
-              ' ${dataTestInfo['author']}',
-              style: titleStyle.s14.copyWith(color: Colors.blue),
+            Expanded(
+              child: Text(
+                ' ${model.author}',
+                maxLines: 1,
+                style: titleStyle.s14.copyWith(color: Colors.blue),
+              ),
             ),
           ],
         ),
@@ -36,11 +38,15 @@ class InfoWidget extends StatelessWidget {
           children: [
             Text(
               'Trạng thái: ',
+              maxLines: 1,
               style: titleStyle.s14,
             ),
-            Text(
-              '${dataTestInfo['status']}',
-              style: titleStyle.s14.copyWith(color: Colors.blue),
+            Expanded(
+              child: Text(
+                '${model.status}',
+                maxLines: 1,
+                style: titleStyle.s14.copyWith(color: Colors.blue),
+              ),
             ),
           ],
         ),
@@ -49,20 +55,26 @@ class InfoWidget extends StatelessWidget {
           children: [
             Text(
               'Lượt xem: ',
+              maxLines: 1,
               style: titleStyle.s14,
             ),
-            Text(
-              '${dataTestInfo['view']}',
-              style: titleStyle.s14.copyWith(color: Colors.blue),
+            Expanded(
+              child: Text(
+                '${model.view}',
+                maxLines: 1,
+                style: titleStyle.s14.copyWith(color: Colors.blue),
+              ),
             ),
           ],
         ),
         5.h,
-        Text(
-          dataTestInfo['category'] ?? '',
-          style: titleStyle.s14,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
+        Expanded(
+          child: Text(
+            model.category ?? '',
+            style: titleStyle.s14,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

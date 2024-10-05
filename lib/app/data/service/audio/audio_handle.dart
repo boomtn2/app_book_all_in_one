@@ -1,28 +1,30 @@
 import 'dart:async';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:audio_youtube/app/data/model/error_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
-
 import 'model/position_data.dart';
 
 class CAudioHandle extends BaseAudioHandler with QueueHandler {
   final _player = AudioPlayer();
-  ConcatenatingAudioSource? playlist;
-  StreamSubscription<PositionData>? _positionDataSubscription;
   final PublishSubject<dynamic> _positionDataSubject =
       PublishSubject<dynamic>();
+  ConcatenatingAudioSource? playlist;
+  StreamSubscription<PositionData>? _positionDataSubscription;
   bool isPause = false;
   AudioSession? session;
+
   CAudioHandle() {
     init();
   }
 
   void init() {
+    _player.processingStateStream.listen((state) {
+      if (state == ProcessingState.completed) stop();
+    });
+
     _player.playbackEventStream.listen(_broadcastState,
         onError: (Object e, StackTrace st) {
       if (e is PlatformException) {
@@ -40,6 +42,7 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
         }
       },
     );
+
     _initSession();
   }
 
@@ -125,6 +128,10 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
     if (playlist != null) {
       try {
         if (!isPause) {
+          // After a cold restart (on Android), _player.load jumps straight from
+          // the loading state to the completed state. Inserting a delay makes it
+          // work. Not sure why!
+          //await Future.delayed(Duration(seconds: 2)); // magic delay
           await _player.setAudioSource(playlist!,
               initialIndex: 0, initialPosition: Duration.zero);
         }

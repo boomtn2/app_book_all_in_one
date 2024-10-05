@@ -19,6 +19,8 @@ class SingletonAudiohanle with WidgetsBindingObserver {
   static SingletonAudiohanle get instance =>
       _instance ??= SingletonAudiohanle._internal();
 
+  KeyChangeAudio channelAudio = KeyChangeAudio.mp3;
+
   SingletonAudiohanle._internal() {
     WidgetsBinding.instance.addObserver(this);
     init();
@@ -34,11 +36,11 @@ class SingletonAudiohanle with WidgetsBindingObserver {
     try {
       audioHandler = await AudioService.init(
           builder: () => handle,
-          config: AudioServiceConfig(
+          config: const AudioServiceConfig(
             androidNotificationChannelId: 'hit.coder.ttsaudioquanhonngontinh',
             androidNotificationChannelName: 'Audio',
             androidNotificationOngoing: true,
-            androidStopForegroundOnPause: false,
+            // androidStopForegroundOnPause: false,
           ));
     } catch (e) {
       audioHandler = handle;
@@ -46,14 +48,17 @@ class SingletonAudiohanle with WidgetsBindingObserver {
   }
 
   Future<void> changeChannelAudio(KeyChangeAudio name) async {
-    await audioHandler?.stop();
-    switch (name) {
-      case KeyChangeAudio.mp3:
-        await audioHandler?.switchToHandler(0);
-        break;
-      case KeyChangeAudio.text:
-        await audioHandler?.switchToHandler(1);
-        break;
+    if (channelAudio != name) {
+      channelAudio = name;
+      await audioHandler?.stop();
+      switch (name) {
+        case KeyChangeAudio.mp3:
+          await audioHandler?.switchToHandler(0);
+          break;
+        case KeyChangeAudio.text:
+          await audioHandler?.switchToHandler(1);
+          break;
+      }
     }
   }
 

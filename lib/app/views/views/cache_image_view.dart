@@ -1,3 +1,4 @@
+import 'package:audio_youtube/gen/assets.gen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,12 @@ class CacheImage extends GetView {
               fit: BoxFit.fill,
             ),
           )
-        : const SizedBox.shrink();
+        : ClipRRect(
+            borderRadius: borderRadius ?? BorderRadius.circular(0),
+            child: Assets.images.avt.image(
+              width: width,
+              height: height,
+              fit: BoxFit.fill,
+            ));
   }
 }

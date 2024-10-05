@@ -153,8 +153,8 @@ class YoutubeRepositoryImpl implements YoutubeRepository {
 
   @override
   Future<List<BookModel>> getVideoPlayList(String id) async {
-    final _stream = remoteExtra.getVideosPlayList(id);
-    final list = await _stream.toList();
+    final stream = remoteExtra.getVideosPlayList(id);
+    final list = await stream.toList();
     return _adapterListVideoToListBook(list);
   }
 

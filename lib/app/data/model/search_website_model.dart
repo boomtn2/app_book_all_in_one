@@ -139,7 +139,6 @@ class SearchTag {
           nextPage!.param: [paramIndex.toString()]
         });
       }
-      ;
       return Uri(
               scheme: uri.scheme,
               host: uri.host,
@@ -252,7 +251,6 @@ class SearchName {
           nextPage!.param: [paramIndex.toString()]
         });
       }
-      ;
       return Uri(
               scheme: uri.scheme,
               host: uri.host,

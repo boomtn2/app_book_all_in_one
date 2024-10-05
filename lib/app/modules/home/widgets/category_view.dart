@@ -7,9 +7,7 @@ import 'package:audio_youtube/app/modules/home/widgets/title.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../../core/values/app_values.dart';
-import '../../../views/text/text_loadmore.dart';
 
 class CategoryView extends StatefulWidget {
   const CategoryView({super.key});

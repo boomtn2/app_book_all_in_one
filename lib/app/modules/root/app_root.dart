@@ -1,11 +1,8 @@
-import 'package:audio_youtube/app/core/extension/num_extention.dart';
 import 'package:audio_youtube/app/modules/audio/controllers/audio_controller.dart';
 import 'package:audio_youtube/app/modules/audio/views/mini_audio_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
 import '../../data/repository/data_repository.dart';
 import '../../views/navigator/navigator.dart';
 import '../audio/views/audio_view.dart';

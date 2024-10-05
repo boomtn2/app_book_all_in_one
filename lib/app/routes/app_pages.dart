@@ -1,9 +1,10 @@
 import 'package:audio_youtube/app/data/model/book_model.dart';
+import 'package:audio_youtube/app/modules/book/controllers/book_controller.dart';
+import 'package:audio_youtube/app/modules/book/views/book_view.dart';
 import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
 import 'package:audio_youtube/app/modules/search/views/search_view.dart';
 import 'package:audio_youtube/app/modules/webview/controllers/webview_book_controller.dart';
 import 'package:audio_youtube/app/modules/webview/views/webview_book_view.dart';
-import 'package:audio_youtube/app/modules/youtube/detail_video/bindings/detail_video_youtube_binding.dart';
 import 'package:audio_youtube/app/modules/youtube/detail_video/controller/detail_video_youtube_controller.dart';
 import 'package:audio_youtube/app/modules/youtube/detail_video/view/detail_video_youtube_view.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,21 @@ class AppPages {
                           },
                           builder: (controller) =>
                               DetailVideoYoutubeView(controller),
+                        );
+                      }),
+                  GoRoute(
+                      parentNavigatorKey: shellRouteNavigatorKey,
+                      path: "book",
+                      name: BookView.name,
+                      builder: (context, state) {
+                        assert(state.extra is BookModel);
+                        BookModel model = state.extra as BookModel;
+                        return GetBuilder(
+                          init: BookController(model: model),
+                          dispose: (state) {
+                            Get.delete<BookController>();
+                          },
+                          builder: (controller) => BookView(controller),
                         );
                       }),
                 ]),

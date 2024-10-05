@@ -6,7 +6,6 @@ import 'package:audio_youtube/app/core/base/base_remote_source.dart';
 import 'package:dio/dio.dart';
 
 import '../../model/category_model.dart';
-import '../../model/search_website_model.dart';
 
 abstract class CategoryRemoteDataSoure {
   Future<List<dynamic>> fetchDataSearch();

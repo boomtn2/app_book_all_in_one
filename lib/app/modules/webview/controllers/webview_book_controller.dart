@@ -1,12 +1,19 @@
 import 'dart:convert';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:audio_youtube/app/core/base/base_controller.dart';
+
 import 'package:audio_youtube/app/data/model/config_website.dart';
 import 'package:audio_youtube/app/data/repository/data_repository.dart';
+import 'package:audio_youtube/app/data/service/audio/custom_audio.dart';
+import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class WebViewBookController extends BaseController {
+import '../../../core/utils/conver_string.dart';
+
+class WebViewBookController extends BaseController with WidgetsBindingObserver {
   DataRepository get _dataRepository => DataRepository.instance;
   ConfigWebsiteModel? get _configWebsite => _dataRepository.configWebsite;
 
@@ -20,6 +27,8 @@ class WebViewBookController extends BaseController {
   RxBool loading = false.obs;
 
   RxInt processUI = 0.obs;
+
+  bool isBackGround = false;
 
   final adUrlFilters = [
     ".*.doubleclick.net/.*",
@@ -43,20 +52,28 @@ class WebViewBookController extends BaseController {
   ];
 
   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    _dataRepository.panelController.hide();
-    super.onReady();
-  }
-
-  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     webViewController?.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.paused:
+        // Ứng dụng chuyển sang background
+        isBackGround = true;
+        break;
+      case AppLifecycleState.resumed:
+        isBackGround = false;
+        break;
+      // Ứng dụng quay trở lại foreground
+      default:
+        break;
+    }
   }
 
   void _adsBlock() {
@@ -82,7 +99,7 @@ class WebViewBookController extends BaseController {
   }
 
   void onWebViewCreated(InAppWebViewController controller) {
-    print('onWebViewCreated');
+    debugPrint('onWebViewCreated');
     webViewController = controller;
   }
 
@@ -113,11 +130,11 @@ class WebViewBookController extends BaseController {
   }
 
   void onLoadStop(InAppWebViewController controller, WebUri? url) async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     String st = """document.querySelector('div.description');""";
-    print(st);
+    debugPrint(st);
     final text = await controller.evaluateJavascript(source: st);
-    print(text);
+    debugPrint("$text");
   }
 
   void onReceivedError(InAppWebViewController controller, WebResourceRequest rq,
@@ -137,37 +154,113 @@ class WebViewBookController extends BaseController {
     return URLRequest(url: WebUri(url));
   }
 
-  void stopLoading() {
-    webViewController?.stopLoading();
-    loading.value = false;
-  }
-
-  void getText() async {
-    await Future.delayed(Duration(seconds: 3));
+  Future<List<MediaItem>> getText() async {
+    // await Future.delayed(const Duration(seconds: 3));
     String st = """(function() {
-  const paragraphs = document.querySelectorAll('#bookContentBody p');
-  const textArray = [];
+      const paragraphs = document.querySelectorAll('#bookContentBody p');
+      const textArray = [];
 
-  paragraphs.forEach((p) => {
-    textArray.push(p.textContent.trim());
-  });
+      paragraphs.forEach((p) => {
+        textArray.push(p.textContent.trim());
+      });
 
-  const jsonResult = JSON.stringify(textArray);
-return  jsonResult;
-})();
- 
-
-""";
+      const jsonResult = JSON.stringify(textArray);
+      return  jsonResult;
+      })();
+    """;
     final text = await webViewController?.evaluateJavascript(source: st);
     final json = jsonDecode(text.toString()) as List;
-    json.forEach(
-      (element) => print('$element'),
-    );
+    List<MediaItem> listItem = [];
+    for (var element in json) {
+      String text = ConvertString.xoaKyTuDacBiet(element.toString());
+      listItem.add(MediaItem(
+          id: 'TTS', title: 'Text to speech', extras: {'number': text}));
+    }
+    return listItem;
   }
 
-  void autoLeakChapter() {}
+  void scrollPlaylistChapter() {
+    String st = """document.querySelector('.volume-list').scrollIntoView({
+      behavior: 'smooth', // Optional: Makes the scroll smooth
+      block: 'start',     // Scrolls to the top of the element
+      inline: 'nearest'   // Scrolls to the nearest edge in the inline direction
+    });""";
+    webViewController?.evaluateJavascript(source: st);
+  }
 
-  void textToVoice() {}
+  void play() async {
+    await SingletonAudiohanle.instance.changeChannelAudio(KeyChangeAudio.text);
+    final data = await getText();
+    if (data.isNotEmpty) {
+      await DataRepository.instance.pannelClose();
+      await SingletonAudiohanle.instance.audioHandler?.updateQueue(data);
+      await SingletonAudiohanle.instance.audioHandler?.play();
+      auto();
+    } else {
+      scrollPlaylistChapter();
+    }
+  }
 
-  void leakText() {}
+  void auto() async {
+    final auto = await browerNextChapter();
+    await Future.delayed(const Duration(seconds: 2));
+    for (int i = 0; i < 20; ++i) {
+      debugPrint("auto $i");
+      if (isBackGround) {
+        break;
+      }
+      if (auto == true) {
+        final data = await getText();
+        await SingletonAudiohanle.instance.audioHandler?.addQueueItems(data);
+        await browerNextChapter();
+        await Future.delayed(const Duration(seconds: 2));
+      } else {
+        break;
+      }
+    }
+  }
+
+  Future<bool> browerNextChapter() async {
+    final response =
+        await webViewController?.evaluateJavascript(source: """(function() {
+          const btnNextChapter = document.querySelector("#btnNextChapter");
+
+          if (btnNextChapter) {
+              btnNextChapter.click();
+              return true;
+          } else {
+              return false;
+          }
+        })();
+        """);
+    if (response is bool) {
+      return response;
+    } else {
+      return false;
+    }
+  }
+
+  void browerBack() {
+    loading.value = true;
+    webViewController?.canGoBack();
+  }
+
+  void browerReload() {
+    loading.value = true;
+    webViewController?.reload();
+  }
+
+  void browerCancel() {
+    loading.value = false;
+    webViewController?.stopLoading();
+  }
+
+  void download() {}
+
+  void favorite() {}
+
+  void backResultSearch() async {
+    loading.value = true;
+    webViewController?.loadUrl(urlRequest: URLRequest(url: WebUri(url)));
+  }
 }

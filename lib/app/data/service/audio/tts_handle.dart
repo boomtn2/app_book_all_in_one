@@ -161,13 +161,6 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
     _handleCompletion();
   }
 
-  @override
-  Future<void> addQueueItems(List<MediaItem> mediaItems) {
-    mediaItem.add(mediaItems.first);
-    reset();
-    return super.addQueueItems(mediaItems);
-  }
-
   void reset() {
     _index = 0;
     controllerTextToSpeech.initialize();
@@ -213,9 +206,10 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
 
   @override
   Future<void> stop() {
-    dispose();
     _stopRun();
     _uiNotifiStop();
+    _index = 0;
+    controllerTextToSpeech.stop();
     return super.stop();
   }
 

@@ -8,8 +8,9 @@ import '../../data/model/book_model.dart';
 import 'cache_image_view.dart';
 
 class ItemCardBookView extends StatelessWidget {
-  const ItemCardBookView({super.key, this.book});
+  const ItemCardBookView({super.key, this.book, required this.callback});
   final BookModel? book;
+  final Function(BookModel book) callback;
   @override
   Widget build(BuildContext context) {
     return book == null
@@ -21,7 +22,9 @@ class ItemCardBookView extends StatelessWidget {
             height: 180,
             width: 100,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                callback(book!);
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,

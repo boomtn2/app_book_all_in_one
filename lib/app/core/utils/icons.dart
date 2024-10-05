@@ -25,4 +25,11 @@ class AppIcons {
   static const IconData audioFavorite = FluentIcons.bookmark_32_regular;
   static const IconData donate = Icons.money;
   static const IconData error = FluentIcons.error_circle_48_regular;
+  static const IconData scroll =
+      FluentIcons.dual_screen_vertical_scroll_24_regular;
+  static const IconData backWeb = Icons.arrow_circle_left_sharp;
+  static const IconData searchResult = FluentIcons.book_48_regular;
+  static const IconData browerReload = Icons.replay_outlined;
+  static const IconData browerBack = Icons.arrow_back_ios_new_rounded;
+  static const IconData buy = FluentIcons.store_microsoft_24_regular;
 }

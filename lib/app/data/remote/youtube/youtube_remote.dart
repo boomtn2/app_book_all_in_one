@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audio_youtube/app/core/base/base_remote_source.dart';
 import 'package:audio_youtube/app/data/remote/youtube/youtube_playlist_param_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import '../../model/youtube_search_response.dart';
@@ -142,9 +143,13 @@ class YoutubeExplodeRemoteDataSoureImpl extends BaseRemoteSource
   @override
   Future<AudioOnlyStreamInfo> getInfoVideo(String id) async {
     var manifest = await youtubeExplode.videos.streamsClient.getManifest(id);
-
-    var streamInfo = manifest.audioOnly.withHighestBitrate();
-    return streamInfo;
+    debugPrint(manifest.muxed.toString());
+    debugPrint(manifest.audio.toString());
+    var streamInfo = manifest.audioOnly;
+    for (var element in streamInfo) {
+      print(element.toJson());
+    }
+    return streamInfo.first;
   }
 
   @override
@@ -165,9 +170,9 @@ class YoutubeExplodeRemoteDataSoureImpl extends BaseRemoteSource
   @override
   Future<RelatedVideosList?> getRelated(String id) async {
     try {
-      Video _video = await youtubeExplode.videos.get(id);
+      Video video = await youtubeExplode.videos.get(id);
 
-      return youtubeExplode.videos.getRelatedVideos(_video);
+      return youtubeExplode.videos.getRelatedVideos(video);
     } catch (e) {
       return null;
     }

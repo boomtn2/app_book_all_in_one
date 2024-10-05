@@ -30,4 +30,30 @@ class DataRepository {
   void avatarStop() {
     animationController?.stop();
   }
+
+  Future pannelClose() async {
+    if (panelController.isPanelClosed == false) {
+      await pannelShow();
+      await panelController.close();
+    }
+  }
+
+  Future pannelOpen() async {
+    if (panelController.isPanelOpen == false) {
+      await pannelShow();
+      await panelController.open();
+    }
+  }
+
+  Future pannelShow() async {
+    if (panelController.isPanelShown == false) {
+      await panelController.show();
+    }
+  }
+
+  Future pannelHide() async {
+    if (panelController.isPanelShown) {
+      await panelController.hide();
+    }
+  }
 }

@@ -11,51 +11,61 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+# widgets
   cupertino_icons: ^1.0.6
-  get_cli: ^1.8.1
-  get: ^4.6.6
-
-  logger: ^2.4.0
-  pretty_dio_logger: ^1.4.0
-
-  dio: ^5.6.0
   fluttertoast: ^8.2.8
   flutter_svg: ^2.0.10+1
-  collection: ^1.18.0
-
-  shared_preferences: ^2.3.2
-
-  firebase_core: ^3.3.0
-  google_sign_in: ^6.2.1
-  firebase_auth: ^5.1.4
-
-  firebase_messaging: ^15.1.0
   cached_network_image: ^3.3.1
   sliding_up_panel: ^2.0.0+1
-
-  dart_rss: ^3.0.3
-  just_audio: ^0.9.37
-  youtube_explode_dart: ^2.2.2
-  
   curved_navigation_bar: ^1.0.6
-  go_router: ^14.2.7
   skeletonizer: ^1.4.2
-  flutter_inappwebview: ^6.0.0
   flutter_speed_dial: ^7.0.0
-  audio_service: ^0.18.15
-  audio_session: ^0.1.21
-  rxdart: ^0.27.7
-  flutter_tts: ^3.8.5	
   audio_video_progress_bar: ^2.0.3
   fluentui_system_icons: ^1.1.257
   modal_bottom_sheet: ^3.0.0
 
+# debug
+  logger: ^2.4.0
+  pretty_dio_logger: ^1.4.0
+
+# controller 
+  get_cli: ^1.8.1
+  get: ^4.6.6
+  go_router: ^14.2.7
+
+# firebase
+  firebase_core: ^3.3.0
+  google_sign_in: ^6.2.1
+  firebase_auth: ^5.1.4
+  firebase_messaging: ^15.1.0
+  
+# model
+  collection: ^1.18.0
+  shared_preferences: ^2.3.2
+  sqflite: ^2.3.3+1
+
+# network
+  flutter_inappwebview: ^6.0.0
+  dio: ^5.6.0
+
+# audio
+  just_audio: ^0.9.37
+  audio_service: ^0.18.15
+  audio_session: ^0.1.21
+  flutter_tts: ^3.8.5	
   flowery_tts:
     git:
       url: https://github.com/boomtn2/flowery_api_tts.git
       ref: fix_model
- 
-  
+
+ # other
+  rxdart: ^0.27.7
+  youtube_explode_dart: ^2.2.2 
+  dart_rss: ^3.0.3
+  path_provider: ^2.0.15
+  permission_handler: ^10.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

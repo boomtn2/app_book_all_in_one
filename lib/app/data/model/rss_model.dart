@@ -22,14 +22,14 @@ class Podcast {
   final String name;
   final String link;
   final String img;
-  int price = 1000;
+  int price = 0;
 
   Podcast(
       {required this.name,
       required this.link,
       required this.img,
       required String price}) {
-    this.price = parseInt(price) ?? 1000;
+    this.price = parseInt(price) ?? 0;
   }
 
   Podcast copyWith({

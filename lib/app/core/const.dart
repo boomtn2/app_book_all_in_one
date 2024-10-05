@@ -19,9 +19,9 @@ class Const {
       // Print an emoji for each log message
     ),
   );
-
-  static String typePlayList = 'youtube#playlist';
-  static String typeVideo = 'youtube#video';
-  static String typeMP3 = 'mp3';
-  static String typeText = 'text';
+  static const String typeRSS = 'Rss';
+  static const String typePlayList = 'youtube#playlist';
+  static const String typeVideo = 'youtube#video';
+  static const String typeMP3 = 'mp3';
+  static const String typeText = 'text';
 }

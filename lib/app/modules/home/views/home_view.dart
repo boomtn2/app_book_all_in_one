@@ -9,6 +9,7 @@ import '../widgets/category_view.dart';
 import '../widgets/intro_view.dart';
 import '../widgets/rss_view.dart';
 import '../widgets/sli_search_view.dart';
+import '../widgets/news_view.dart';
 
 class HomeView extends BaseView<HomeController> {
   HomeView({super.key});
@@ -20,15 +21,16 @@ class HomeView extends BaseView<HomeController> {
 
   @override
   Widget body(BuildContext context) {
-    return const CustomScrollView(
+    return CustomScrollView(
       slivers: [
-        SliSearchView(),
-        SliverExpandedView(height: 10),
-        CategoryView(),
-        NewView(),
-        RssView(),
+        const SliSearchView(),
+        const SliverExpandedView(height: 10),
+        const CategoryView(),
+        const RssView(),
+        const NewView(),
         IntroView(),
-        SliverExpandedView(height: 350)
+        NewsView(),
+        const SliverExpandedView(height: 350)
       ],
     );
   }

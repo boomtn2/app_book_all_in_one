@@ -35,7 +35,7 @@ abstract class BaseView<Controller extends BaseController>
               ? _showLoading()
               : Container()),
           Obx(() => controller.errorMessage.isNotEmpty
-              ? showErrorSnackBar(controller.errorMessage)
+              ? showErrorSnackBar(controller.errorMessage, context)
               : Container()),
           Container(),
         ],
@@ -76,10 +76,10 @@ abstract class BaseView<Controller extends BaseController>
     );
   }
 
-  Widget showErrorSnackBar(String message) {
+  Widget showErrorSnackBar(String message, BuildContext context) {
     final snackBar = SnackBar(content: Text(message));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
 
     return Container();
