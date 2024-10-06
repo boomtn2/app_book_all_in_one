@@ -16,6 +16,7 @@ import 'package:audio_youtube/app/modules/book/widgets/other_widget.dart';
 import 'package:audio_youtube/app/modules/book/widgets/price_widget.dart';
 import 'package:audio_youtube/app/views/folder/tabbar_folder.dart';
 import 'package:audio_youtube/app/views/views/cache_image_view.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -40,6 +41,7 @@ class BookController extends GetxController {
   final HtmlRepository html = HtmlRepositoryImpl();
   final BookModel model;
   BuildContext? context;
+  BuildContext? contextDialog;
 
   ChapterModel? _linkChapter;
 
@@ -77,6 +79,39 @@ class BookController extends GetxController {
     } else {
       indext.value = 0;
       _pageController.jumpToPage(0);
+    }
+  }
+
+  void showDialogProgress() {
+    if (context != null) {
+      showDialog(
+          context: context!,
+          builder: (context) {
+            contextDialog = context;
+            return AlertDialog(
+              title: const Text('Tiến trình'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ValueListenableBuilder(
+                    valueListenable: processingDownloadChapter,
+                    builder: (context, value, child) {
+                      return Text("$value /50 Chapter");
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      isCancelDownload = true;
+                      CancelToken cancelToken = CancelToken();
+                      cancelToken.cancel();
+                      Navigator.canPop(context);
+                    },
+                    child: const Text('Hủy tải'),
+                  )
+                ],
+              ),
+            );
+          });
     }
   }
 
@@ -307,6 +342,7 @@ class BookController extends GetxController {
   bool isCancelDownload = false;
   void _auto50Chapter() async {
     processingDownloadChapter = ValueNotifier(0);
+    showDialogProgress();
     for (int i = 0; i < 50; ++i) {
       processingDownloadChapter.value = i;
       if (isCancelDownload) {

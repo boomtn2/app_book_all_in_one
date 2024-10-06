@@ -23,7 +23,7 @@ class DetailVideoYoutubeController extends GetxController {
   RxList<BookModel> videoChannelUpload = <BookModel>[].obs;
   RxList<BookModel> getVideosRelated = <BookModel>[].obs;
 
-  bool showGetMp3 = false;
+  ValueNotifier<bool> showGetMp3 = ValueNotifier(false);
   BuildContext? context;
 
   void init() async {
@@ -47,41 +47,47 @@ class DetailVideoYoutubeController extends GetxController {
     final uri = await _ytbRepository.getUriMp3(model.id ?? '');
     debugPrint('getMp3 url$uri');
     await setMedia(uri.toString(), model.title);
-    closeDialod();
+
     SingletonAudiohanle.instance.audioHandler?.play();
   }
 
-  void closeDialod() {
-    if (context != null && showGetMp3) {
-      Navigator.of(context!).pop();
-    }
-  }
-
   void showDialogLoadMp3() {
-    if (context != null) {
-      showDialog(
-        context: context!,
-        builder: (context) => AlertDialog(
-          titleTextStyle: titleStyle,
-          contentTextStyle: afaca,
-          title: const Text('Đang lấy dữ liệu'),
-          content: SizedBox(
-              height: 80,
-              child: Column(
-                children: [
-                  const Loading(),
-                  ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(Colors.red)),
-                      onPressed: () {
-                        Dio().close();
-                      },
-                      child: const Text('Huỷ'))
-                ],
-              )),
-        ),
-      );
-    }
+    showGetMp3.value = true;
+//     if (context != null) {
+//       showDialog(
+
+//         context: context!,
+//         builder: (context) {
+//           showGetMp3.addListener(() {
+
+//           },);
+// return AlertDialog(
+//           titleTextStyle: titleStyle,
+//           contentTextStyle: afaca,
+//           title: const Text(
+//             'Đang lấy dữ liệu',
+//             style: afaca,
+//           ),
+//           content: SizedBox(
+//               height: 80,
+//               child: Column(
+//                 children: [
+//                   const Loading(),
+//                   ElevatedButton(
+//                       style: const ButtonStyle(
+//                           backgroundColor: WidgetStatePropertyAll(Colors.red)),
+//                       onPressed: () {
+//                         CancelToken cancelToken = CancelToken();
+//                         cancelToken.cancel();
+//                         Navigator.of(context).canPop();
+//                       },
+//                       child: const Text('Huỷ'))
+//                 ],
+//               )),
+//         );
+
+//         });
+    // }
   }
 
   Future setMedia(String mp3, String title) async {
