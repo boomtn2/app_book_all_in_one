@@ -12,7 +12,9 @@ import '../../../../data/repository/youtube_repository.dart';
 class DetailVideoYoutubeController extends GetxController {
   late final BookModel? bookModel;
 
-  DetailVideoYoutubeController({required this.bookModel});
+  DetailVideoYoutubeController({required this.bookModel}) {
+    init();
+  }
 
   final YoutubeRepository _ytbRepository =
       Get.find(tag: (YoutubeRepository).toString());

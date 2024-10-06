@@ -114,10 +114,14 @@ class DetailVideoYoutubeView extends GetView<DetailVideoYoutubeController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          instanceController.bookModel?.snippet?.channelTitle ??
-                              '',
-                          style: titleStyle,
+                        Expanded(
+                          child: Text(
+                            maxLines: 1,
+                            instanceController
+                                    .bookModel?.snippet?.channelTitle ??
+                                '',
+                            style: titleStyle,
+                          ),
                         ),
                         ElevatedButton(
                             onPressed: () {},

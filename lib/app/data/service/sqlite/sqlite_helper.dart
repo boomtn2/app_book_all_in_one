@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../model/model_db/download_model.dart';
 import '../../model/model_db/favorite_model.dart';
 import '../../model/model_db/history_model.dart';
+import '../../model/models_export.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper.internal();
@@ -36,10 +37,10 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int newVersion) async {
     await _execute(
-        'CREATE TABLE ${FavoriteModel.table}(${FavoriteModel.cId} TEXT,${FavoriteModel.cName} TEXT ,${FavoriteModel.cImage} TEXT,${FavoriteModel.cType} TEXT,${FavoriteModel.cFavorite} INTEGER)',
+        'CREATE TABLE ${FavoriteModel.table}(${FavoriteModel.cId} TEXT PRIMARY KEY,${FavoriteModel.cName} TEXT ,${FavoriteModel.cImage} TEXT,${FavoriteModel.cType} TEXT,${FavoriteModel.cFavorite} INTEGER)',
         db);
     await _execute(
-        'CREATE TABLE ${HistoryModel.table}(${HistoryModel.cId} TEXT,${HistoryModel.cName} TEXT ,${HistoryModel.cImage} TEXT,${HistoryModel.cType} TEXT)',
+        'CREATE TABLE ${HistoryModel.table}(${HistoryModel.cId} TEXT PRIMARY KEY,${HistoryModel.cName} TEXT ,${HistoryModel.cImage} TEXT,${HistoryModel.cType} TEXT)',
         db);
     await _execute(
         'CREATE TABLE ${ChapterHistoryModel.table}(${ChapterHistoryModel.cId} TEXT,${ChapterHistoryModel.cName} TEXT ,${ChapterHistoryModel.cPath} TEXT,${ChapterHistoryModel.cType} TEXT)',
@@ -50,6 +51,23 @@ class DatabaseHelper {
     await _execute(
         'CREATE TABLE ${ItemDownload.dbTable}(${ItemDownload.cID} TEXT,${ItemDownload.cName} TEXT ,${ItemDownload.cPath} TEXT,${ItemDownload.cSTT} INTEGER,${ItemDownload.cText} TEXT,${ItemDownload.cType} TEXT )',
         db);
+
+    await _execute(ConfigWebsite.querryCreateTable, db);
+    await _execute(Listbookhtml.querryCreateTable, db);
+    await _execute(Jsleak.querryCreateTable, db);
+    await _execute(Chapterhtml.querryCreateTable, db);
+
+    await _execute(ChannelModel.querryCreateTable, db);
+
+    await _execute(SearchName.querryCreateTable, db);
+    await _execute(SearchTag.querryCreateTable, db);
+    await _execute(NextPage.querryCreateTable, db);
+    await _execute(Fill.querryCreateTable, db);
+
+    await _execute(WebsiteTag.querryCreateTable, db);
+    await _execute(GroupTag.querryCreateTable, db);
+    await _execute(Tag.querryCreateTable, db);
+    await _execute(IDTag.querryCreateTable, db);
   }
 
   Future _execute(String query, Database db) async {

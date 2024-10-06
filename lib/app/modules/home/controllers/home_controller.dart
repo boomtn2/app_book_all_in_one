@@ -49,12 +49,12 @@ class HomeController extends BaseController {
 
     await _loadRSS();
     await _loadHotSearchYoutube();
-    // await _loadNews();
-    // await _getChannel();
-    // await _loadConfigWebsite();
-    // await _getCategory();
-    // await _getSearch();
-    // _saveData();
+    await _loadNews();
+    await _getChannel();
+    await _loadConfigWebsite();
+    await _getCategory();
+    await _getSearch();
+    _saveData();
   }
 
   @override

@@ -32,6 +32,20 @@ class ConfigWebsite {
   final Chapterhtml chapterhtml;
   final Jsleak jsleak;
 
+  //DB
+  static const String table = "configwebsite";
+  static const String cType = "type";
+  static const String cId = "id"; //id
+
+  String get id => website;
+
+  Map<String, Object?> getMapInsertDB() {
+    return {cId: id, cType: type};
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cType TEXT  )';
+
   ConfigWebsite({
     required this.type,
     required this.website,
@@ -87,6 +101,27 @@ class Chapterhtml {
     required this.querryTitle,
   });
 
+  //DB
+  static const String table = "Chapterhtml";
+  static const String cID = "id";
+  static const String cQuerryLinkNext = "querryLinkNext";
+  static const String cQuerryLinkPre = "querryLinkPre";
+  static const String cQuerryTextChapter = "querryTextChapter";
+  static const String cQuerryTitle = "querryTitle";
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cID TEXT,$cQuerryLinkNext TEXT ,$cQuerryLinkPre TEXT,$cQuerryTextChapter TEXT,$cQuerryTitle TEXT)';
+
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {
+      cID: id,
+      cQuerryLinkNext: querryLinkNext,
+      cQuerryLinkPre: querryLinkPre,
+      cQuerryTextChapter: querryTextChapter,
+      cQuerryTitle: querryTitle,
+    };
+  }
+
   Chapterhtml copyWith({
     String? querryLinkNext,
     String? querryLinkPre,
@@ -124,6 +159,30 @@ class Jsleak {
   final String jsDescription;
   final String jsCategory;
   final String jsOther;
+
+  //DB
+  static const String table = "Jsleak";
+  static const String cID = "id";
+  static const String cJsIndexing = "jsIndexing";
+  static const String cJsListChapter = "jsListChapter";
+  static const String cJsActionNext = "jsActionNext";
+  static const String cJsDescription = "jsDescription";
+  static const String cJsCategory = "jsCategory";
+  static const String cJsOther = "jsOther";
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cID TEXT,$cJsIndexing TEXT,$cJsListChapter TEXT,$cJsActionNext TEXT,$cJsDescription TEXT,$cJsCategory TEXT,$cJsOther TEXT  )';
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {
+      cID: id,
+      cJsIndexing: jsIndexing,
+      cJsListChapter: jsListChapter,
+      cJsActionNext: jsActionNext,
+      cJsDescription: jsDescription,
+      cJsCategory: jsCategory,
+      cJsOther: jsOther
+    };
+  }
 
   Jsleak({
     required this.jsIndexing,
@@ -179,6 +238,29 @@ class Listbookhtml {
   final String queryAuthor;
   final String queryview;
   final String queryHref;
+
+  //DB
+  static const String table = "listbookhtml";
+  static const String cID = "id";
+  static const String cQuerryList = "querrylist";
+  static const String cQueryText = "queryText";
+  static const String cQueryScr = "queryScr";
+  static const String cQueryAuthor = "queryAuthor";
+  static const String cQueryview = "queryview";
+  static const String cQueryHref = "queryHref";
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cID TEXT,$cQuerryList TEXT,$cQueryText TEXT,$cQueryScr TEXT,$cQueryAuthor TEXT,$cQueryview TEXT,$cQueryHref TEXT  )';
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {
+      cID: id,
+      cQuerryList: querryList,
+      cQueryText: queryText,
+      cQueryScr: queryScr,
+      cQueryAuthor: queryAuthor,
+      cQueryview: queryview,
+      cQueryHref: queryHref
+    };
+  }
 
   Listbookhtml({
     required this.querryList,

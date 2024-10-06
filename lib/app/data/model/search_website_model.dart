@@ -2,7 +2,19 @@ class NextPage {
   final String param;
   final int begin;
   final int step;
+  //DB
+  static const String table = "NextPage";
+  static const String cId = "id"; //idWebsite
+  static const String cbegin = "begin";
+  static const String cParam = "param";
+  static const String cstep = "step";
 
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {cId: id, cParam: param, cbegin: begin, cstep: step};
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT,$cParam TEXT,$cstep INTEGER,$cbegin INTEGER )';
   NextPage({required this.param, required this.begin, required this.step});
 
   factory NextPage.json(Map<String, dynamic> json) {
@@ -30,6 +42,20 @@ class Fill {
   final String name;
   final String param;
   final List<Map<String, dynamic>> values;
+
+  //DB
+  static const String table = "Fill";
+  static const String cId = "id"; //idWebsite
+  static const String cName = "name";
+  static const String cParam = "param";
+  static const String cValues = "cValues";
+
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {cId: id, cName: name, cParam: param, cValues: ""};
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT,$cName TEXT,$cParam TEXT,$cValues TEXT )';
 
   Fill({required this.name, required this.param, required this.values});
 
@@ -73,6 +99,26 @@ class SearchTag {
   final Map<String, dynamic>? params;
   final NextPage? nextPage;
 
+  //DB
+  static const String table = "SearchTag";
+  static const String cType = "type";
+  static const String cId = "website"; //id
+  static const String cPath = "path";
+  static const String cTypePram = "typePram";
+  static const String cParams = "params";
+
+  Map<String, Object?> getMapInsertDB() {
+    return {
+      cId: website,
+      cType: type,
+      cPath: path,
+      cTypePram: typePram,
+      cParams: params.toString()
+    };
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cType TEXT,$cPath TEXT,$cTypePram TEXT,$cParams TEXT)';
   SearchTag(
       {required this.type,
       required this.website,
@@ -179,6 +225,26 @@ class SearchName {
   final String? param;
   final NextPage? nextPage;
 
+  //DB
+  static const String table = "SearchName";
+  static const String cType = "type";
+  static const String cId = "website"; //id
+  static const String cPath = "path";
+  static const String cTypePram = "typePram";
+  static const String cParams = "params";
+
+  Map<String, Object?> getMapInsertDB() {
+    return {
+      cId: website,
+      cType: type,
+      cPath: path,
+      cTypePram: typePram,
+      cParams: params.toString()
+    };
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cType TEXT,$cPath TEXT,$cTypePram TEXT,$cParams TEXT)';
   SearchName(
       {required this.type,
       required this.website,

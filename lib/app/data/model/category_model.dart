@@ -3,6 +3,18 @@ class WebsiteTag {
   final GroupTag hotTag;
   final List<GroupTag> tags;
 
+  //DB
+  static const String table = "WebsiteTag";
+  static const String cId = "type"; //idWebsite
+
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {
+      cId: id,
+    };
+  }
+
+  static String get querryCreateTable => 'CREATE TABLE $table($cId TEXT )';
+
   WebsiteTag({required this.type, required this.hotTag, required this.tags});
 
   factory WebsiteTag.json(Map<String, dynamic> json) {
@@ -30,7 +42,18 @@ class GroupTag {
 
   GroupTag(
       {required this.nameGroup, required this.tags, required this.multiselect});
+  //DB
+  static const String table = "GroupTag";
+  static const String cId = "id"; //idWebsite
+  static const String cNameGroup = "nameGroup"; //id GroupTag
+  static const String cMultiselect = "multiselect";
 
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {cId: id, cNameGroup: nameGroup, cMultiselect: multiselect ? 1 : 0};
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT,$cNameGroup TEXT,$cMultiselect INTEGER)';
   factory GroupTag.jsonTag(Map<String, dynamic> json) {
     final tags = json["values"];
     List<Tag> tempTags = [];
@@ -59,6 +82,17 @@ class Tag {
   final String name;
   final List<IDTag> idTags;
 
+  //DB
+  static const String table = "Tag";
+  static const String cId = "id"; //idGRTAG
+  static const String cName = "name"; //idIDTAG
+
+  Map<String, Object?> getMapInsertDB(String id) {
+    return {cId: id, cName: name};
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT, $cName TEXT)';
   Tag({required this.name, required this.idTags});
 
   @override
@@ -71,6 +105,22 @@ class IDTag {
   final String id;
   final String tag;
 
+  //DB
+  static const String table = "IDTag";
+  static const String cTag = "tag";
+  static const String cId = "id"; //id
+  static const String cCode = "code"; //id
+
+  Map<String, Object?> getMapInsertDB(String idTAG) {
+    return {
+      cId: idTAG,
+      cTag: tag,
+      cCode: id,
+    };
+  }
+
+  static String get querryCreateTable =>
+      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cTag TEXT )';
   IDTag({required this.id, required this.tag});
 
   @override
