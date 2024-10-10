@@ -72,7 +72,6 @@ class InfoWidget extends StatelessWidget {
           child: Text(
             model.category ?? '',
             style: titleStyle.s14,
-            maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
         ),

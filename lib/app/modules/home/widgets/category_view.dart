@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/values/app_values.dart';
+import 'sli_expend.dart';
 
 class CategoryView extends StatefulWidget {
   const CategoryView({super.key});
@@ -22,7 +23,7 @@ class _CategoryViewState extends State<CategoryView>
 
   late TabController _tabController;
 
-  int _currentPageIndex = 0;
+  final int _currentPageIndex = 0;
 
   final controller = Get.find<HomeController>();
   @override
@@ -44,55 +45,56 @@ class _CategoryViewState extends State<CategoryView>
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: AppValues.paddingLeft,
-          right: AppValues.paddingLeft,
-        ),
-        child: Obx(
-          () => Column(
-            children: [
-              TitleView(
-                title: 'Thể loại',
-                child: TabPageSelector(
-                  controller: _tabController,
-                  color: Colors.blue,
-                  selectedColor: Colors.black,
+    return Obx(
+      () => controller.tags.isEmpty
+          ? const SliverExpandedView(height: 0)
+          : SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: AppValues.paddingLeft,
+                  right: AppValues.paddingLeft,
                 ),
-                funtion: () => controller.loadMoreCategory(context),
-              ),
-              Skeletonizer(
-                enabled: !controller.isCategoryLoading.value,
-                child: SizedBox(
-                  height: 100,
-                  width: size.width,
-                  child: PageView(
-                    onPageChanged: (value) {
-                      setState(() {
-                        _tabController.animateTo(value);
-                      });
-                    },
-                    controller: PageController(
-                      initialPage: _currentPageIndex,
-                    ),
+                child: Obx(
+                  () => Column(
                     children: [
-                      for (int i = 0; i < controller.tags.length / 4; ++i)
-                        _page(
-                          Size(size.width, 100),
-                          controller.tags.getNullIndex((i * 4)),
-                          controller.tags.getNullIndex((i * 4) + 1),
-                          controller.tags.getNullIndex((i * 4) + 2),
-                          controller.tags.getNullIndex((i * 4) + 3),
+                      TitleView(
+                        title: 'Thể loại',
+                        child: TabPageSelector(
+                          controller: _tabController,
+                          color: Colors.blue,
+                          selectedColor: Colors.black,
                         ),
+                        funtion: () => controller.loadMoreCategory(context),
+                      ),
+                      SizedBox(
+                        height: 100,
+                        width: size.width,
+                        child: PageView(
+                          onPageChanged: (value) {
+                            setState(() {
+                              _tabController.animateTo(value);
+                            });
+                          },
+                          controller: PageController(
+                            initialPage: _currentPageIndex,
+                          ),
+                          children: [
+                            for (int i = 0; i < controller.tags.length / 4; ++i)
+                              _page(
+                                Size(size.width, 100),
+                                controller.tags.getNullIndex((i * 4)),
+                                controller.tags.getNullIndex((i * 4) + 1),
+                                controller.tags.getNullIndex((i * 4) + 2),
+                                controller.tags.getNullIndex((i * 4) + 3),
+                              ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 

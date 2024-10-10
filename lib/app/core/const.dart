@@ -24,4 +24,5 @@ class Const {
   static const String typeVideo = 'youtube#video';
   static const String typeMP3 = 'mp3';
   static const String typeText = 'text';
+  static const String typePlayListPostCastVnExpress = 'play-list-vnexpress';
 }

@@ -5,6 +5,7 @@ abstract class HtmlRepository {
   Future<List<BookModel>> dtruyenFetchListBook(String url);
   Future<(ChapterModel, BookModel)> dtruyenFetchInforBook(String url);
   Future<ChapterModel> dtruyenFetchChapter(String url);
+  Future<List<BookModel>> dtruyenLoadMore(String url, int index);
 }
 
 class HtmlRepositoryImpl implements HtmlRepository {
@@ -22,5 +23,10 @@ class HtmlRepositoryImpl implements HtmlRepository {
   @override
   Future<ChapterModel> dtruyenFetchChapter(String url) {
     return dtruyen.fetchChapter(url);
+  }
+
+  @override
+  Future<List<BookModel>> dtruyenLoadMore(String url, int index) {
+    return dtruyen.loadMoreListBook(url, index);
   }
 }

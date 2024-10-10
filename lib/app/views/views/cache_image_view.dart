@@ -1,6 +1,7 @@
 import 'package:audio_youtube/gen/assets.gen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 import '../../core/utils/util.dart';
@@ -34,7 +35,7 @@ class CacheImage extends GetView {
                   ),
                 ),
               ),
-              placeholder: (context, url) => const SizedBox(),
+              placeholder: (context, url) => const Center(child: loadingWidget),
               errorWidget: (context, url, error) => const Icon(Icons.error),
               width: width,
               height: height,
@@ -48,5 +49,25 @@ class CacheImage extends GetView {
               height: height,
               fit: BoxFit.fill,
             ));
+  }
+}
+
+const loadingWidget = LoadingWidget(
+  isImage: true,
+);
+
+class LoadingWidget extends StatelessWidget {
+  final bool isImage;
+
+  const LoadingWidget({super.key, this.isImage = false});
+
+  @override
+  Widget build(BuildContext context) {
+    const Color color = Colors.blueAccent;
+    return Center(
+      child: isImage
+          ? const SpinKitRipple(color: color)
+          : const SpinKitWave(color: color),
+    );
   }
 }

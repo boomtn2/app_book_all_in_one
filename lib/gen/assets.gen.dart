@@ -110,10 +110,21 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsJsonsGen {
+  const $AssetsJsonsGen();
+
+  /// File path: assets/jsons/default_config_website.json
+  String get defaultConfigWebsite => 'assets/jsons/default_config_website.json';
+
+  /// List of all assets
+  List<String> get values => [defaultConfigWebsite];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsJsonsGen jsons = $AssetsJsonsGen();
 }
 
 class AssetGenImage {

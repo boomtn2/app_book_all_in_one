@@ -11,8 +11,8 @@ class OtherBookWidget extends StatelessWidget {
         'Đề xuất',
         style: headerStyle,
       ),
-      Padding(
-        padding: const EdgeInsets.all(5.0),
+      const Padding(
+        padding: EdgeInsets.all(5.0),
         child: Row(
           children: [
             //

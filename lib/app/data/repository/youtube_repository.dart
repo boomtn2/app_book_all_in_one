@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import '../model/youtube_search_response.dart';
+import '../remote/youtube/param_models/youtube_search_param_model.dart';
 
 abstract class YoutubeRepository {
   Future<List<BookModel>> search(String search);
@@ -15,6 +16,9 @@ abstract class YoutubeRepository {
   Future<List<BookModel>> getChannelUpload(String id);
   Future<List<BookModel>> getPlayListChannel(String id);
   Future<List<BookModel>> getVideoPlayList(String id);
+  Future<List<BookModel>> getLoadMoreSearch(YoutubeSearchParamModel param);
+  Future<YoutubeSearchParamModel?> getParamSearchModel();
+
   Future<bool> downloadMp3(String id);
   void dispose();
 }
@@ -169,5 +173,17 @@ class YoutubeRepositoryImpl implements YoutubeRepository {
           type: AppValues.typeVideoYoutube));
     }
     return books;
+  }
+
+  @override
+  Future<List<BookModel>> getLoadMoreSearch(
+      YoutubeSearchParamModel param) async {
+    final data = await remote.loadMoreSearchPlayList(param);
+    return _adapterListModel(data);
+  }
+
+  @override
+  Future<YoutubeSearchParamModel?> getParamSearchModel() async {
+    return remote.getYoutubeParamSearch();
   }
 }

@@ -1,6 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/error_auth.dart';
+
 class LoggingAudioHandler extends CompositeAudioHandler {
   LoggingAudioHandler(super.inner) {
     playbackState.listen((state) {
@@ -22,7 +24,13 @@ class LoggingAudioHandler extends CompositeAudioHandler {
       _log('androidPlaybackInfo changed: $androidPlaybackInfo');
     });
     customEvent.listen((dynamic customEventStream) {
-      _log('customEvent changed: $customEventStream');
+      if(customEventStream is ErorrBase)
+        {
+          _log('customEvent changed: ${customEventStream.message} ${customEventStream.code} ');
+        }else{
+        _log('customEvent changed: $customEventStream');
+      }
+
     });
     customState.listen((dynamic customState) {
       _log('customState changed: $customState');

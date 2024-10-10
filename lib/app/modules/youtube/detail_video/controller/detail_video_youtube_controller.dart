@@ -69,7 +69,7 @@ class DetailVideoYoutubeController extends GetxController {
               height: 80,
               child: Column(
                 children: [
-                  const Loading(),
+                  const     Expanded(child:  Loading()),
                   ElevatedButton(
                       style: const ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.red)),

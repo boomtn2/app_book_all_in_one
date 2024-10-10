@@ -29,7 +29,9 @@ class RssView extends GetView<HomeController> {
               TitleView(
                 title: 'Chọn lọc',
                 style: bigTitleStyle.s20,
-                funtion: () {},
+                funtion: () {
+                  controller.openLoadMore(controller.videoRSS, context);
+                },
               ),
               5.h,
               Skeletonizer(

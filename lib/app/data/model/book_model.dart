@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:audio_youtube/app/data/model/youtube_search_response.dart';
 
 class BookModel {
@@ -27,6 +26,16 @@ class BookModel {
       this.category,
       this.view,
       this.price});
+
+  ChapterModel getChapterModel() {
+    return ChapterModel(
+      text: '',
+      title: title,
+      linkChapter: id ?? '',
+      linkNext: '',
+      linkPre: '',
+    );
+  }
 }
 
 class ChapterModel {

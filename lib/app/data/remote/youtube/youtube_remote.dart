@@ -1,18 +1,22 @@
 import 'dart:io';
 
 import 'package:audio_youtube/app/core/base/base_remote_source.dart';
-import 'package:audio_youtube/app/data/remote/youtube/youtube_playlist_param_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import '../../model/youtube_search_response.dart';
-import 'youtube_search_param_model.dart';
+import 'param_models/youtube_playlist_param_model.dart';
+import 'param_models/youtube_search_param_model.dart';
 
 abstract class YoutubeRemoteDataSoure {
   Future<YoutubeSearchResponse> searchYoutubeVideo(String search);
+
   Future<YoutubeSearchResponse> getVideoPlayList(String idPlayList);
   Future<YoutubeSearchResponse> getPlayListChannel(String idChannel);
+  Future<YoutubeSearchResponse> loadMoreSearchPlayList(
+      YoutubeSearchParamModel param);
+  YoutubeSearchParamModel? getYoutubeParamSearch();
 }
 
 abstract class ExtraYoutubeRemoteDataSoure {
@@ -38,7 +42,7 @@ class YoutubeRemoteDataSoureImpl extends BaseRemoteSource
     var endpoint = "$path/search/";
     final param = YoutubeSearchParamModel(q: search, type: 'playlist');
     var dioCall = dioClient.get(endpoint, queryParameters: param.toJson());
-
+    _searchParamModel = param;
     try {
       return callApiWithErrorParser(dioCall)
           .then((response) => _parseGithubProjectSearchResponse(response));
@@ -49,7 +53,9 @@ class YoutubeRemoteDataSoureImpl extends BaseRemoteSource
 
   YoutubeSearchResponse _parseGithubProjectSearchResponse(
       Response<dynamic> response) {
-    return YoutubeSearchResponse.fromJson(response.data);
+    final responseYtb = YoutubeSearchResponse.fromJson(response.data);
+    _searchParamModel?.token = responseYtb.nextPageToken;
+    return responseYtb;
   }
 
   @override
@@ -73,6 +79,7 @@ class YoutubeRemoteDataSoureImpl extends BaseRemoteSource
       q: null,
       channelId: idChannel,
     );
+    _searchParamModel = param;
     var dioCall = dioClient.get(endpoint, queryParameters: param.toJson());
 
     try {
@@ -81,6 +88,28 @@ class YoutubeRemoteDataSoureImpl extends BaseRemoteSource
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<YoutubeSearchResponse> loadMoreSearchPlayList(
+      YoutubeSearchParamModel param) {
+    var endpoint = "$path/search/";
+    var dioCall =
+        dioClient.get(endpoint, queryParameters: param.toJsonNextPage());
+    _searchParamModel = param;
+    try {
+      return callApiWithErrorParser(dioCall)
+          .then((response) => _parseGithubProjectSearchResponse(response));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  YoutubeSearchParamModel? _searchParamModel;
+
+  @override
+  YoutubeSearchParamModel? getYoutubeParamSearch() {
+    return _searchParamModel;
   }
 }
 

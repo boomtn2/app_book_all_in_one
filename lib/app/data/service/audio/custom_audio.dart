@@ -19,7 +19,7 @@ class SingletonAudiohanle with WidgetsBindingObserver {
   static SingletonAudiohanle get instance =>
       _instance ??= SingletonAudiohanle._internal();
 
-  KeyChangeAudio channelAudio = KeyChangeAudio.mp3;
+  KeyChangeAudio channelAudio = KeyChangeAudio.text;
 
   SingletonAudiohanle._internal() {
     WidgetsBinding.instance.addObserver(this);
@@ -27,8 +27,8 @@ class SingletonAudiohanle with WidgetsBindingObserver {
   }
 
   final handle = LoggingAudioHandler(MainSwitchHandler([
-    CAudioHandle(),
     CTextPlayerHandler(),
+    CAudioHandle(),
   ]));
 
   AudioProcessingState? handleState;
@@ -53,10 +53,10 @@ class SingletonAudiohanle with WidgetsBindingObserver {
       await audioHandler?.stop();
       switch (name) {
         case KeyChangeAudio.mp3:
-          await audioHandler?.switchToHandler(0);
+          await audioHandler?.switchToHandler(1);
           break;
         case KeyChangeAudio.text:
-          await audioHandler?.switchToHandler(1);
+          await audioHandler?.switchToHandler(0);
           break;
       }
     }

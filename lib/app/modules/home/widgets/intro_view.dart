@@ -8,33 +8,41 @@ import '../../../core/values/text_styles.dart';
 import '../../../data/model/book_model.dart';
 import '../../../views/views/item_card_book_view.dart';
 import '../controllers/home_controller.dart';
+import 'sli_expend.dart';
 
 class IntroView extends StatelessWidget {
   IntroView({super.key});
   final controller = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: AppValues.paddingLeft,
-          right: AppValues.paddingLeft,
-        ),
-        child: Column(
-          children: [
-            TitleView(
-              title: 'Giới thiệu',
-              style: bigTitleStyle.s20,
-              funtion: () {},
+    return Obx(
+      () => controller.dtruyenListBook.isEmpty
+          ? const SliverExpandedView(height: 0)
+          : SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: AppValues.paddingLeft,
+                  right: AppValues.paddingLeft,
+                ),
+                child: Column(
+                  children: [
+                    TitleView(
+                      title: 'Giới thiệu',
+                      style: bigTitleStyle.s20,
+                      funtion: () {
+                        controller.openLoadMore(
+                            controller.dtruyenListBook, context);
+                      },
+                    ),
+                    Obx(() => _body(
+                        MediaQuery.sizeOf(context),
+                        controller.dtruyenListBook,
+                        controller.count(6, controller.dtruyenListBook.length),
+                        context)),
+                  ],
+                ),
+              ),
             ),
-            Obx(() => _body(
-                MediaQuery.sizeOf(context),
-                controller.dtruyenListBook,
-                controller.count(6, controller.dtruyenListBook.length),
-                context)),
-          ],
-        ),
-      ),
     );
   }
 

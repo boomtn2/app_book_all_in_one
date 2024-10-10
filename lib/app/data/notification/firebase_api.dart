@@ -27,8 +27,8 @@ class FirebaseApi {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
 
-    print("Handling a background message: ${message.messageId}");
-    print("Handling a background message: ${message.data}");
+    // debug("Handling a background message: ${message.messageId}");
+    // print("Handling a background message: ${message.data}");
   }
 
   //

@@ -31,6 +31,7 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
   }
 
   void _pushEror(String mess, String code) {
+    stop();
     _dataSubject
         .add(ErorrBase(message: mess, code: '[EROR] [TTS HANDLE] $code'));
   }
@@ -89,7 +90,7 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
     try {
       voices = await controllerTextToSpeech.getVoices();
     } catch (e) {
-      _pushEror('Lỗi danh sách giọng đọc', '');
+      _pushEror('Lỗi danh sách giọng đọc getVoice', '');
     }
   }
 

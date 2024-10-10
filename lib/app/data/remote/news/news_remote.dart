@@ -2,32 +2,25 @@ import 'dart:convert';
 
 import 'package:audio_youtube/app/core/base/base_remote_source.dart';
 import 'package:audio_youtube/app/core/const.dart';
+import 'package:audio_youtube/app/data/remote/news/models/news_postcard_param_model.dart';
 import 'package:dio/dio.dart';
-
 import '../../model/book_model.dart';
+import '../../model/postcard_vnexpress/intro_postcard_model.dart';
 
 abstract class NewsRemoteDataSource {
-  Future<List<BookModel>> fetchNews();
+  Future<List<BookModel>> fetchPostCard(List<String> articleIds);
+  Future<List<BookModel>> fetchPostCardArticleIds(
+      String url, int limit, int offset);
+  Future<List<IntroPostCard>> fetchIntroPostCard();
 }
 
 class NewsRemoteDataSourceImpl extends BaseRemoteSource
     implements NewsRemoteDataSource {
-  String api = "https://gw.vnexpress.net/ar/get_rule_2";
   @override
-  Future<List<BookModel>> fetchNews() async {
-    var endpoint = api;
-    var dioCall = dioClient.get(endpoint, queryParameters: {
-      "category_id": "1001014",
-      "limit": "10",
-      "page": "1",
-      "data_select":
-          "article_id,article_type,privacy,title,lead,share_url,thumbnail_url,new_privacy,publish_time,original_cate,article_category,myvne_token,off_thumb,iscomment,thumb_list",
-      "exclude_id": "4799843,4799827,4800141,4333519,4799846,4799846",
-      "thumb_size": "490x294",
-      "thumb_quality": "100",
-      "thumb_dpr": "1,2",
-      "thumb_fit": "crop"
-    });
+  Future<List<BookModel>> fetchPostCard(List<String> articleIds) async {
+    var endpoint = NewsPostCardModel.domain;
+    var dioCall = dioClient.get(endpoint,
+        queryParameters: NewsPostCardModel.getPostCard(articleIds));
 
     try {
       return callApiWithErrorParser(dioCall)
@@ -38,20 +31,60 @@ class NewsRemoteDataSourceImpl extends BaseRemoteSource
   }
 
   List<BookModel> _parseBookResponse(Response<dynamic> response) {
-    final json = response.data;
+    final json = jsonDecode(response.data);
     List<BookModel> list = [];
-    final dataList = json["data"]["1001014"]["data"] as List;
+    final dataList = json["data"] as List;
     for (var element in dataList) {
       list.add(BookModel(
-          id: element["share_url"],
+          id: element["podcast"]["path"],
           title: element["title"] ?? '',
           author: "",
           img: element["thumbnail_url"] ?? "",
-          type: Const.typeText));
+          type: Const.typeMP3));
     }
 
     return list;
   }
-}
 
-class News {}
+  List<BookModel> _parseBookArticleIdsResponse(Response<dynamic> response) {
+    final json = jsonDecode(response.data);
+    List<BookModel> list = [];
+    final itemJson = json["data"] as Map;
+    final dataList = itemJson.entries.first.value["data"] as List;
+    for (var element in dataList) {
+      list.add(BookModel(
+          id: "${element["article_id"]}",
+          title: element["title"] ?? '',
+          author: element["publish_time_format"] ?? '',
+          img: element["thumbnail_url"] ?? "",
+          type: Const.typePlayList,
+          detail: element["lead"]));
+    }
+
+    return list;
+  }
+
+  @override
+  Future<List<BookModel>> fetchPostCardArticleIds(
+      String url, int limit, int offset) async {
+    var endpoint = "$url/limit/$limit/offset/$offset";
+    var dioCall = dioClient.get(endpoint);
+    try {
+      return callApiWithErrorParser(dioCall)
+          .then((response) => _parseBookArticleIdsResponse(response));
+    } catch (e) {
+      return [];
+    }
+  }
+
+  @override
+  Future<List<IntroPostCard>> fetchIntroPostCard() async {
+    final list = jsonDecode(dataIntroPostCardJson) as List;
+    List<IntroPostCard> listPostCard = [];
+    for (var item in list) {
+      listPostCard.add(IntroPostCard.json(item));
+    }
+
+    return listPostCard;
+  }
+}

@@ -96,30 +96,30 @@ class AudioView extends GetView<AudioController> {
   }
 
   Widget _moreFuntion() {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ButtonAudio(
           icon: AppIcons.audioVoice,
           title: 'Giọng đọc',
-          callback: null,
+          callback: () => instanceController.getVoices(),
         ),
-        ButtonAudio(
+        const ButtonAudio(
           icon: AppIcons.audioDownLoad,
           title: 'Tải về',
           callback: null,
         ),
-        ButtonAudio(
+        const ButtonAudio(
           icon: AppIcons.audioFavorite,
           title: 'Yêu thích',
           callback: null,
         ),
-        ButtonAudio(
+        const ButtonAudio(
           icon: AppIcons.audioReport,
           title: 'Báo lỗi',
           callback: null,
         ),
-        ButtonAudio(
+        const ButtonAudio(
           icon: AppIcons.donate,
           title: 'Ủng hộ',
           callback: null,

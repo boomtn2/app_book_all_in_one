@@ -8,13 +8,20 @@ import 'package:audio_youtube/app/data/repository/html_repository.dart';
 import 'package:audio_youtube/app/data/repository/news_repository.dart';
 import 'package:audio_youtube/app/data/repository/youtube_repository.dart';
 import 'package:audio_youtube/app/modules/book/views/book_view.dart';
+import 'package:audio_youtube/app/modules/loadmore/loadmore_view.dart';
+import 'package:audio_youtube/app/modules/post_card/post_card_view.dart';
 import 'package:audio_youtube/app/modules/search/views/search_view.dart';
 import 'package:audio_youtube/app/modules/webview/views/webview_book_view.dart';
+import 'package:audio_youtube/app/modules/youtube/channel/view/channel_youtube_view.dart';
 import 'package:audio_youtube/app/modules/youtube/detail_video/view/detail_video_youtube_view.dart';
+import 'package:audio_youtube/app/modules/youtube/loadmore/view/channel_youtube_view.dart';
+import 'package:audio_youtube/app/modules/youtube/playlist_channels/playlist_channels_view.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import '../../../data/model/models_export.dart';
+import '../../../data/remote/youtube/param_models/youtube_search_param_model.dart';
 
 class HomeController extends BaseController {
   final YoutubeRepository _ytbRepository =
@@ -36,25 +43,33 @@ class HomeController extends BaseController {
   ListSearchTag? tagSearch;
   ListSearchName? nameSearch;
 
-  RxBool isCategoryLoading = true.obs;
-  RxBool isHotLoading = true.obs;
-  RxBool isChannelLoading = true.obs;
+  // RxBool isCategoryLoading = true.obs;
+  // RxBool isHotLoading = true.obs;
+  // RxBool isChannelLoading = true.obs;
   RxBool isRSSLoading = true.obs;
-  RxBool isDtruyenLoading = true.obs;
+  // RxBool isDtruyenLoading = true.obs;
+
+  RxBool isLoadingDataSystem = true.obs;
+
+  YoutubeSearchParamModel? _youtubeSearchParamModel;
 
   @override
   void onInit() async {
     super.onInit();
-    await _loadDtruyen();
-
-    await _loadRSS();
-    await _loadHotSearchYoutube();
     await _loadNews();
+    await Future.delayed(const Duration(seconds: 4));
+    await _loadDtruyen();
+    await Future.delayed(const Duration(seconds: 2));
+    await _loadRSS();
+    await Future.delayed(const Duration(seconds: 1));
+    await _loadHotSearchYoutube();
     await _getChannel();
-    await _loadConfigWebsite();
+    await Future.delayed(const Duration(seconds: 1));
     await _getCategory();
     await _getSearch();
+    await _loadConfigWebsite();
     _saveData();
+    isLoadingDataSystem.value = false;
   }
 
   @override
@@ -76,11 +91,9 @@ class HomeController extends BaseController {
 
   Future _loadHotSearchYoutube() async {
     try {
-      isHotLoading.value = true;
       final response = await _ytbRepository.search('Thập niên 70');
       videoYoutube.value = response;
-      await Future.delayed(const Duration(seconds: 1));
-      isHotLoading.value = false;
+      _youtubeSearchParamModel = await _ytbRepository.getParamSearchModel();
     } catch (e) {
       showErrorMessage('Đề xuất bị lỗi!');
     }
@@ -112,8 +125,9 @@ class HomeController extends BaseController {
 
   Future _loadDtruyen() async {
     try {
-      final list = await _htmlRepository
-          .dtruyenFetchListBook("https://dtruyen.net/truyen-nu-cuong-hay/");
+      String path = "https://dtruyen.net/truyen-nu-cuong-hay/";
+      DataRepository.instance.urlDtruyen = path;
+      final list = await _htmlRepository.dtruyenFetchListBook(path);
       dtruyenListBook.value = list;
     } catch (e) {}
   }
@@ -131,7 +145,7 @@ class HomeController extends BaseController {
   }
 
   Future _loadNews() async {
-    newsListBook.value = await _newsRepository.fetchNews();
+    newsListBook.value = await _newsRepository.fetchIntroPostCard();
   }
 
   Future _getCategory() async {
@@ -203,5 +217,26 @@ class HomeController extends BaseController {
         Util.navigateNamed(context, WebViewBookView.name, extra: book.id);
       }
     }
+  }
+
+  void openLoadMore(List<BookModel> list, BuildContext context) {
+    Util.navigateNamed(context, LoadMoreView.name, extra: list);
+  }
+
+  void openLoadMoreYoutube(List<BookModel> list, BuildContext context) {
+    DataRepository.instance.youtubeSearchParamModel = _youtubeSearchParamModel;
+    Util.navigateNamed(context, LoadMorePlayListYoutubeView.name, extra: list);
+  }
+
+  void openChannel(BuildContext context, ChannelModel channel) {
+    Util.navigateNamed(context, ChannelYoutubeView.name, extra: channel);
+  }
+
+  void openAllChannel(BuildContext context) {
+    Util.navigateNamed(context, PlaylistChannelsView.name, extra: channel);
+  }
+
+  void openPlayListPostCard(BuildContext context, BookModel book) {
+    Util.navigateNamed(context, PostCardView.name, extra: book);
   }
 }

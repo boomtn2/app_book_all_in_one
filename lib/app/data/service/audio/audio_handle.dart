@@ -217,7 +217,7 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
 
   @override
   Future<void> updateQueue(List<MediaItem> newQueue) async {
-    _player.stop();
+    await _player.stop();
     await playlist?.clear();
     playlist = ConcatenatingAudioSource(
       children: List<AudioSource>.from(newQueue

@@ -86,6 +86,7 @@ class _TabbarFolderState extends State<TabbarFolder> {
         child: Text(
           title.toUpperCase(),
           style: headerStyle.copyWith(color: enable ? color : hide),
+          maxLines: 1,
         ),
       ),
     );

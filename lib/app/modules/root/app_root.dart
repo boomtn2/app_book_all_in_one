@@ -42,7 +42,11 @@ class RootApp extends StatelessWidget {
                     // print('onPanelSlide');
                   },
                   isDraggable: true,
-                  collapsed: MiniAudioView(instanceController: controller),
+                  collapsed: InkWell(
+                      onTap: () {
+                        DataRepository.instance.pannelOpen();
+                      },
+                      child: MiniAudioView(instanceController: controller)),
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(18.0),
                       topRight: Radius.circular(18.0)),

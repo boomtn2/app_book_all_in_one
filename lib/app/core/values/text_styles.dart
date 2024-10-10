@@ -247,4 +247,4 @@ final TextStyle textButtonStyle =
     afaca.copyWith(fontSize: 12, fontWeight: FontWeight.w500);
 
 final TextStyle fontStyteLoadMore =
-    afaca.copyWith(color: Colors.blue, fontSize: 12);
+    afaca.copyWith(color: Colors.blue, fontSize: 14);

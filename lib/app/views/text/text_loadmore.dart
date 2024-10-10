@@ -7,9 +7,12 @@ class TextLoadmoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'Xem thêm',
-      style: fontStyteLoadMore,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        'Xem thêm',
+        style: fontStyteLoadMore,
+      ),
     );
   }
 }

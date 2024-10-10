@@ -8,6 +8,7 @@ abstract class DtruyenRemoteDataSource {
   Future<List<BookModel>> fetchListBook(String url);
   Future<(ChapterModel, BookModel)> fetchInfor(String url);
   Future<ChapterModel> fetchChapter(String url);
+  Future<List<BookModel>> loadMoreListBook(String url, int index);
 }
 
 class DtruyenRemoteImpl extends BaseRemoteSource
@@ -96,5 +97,18 @@ class DtruyenRemoteImpl extends BaseRemoteSource
         querryTextChapter: "",
         querryTitle: "");
     return (chapter, book);
+  }
+
+  @override
+  Future<List<BookModel>> loadMoreListBook(String url, int index) {
+    var endpoint = "$url/$index/";
+    var dioCall = dioClient.get(endpoint);
+
+    try {
+      return callApiWithErrorParser(dioCall)
+          .then((response) => _parseBookResponse(response));
+    } catch (e) {
+      rethrow;
+    }
   }
 }

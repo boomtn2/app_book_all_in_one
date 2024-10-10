@@ -38,13 +38,12 @@ class NewView extends GetView<HomeController> {
                 children: [
                   TitleView(
                     title: 'Đề xuất',
-                    funtion: () {},
+                    funtion: () {
+                      controller.openLoadMoreYoutube(
+                          controller.videoYoutube, context);
+                    },
                   ),
-                  Skeletonizer(
-                      enabled: controller.isHotLoading.value,
-                      child: controller.isHotLoading.value
-                          ? _videos(controller.dataFake(), context)
-                          : _videos(controller.videoYoutube, context)),
+                  _videos(controller.videoYoutube, context),
                   5.h,
                   Card(
                     child: Padding(
@@ -54,7 +53,9 @@ class NewView extends GetView<HomeController> {
                           TitleView(
                             title: 'Kênh hay:',
                             style: boldTitleStyle,
-                            funtion: () {},
+                            funtion: () {
+                              controller.openAllChannel(context);
+                            },
                           ),
                           SizedBox(
                             height: 60,
@@ -64,7 +65,7 @@ class NewView extends GetView<HomeController> {
                               scrollDirection: Axis.horizontal,
                               itemCount: controller.channel.length,
                               itemBuilder: (context, index) =>
-                                  channel(controller.channel[index]),
+                                  channel(controller.channel[index], context),
                             ),
                           ),
                         ],
@@ -112,31 +113,36 @@ class NewView extends GetView<HomeController> {
             )));
   }
 
-  Widget channel(ChannelModel channel) {
-    return SizedBox(
-      width: 180,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircleAvatar(
-            maxRadius: 28,
-            child: CacheImage(
-              width: 50,
-              height: 50,
-              borderRadius: const BorderRadius.all(Radius.circular(60)),
-              url: channel.thumbail,
+  Widget channel(ChannelModel channel, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        controller.openChannel(context, channel);
+      },
+      child: SizedBox(
+        width: 180,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              maxRadius: 28,
+              child: CacheImage(
+                width: 50,
+                height: 50,
+                borderRadius: const BorderRadius.all(Radius.circular(60)),
+                url: channel.thumbail,
+              ),
             ),
-          ),
-          5.w,
-          Expanded(
-            child: Text(
-              channel.name,
-              style: titleStyle.s14,
-              maxLines: 1,
+            5.w,
+            Expanded(
+              child: Text(
+                channel.name,
+                style: titleStyle.s14,
+                maxLines: 1,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

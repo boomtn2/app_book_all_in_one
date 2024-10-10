@@ -1,10 +1,14 @@
 import 'package:audio_youtube/app/core/base/base_view.dart';
+import 'package:audio_youtube/app/core/extension/num_extention.dart';
+import 'package:audio_youtube/app/core/widget/loading.dart';
 import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
 import 'package:audio_youtube/app/modules/home/widgets/new_view.dart';
 import 'package:audio_youtube/app/modules/home/widgets/sli_expend.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../core/values/text_styles.dart';
 import '../widgets/category_view.dart';
 import '../widgets/intro_view.dart';
 import '../widgets/rss_view.dart';
@@ -24,11 +28,38 @@ class HomeView extends BaseView<HomeController> {
     return CustomScrollView(
       slivers: [
         const SliSearchView(),
+        Obx(
+          () => controller.isLoadingDataSystem.value
+              ? SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      5.h,
+                      const Loading(),
+                      5.h,
+                      Text(
+                        'Đang tải dữ liệu truyện...',
+                        style: titleStyle.s22,
+                      ),
+                      5.h,
+                    ],
+                  ),
+                )
+              : const SliverExpandedView(height: 0),
+        ),
         const SliverExpandedView(height: 10),
         const CategoryView(),
-        const RssView(),
         const NewView(),
+        const RssView(),
         IntroView(),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Text(
+              'Post Card',
+              style: bigTitleStyle.s20,
+            ),
+          ),
+        ),
         NewsView(),
         const SliverExpandedView(height: 350)
       ],

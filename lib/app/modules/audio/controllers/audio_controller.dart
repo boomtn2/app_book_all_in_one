@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_youtube/app/core/base/base_controller.dart';
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
-import 'package:audio_youtube/app/core/utils/icons.dart';
 import 'package:audio_youtube/app/core/values/text_styles.dart';
 import 'package:audio_youtube/app/data/model/error_auth.dart';
 import 'package:audio_youtube/app/data/repository/data_repository.dart';
@@ -11,7 +9,6 @@ import 'package:audio_youtube/app/data/service/audio/custom_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
 import '../../../data/service/audio/model/position_data.dart';
 
 enum PlayState { Playing, Pause, Stop, Loading }
@@ -21,13 +18,17 @@ class AudioController extends BaseController {
   RxString thumble = ''.obs;
   StreamSubscription<PlaybackState>? _streamSubscription;
   Rx<PlayState> state = PlayState.Stop.obs;
+
   AudioHandler? get controllerAudio =>
       SingletonAudiohanle.instance.audioHandler;
   RxBool showAppBar = false.obs;
   RxBool initService = false.obs;
   final BuildContext rootContext;
   BuildContext? context;
-  AudioController(this.rootContext){
+
+  bool isShowDialog = false;
+
+  AudioController(this.rootContext) {
     _init();
   }
 
@@ -75,45 +76,50 @@ class AudioController extends BaseController {
       },
     );
 
-    SingletonAudiohanle.instance.audioHandler?.customEvent.listen(
+    SingletonAudiohanle.instance.audioHandler?.customEvent.distinct().listen(
       (event) {
         if (event is ErorrBase) {
-          if (rootContext.mounted) {
-            showAdaptiveDialog(
-              context: rootContext,
-              builder: (context) => AlertDialog(
-                title: Row(
-                  children: [
-                    const Icon(
-                      AppIcons.error,
-                      color: Colors.red,
-                    ),
-                    10.w,
-                    const Text('Lỗi'),
-                  ],
-                ),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text(
-                        event.message,
-                        style: titleStyle,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Đóng'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            );
-          }
+          DataRepository.instance.stopAllDownload();
+          // if (DataRepository.instance.contextScreen?.mounted == true &&
+          //     isShowDialog == false) {
+          //   isShowDialog = true;
+          //   showAdaptiveDialog(
+          //     context: DataRepository.instance.contextScreen!,
+          //     barrierDismissible: false,
+          //     builder: (context) => AlertDialog(
+          //       title: Row(
+          //         children: [
+          //           const Icon(
+          //             AppIcons.error,
+          //             color: Colors.red,
+          //           ),
+          //           10.w,
+          //           const Text('Lỗi'),
+          //         ],
+          //       ),
+          //       content: SingleChildScrollView(
+          //         child: ListBody(
+          //           children: <Widget>[
+          //             Text(
+          //               event.message,
+          //               style: titleStyle,
+          //               textAlign: TextAlign.center,
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       actions: <Widget>[
+          //         TextButton(
+          //           child: const Text('Đóng'),
+          //           onPressed: () {
+          //             Navigator.of(context).pop();
+          //             isShowDialog = false;
+          //           },
+          //         ),
+          //       ],
+          //     ),
+          //   );
+          // }
         }
       },
     );
@@ -224,52 +230,15 @@ class AudioController extends BaseController {
     );
   }
 
-  void addDataTest() {
-    SingletonAudiohanle.instance.audioHandler?.updateQueue([
-      MediaItem(
-          id:
-              'https://d3ctxlq1ktw2nl.cloudfront.net/staging/2024-7-25/1508ddd0-8a8f-76d6-d033-8be70ee51271.mp3',
-          title: 'Datatest',
-          artUri: Uri.parse(
-              'https://i.pinimg.com/originals/19/da/e8/19dae8ad303ccedef09da8f6b0fb58ae.jpg'),
-          extras: {
-            'number':
-                """Có tiền có nhan kiều kiều phú bà mỹ nhân X ngoài lạnh trong nóng tuấn mỹ thần y ca ca
-    
-    Phú bà Giang Nhan Khanh xuyên qua đến những năm 80, người mang không gian biệt thự, khai cửa hàng, mua sơn, một đường hô mưa gọi gió xây dựng chính mình thương nghiệp đế quốc.
-    
-    Ân nhân cứu mạng là cái tuấn mỹ vô song tiểu thiếu niên, quải về nhà dưỡng, ai ngờ dưỡng dưỡng, tiểu thiếu niên bề ngoài lạnh như băng, kỳ thật là cái bá đạo sủng tính cách, Giang Nhan Khanh chỉ có thể một bên hưởng thụ, một bên sủng trở về.
-    
-    Chờ đến sau lại, Phương Minh Tiêu đem tiểu kiều thê giam cầm ở chính mình trong lòng ngực, hận không thể xoa tiến trong lòng.
-    
-    Niên đại hiện đại ngôn tình làm ruộng trọng sinh không gian"""
-          }),
-      MediaItem(
-          id:
-              'https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3',
-          title: "A Salute To Head-Scratching Science",
-          artUri: Uri.parse(
-              'https://i.pinimg.com/originals/11/1a/b0/111ab055f76ea4e07684d797d94a48a6.jpg'),
-          extras: {
-            'number':
-                """Có tiền có nhan kiều kiều phú bà mỹ nhân X ngoài lạnh trong nóng tuấn mỹ thần y ca ca
-    
-    Phú bà Giang Nhan Khanh xuyên qua đến những năm 80, người mang không gian biệt thự, khai cửa hàng, mua sơn, một đường hô mưa gọi gió xây dựng chính mình thương nghiệp đế quốc.
-    
-    Ân nhân cứu mạng là cái tuấn mỹ vô song tiểu thiếu niên, quải về nhà dưỡng, ai ngờ dưỡng dưỡng, tiểu thiếu niên bề ngoài lạnh như băng, kỳ thật là cái bá đạo sủng tính cách, Giang Nhan Khanh chỉ có thể một bên hưởng thụ, một bên sủng trở về.
-    
-    Chờ đến sau lại, Phương Minh Tiêu đem tiểu kiều thê giam cầm ở chính mình trong lòng ngực, hận không thể xoa tiến trong lòng.
-    
-    Niên đại hiện đại ngôn tình làm ruộng trọng sinh không gian"""
-          }),
-    ]);
-  }
-
   void changeAudio() {
     SingletonAudiohanle.instance.changeChannelAudio(KeyChangeAudio.mp3);
   }
 
   void changeText() {
     SingletonAudiohanle.instance.changeChannelAudio(KeyChangeAudio.text);
+  }
+
+  void getVoices() {
+    DataRepository.instance.flowerTTS();
   }
 }

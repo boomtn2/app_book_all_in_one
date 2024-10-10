@@ -43,14 +43,15 @@ class ItemCardBookHoritalView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           5.h,
-                          Text(book?.title ?? ''.toUpperCase(),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              style: afaca.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1)),
+                          Expanded(
+                            child: Text(book?.title ?? ''.toUpperCase(),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: afaca.copyWith(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1)),
+                          ),
                         ],
                       ),
                     ),
