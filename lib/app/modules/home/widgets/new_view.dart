@@ -81,36 +81,32 @@ class NewView extends GetView<HomeController> {
 
   Widget _videos(List<BookModel> books, BuildContext context) {
     return SizedBox(
+        height: 360,
         width: sizeMax,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              child: Row(
-                children: [
-                  for (int i = 0; i < books.length / 2; ++i)
-                    Row(
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ItemCardBookHoritalView(
-                              book: books.getNullIndex(i * 2),
-                              openDetail: (p0) => openDetail(p0, context),
-                            ),
-                            5.h,
-                            ItemCardBookHoritalView(
-                              book: controller.videoYoutube
-                                  .getNullIndex((i * 2) + 1),
-                              openDetail: (p0) => openDetail(p0, context),
-                            ),
-                          ],
-                        ),
-                        10.w,
-                      ],
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: books.length ~/ 2,
+          itemBuilder: (context, i) {
+            return Row(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ItemCardBookHoritalView(
+                      book: books.getNullIndex(i * 2),
+                      openDetail: (p0) => openDetail(p0, context),
                     ),
-                ],
-              ),
-            )));
+                    5.h,
+                    ItemCardBookHoritalView(
+                      book: controller.videoYoutube.getNullIndex((i * 2) + 1),
+                      openDetail: (p0) => openDetail(p0, context),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ));
   }
 
   Widget channel(ChannelModel channel, BuildContext context) {

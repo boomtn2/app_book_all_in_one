@@ -28,21 +28,21 @@ class AudioView extends GetView<AudioController> {
                 .secondaryContainer
                 .withOpacity(0.72),
             leading: instanceController.showAppBar.value
-                ? const ButtonAudio(
+                ? ButtonAudio(
                     icon: AppIcons.appClose,
                     title: 'Thoát',
-                    callback: null,
+                    callback: instanceController.closeSliup,
                   )
                 : null,
-            actions: instanceController.showAppBar.value
-                ? const [
-                    ButtonAudio(
-                      icon: AppIcons.appMenu,
-                      title: 'Menu',
-                      callback: null,
-                    ),
-                  ]
-                : [],
+            // actions: instanceController.showAppBar.value
+            //     ? const [
+            //         ButtonAudio(
+            //           icon: AppIcons.appMenu,
+            //           title: 'Menu',
+            //           callback: null,
+            //         ),
+            //       ]
+            //     : [],
           ),
           body: instanceController.initService.value
               ? Center(

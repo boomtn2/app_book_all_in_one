@@ -10,6 +10,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:rive/rive.dart' as _rive;
 import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsImagesGen {
@@ -120,11 +121,23 @@ class $AssetsJsonsGen {
   List<String> get values => [defaultConfigWebsite];
 }
 
+class $AssetsRivesGen {
+  const $AssetsRivesGen();
+
+  /// File path: assets/rives/bgr_catbot.riv
+  RiveGenImage get bgrCatbot =>
+      const RiveGenImage('assets/rives/bgr_catbot.riv');
+
+  /// List of all assets
+  List<RiveGenImage> get values => [bgrCatbot];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsJsonsGen jsons = $AssetsJsonsGen();
+  static const $AssetsRivesGen rives = $AssetsRivesGen();
 }
 
 class AssetGenImage {
@@ -277,6 +290,47 @@ class SvgGenImage {
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
+    );
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class RiveGenImage {
+  const RiveGenImage(
+    this._assetName, {
+    this.flavors = const {},
+  });
+
+  final String _assetName;
+  final Set<String> flavors;
+
+  _rive.RiveAnimation rive({
+    String? artboard,
+    List<String> animations = const [],
+    List<String> stateMachines = const [],
+    BoxFit? fit,
+    Alignment? alignment,
+    Widget? placeHolder,
+    bool antialiasing = true,
+    bool useArtboardSize = false,
+    List<_rive.RiveAnimationController> controllers = const [],
+    _rive.OnInitCallback? onInit,
+  }) {
+    return _rive.RiveAnimation.asset(
+      _assetName,
+      artboard: artboard,
+      animations: animations,
+      stateMachines: stateMachines,
+      fit: fit,
+      alignment: alignment,
+      placeHolder: placeHolder,
+      antialiasing: antialiasing,
+      useArtboardSize: useArtboardSize,
+      controllers: controllers,
+      onInit: onInit,
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +8,14 @@ class Util {
       return false;
     }
     return true;
+  }
+
+  Future showOptimiBattery() async {
+    await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+    await DisableBatteryOptimization
+        .showDisableManufacturerBatteryOptimizationSettings(
+            "Để ứng dụng hoạt động được nền bạn hãy tắt chế độ tiếp kiệm pin.",
+            "Làm theo các bước dưới đây để tắt chế độ tiếp kiệM pin \n1. Giới hạn sử dụng nền \n2.Ứng dụng không bao giờ tự ngủ. \n3.Thêm ứng dụng vào danh sách");
   }
 
   //Dùng cho bottom navigator

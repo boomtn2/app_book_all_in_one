@@ -31,7 +31,7 @@ class NewsRemoteDataSourceImpl extends BaseRemoteSource
   }
 
   List<BookModel> _parseBookResponse(Response<dynamic> response) {
-    final json = jsonDecode(response.data);
+    final json = response.data;
     List<BookModel> list = [];
     final dataList = json["data"] as List;
     for (var element in dataList) {

@@ -11,7 +11,13 @@ class NewsPostCardModel {
       "thumb_fit": "crop"
     };
 
-    param["article_id"] = articleIds;
+    String article_id = '';
+
+    for (var element in articleIds) {
+      article_id += '$element,';
+    }
+
+    param["article_id"] = article_id;
     return param;
   }
 }

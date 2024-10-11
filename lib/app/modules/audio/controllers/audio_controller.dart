@@ -241,4 +241,8 @@ class AudioController extends BaseController {
   void getVoices() {
     DataRepository.instance.flowerTTS();
   }
+
+  void closeSliup() {
+    DataRepository.instance.pannelClose();
+  }
 }

@@ -86,7 +86,11 @@ class HomeController extends BaseController {
   }
 
   Future _loadConfigWebsite() async {
-    configWebsite = await _gistRepository.getConfigWebsite();
+    try {
+      configWebsite = await _gistRepository.getConfigWebsite();
+    } catch (e) {
+      showErrorMessage("Tải cấu hình website thất bại!");
+    }
   }
 
   Future _loadHotSearchYoutube() async {
@@ -119,7 +123,7 @@ class HomeController extends BaseController {
       await Future.delayed(const Duration(seconds: 1));
       isRSSLoading.value = false;
     } catch (e) {
-      showErrorMessage('Tải dữ liệu Dịch việt thất bại!');
+      showErrorMessage('Tải dữ liệu chọn lọc thất bại!');
     }
   }
 
@@ -129,45 +133,63 @@ class HomeController extends BaseController {
       DataRepository.instance.urlDtruyen = path;
       final list = await _htmlRepository.dtruyenFetchListBook(path);
       dtruyenListBook.value = list;
-    } catch (e) {}
+    } catch (e) {
+      showErrorMessage("Tải dữ liệU truyện dịch việt thất bại!");
+    }
   }
 
   Future _getSearch() async {
-    final list = await _gistRepository.getConfigSearch();
+    try {
+      final list = await _gistRepository.getConfigSearch();
 
-    if (list[0] is ListSearchTag) {
-      tagSearch = list[0];
-    }
+      if (list[0] is ListSearchTag) {
+        tagSearch = list[0];
+      }
 
-    if (list[1] is ListSearchName) {
-      nameSearch = list[1];
+      if (list[1] is ListSearchName) {
+        nameSearch = list[1];
+      }
+    } catch (e) {
+      showErrorMessage("Tải dữ liệu tìm kiếm thất bại!");
     }
   }
 
   Future _loadNews() async {
-    newsListBook.value = await _newsRepository.fetchIntroPostCard();
+    try {
+      newsListBook.value = await _newsRepository.fetchIntroPostCard();
+    } catch (e) {
+      showErrorMessage("Tải tin tức thất bại!");
+    }
   }
 
   Future _getCategory() async {
-    final websitesTag = await _gistRepository.getCategorySearch();
-    if (websitesTag.isNotEmpty) {
-      _dataRepository.tagWebsite = websitesTag as List<WebsiteTag>;
-    }
-
-    List<Tag> tag = [];
-    if (websitesTag[0] is WebsiteTag) {
-      tag.addAll(websitesTag[0].hotTag.tags);
-      for (GroupTag item in websitesTag[0].tags) {
-        tag.addAll(item.tags);
+    try {
+      final websitesTag = await _gistRepository.getCategorySearch();
+      if (websitesTag.isNotEmpty) {
+        _dataRepository.tagWebsite = websitesTag as List<WebsiteTag>;
       }
+
+      List<Tag> tag = [];
+      if (websitesTag[0] is WebsiteTag) {
+        tag.addAll(websitesTag[0].hotTag.tags);
+        for (GroupTag item in websitesTag[0].tags) {
+          tag.addAll(item.tags);
+        }
+      }
+      tags.value = tag;
+    } catch (e) {
+      showErrorMessage("Tải dữ liệu thể loại thất bại!");
     }
-    tags.value = tag;
   }
 
   Future _getChannel() async {
-    final channelResponse = await _gistRepository.getChannel();
-    if (channelResponse is List<ChannelModel>) {
-      channel.value = channelResponse;
+    try {
+      final channelResponse = await _gistRepository.getChannel();
+      if (channelResponse is List<ChannelModel>) {
+        channel.value = channelResponse;
+      }
+    } catch (e) {
+      showErrorMessage("Tải dữ liệu kênh thất bại!");
     }
   }
 

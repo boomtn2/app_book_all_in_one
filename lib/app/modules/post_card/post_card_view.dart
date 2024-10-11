@@ -37,8 +37,10 @@ class PostCardView extends StatelessWidget {
             child: Card(
               child: Row(
                 children: [
-                  _buttonTextAroud(
-                      'Nghe danh sách', AppIcons.audioPlaylist, () {}),
+                  _buttonTextAroud('Nghe danh sách', AppIcons.audioPlaylist,
+                      () {
+                    controller.addALLQueues();
+                  }),
                 ],
               ),
             ),
@@ -50,47 +52,52 @@ class PostCardView extends StatelessWidget {
                 final book = controller.playList[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: Card(
-                    child: SizedBox(
-                      height: 100,
-                      width: double.infinity,
-                      child: Row(
-                        children: [
-                          CacheImage(
-                            url: book.img,
-                            height: 100,
-                            width: 100,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          10.w,
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    book.title,
-                                    style: afaca.s14
-                                        .copyWith(fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      book.detail ?? 'Nội dung',
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: afaca.s12
-                                          .copyWith(color: Colors.grey),
+                  child: InkWell(
+                    onTap: () {
+                      controller.addQueue(index);
+                    },
+                    child: Card(
+                      child: SizedBox(
+                        height: 100,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            CacheImage(
+                              url: book.img,
+                              height: 100,
+                              width: 100,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            10.w,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      book.title,
+                                      style: afaca.s14.copyWith(
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 1,
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      child: Text(
+                                        book.detail ?? 'Nội dung',
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: afaca.s12
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          const Icon(AppIcons.audioPlay),
-                          5.w,
-                        ],
+                            const Icon(AppIcons.audioPlay),
+                            5.w,
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -116,20 +123,24 @@ class PostCardView extends StatelessWidget {
   }
 
   Widget _buttonTextAroud(String tile, IconData icon, Function callBack) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black54, width: 1, strokeAlign: 1)),
-      child: Row(
-        children: [
-          Icon(icon),
-          5.w,
-          Text(
-            tile,
-            style: afaca,
-          ),
-        ],
+    return InkWell(
+      onTap: () => callBack(),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border:
+                Border.all(color: Colors.black54, width: 1, strokeAlign: 1)),
+        child: Row(
+          children: [
+            Icon(icon),
+            5.w,
+            Text(
+              tile,
+              style: afaca,
+            ),
+          ],
+        ),
       ),
     );
   }

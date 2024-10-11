@@ -38,7 +38,7 @@ class AppPages {
   // static const INITIAL = Routes.HOME;
   static final routes = GoRouter(navigatorKey: rootNavigatorKey, routes: [
     GoRoute(
-      path: "/slash",
+      path: "/",
       name: SlashView.name,
       builder: (context, state) {
         return const SlashView();
@@ -50,7 +50,7 @@ class AppPages {
           StatefulShellBranch(navigatorKey: shellRouteNavigatorKey, routes: [
             GoRoute(
                 parentNavigatorKey: shellRouteNavigatorKey,
-                path: "/",
+                path: "/home",
                 name: HomeView.name,
                 builder: (context, state) => GetBuilder(
                       init: HomeController(),

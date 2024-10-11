@@ -1,5 +1,6 @@
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
-import 'package:audio_youtube/app/views/avatar_audio.dart';
+
+import 'package:audio_youtube/app/views/views/cache_image_view.dart';
 import 'package:flutter/material.dart';
 import '../../core/values/text_styles.dart';
 import '../../data/model/book_model.dart';
@@ -22,8 +23,8 @@ class ItemCardBookHoritalView extends StatelessWidget {
               if (book != null) openDetail(book!);
             },
             child: SizedBox(
-              height: 180,
-              width: 150,
+              height: 170,
+              width: 140,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -31,8 +32,9 @@ class ItemCardBookHoritalView extends StatelessWidget {
                   SizedBox(
                       height: 130,
                       width: 130,
-                      child: AvatarAudio(
+                      child: CacheImage(
                         url: book?.img ?? '',
+                        borderRadius: BorderRadius.circular(10),
                       )),
                   Expanded(
                     child: Padding(
@@ -42,15 +44,18 @@ class ItemCardBookHoritalView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          5.h,
                           Expanded(
-                            child: Text(book?.title ?? ''.toUpperCase(),
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                style: afaca.copyWith(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(book?.title ?? ''.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: afaca.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1)),
+                            ),
                           ),
                         ],
                       ),
