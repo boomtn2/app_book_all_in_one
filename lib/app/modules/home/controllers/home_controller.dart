@@ -53,7 +53,6 @@ class HomeController extends BaseController {
 
   @override
   void onInit() async {
-    debugPrint("[onInit] [HomeController]");
     super.onInit();
     await _loadNews();
     await Future.delayed(const Duration(seconds: 1));

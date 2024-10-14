@@ -50,7 +50,15 @@ class PostCardController extends GetxController {
 
   MediaItem getMediaItem(BookModel book) {
     return MediaItem(
-        id: book.id ?? '', title: book.title, artUri: Uri.parse(book.img));
+        id: book.id ?? '',
+        title: book.title,
+        artUri: Uri.parse(book.img),
+        extras: {
+          "album": introPostCard.title,
+          "path": introPostCard.id,
+          "chapter": book.title,
+          "type": introPostCard.type
+        });
   }
 
   void addALLQueues() {

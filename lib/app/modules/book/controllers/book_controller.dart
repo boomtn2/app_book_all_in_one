@@ -77,7 +77,13 @@ class BookController extends GetxController {
         MediaItem(
             id: list.last.id ?? '',
             title: list.last.title,
-            artUri: Uri.tryParse(list.last.img))
+            artUri: Uri.tryParse(list.last.img),
+            extras: {
+              "album": bookModel.value.title,
+              "path": bookModel.value.id,
+              "chapter": list.last.title,
+              "type": bookModel.value.type
+            })
       ]);
     }
   }

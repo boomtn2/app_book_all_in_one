@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import '../../../../data/repository/youtube_repository.dart';
 
 class DetailVideoYoutubeController extends GetxController {
-  late final BookModel? bookModel;
+  final BookModel? bookModel;
 
   DetailVideoYoutubeController({required this.bookModel}) {
     init();
@@ -69,7 +69,7 @@ class DetailVideoYoutubeController extends GetxController {
               height: 80,
               child: Column(
                 children: [
-                  const     Expanded(child:  Loading()),
+                  const Expanded(child: Loading()),
                   ElevatedButton(
                       style: const ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.red)),
@@ -87,7 +87,16 @@ class DetailVideoYoutubeController extends GetxController {
   Future setMedia(String mp3, String title) async {
     await SingletonAudiohanle.instance.changeChannelAudio(KeyChangeAudio.mp3);
     await SingletonAudiohanle.instance.audioHandler?.updateQueue([
-      MediaItem(id: mp3, title: title, artUri: Uri.parse(bookModel?.img ?? ''))
+      MediaItem(
+          id: mp3,
+          title: title,
+          artUri: Uri.parse(bookModel?.img ?? ''),
+          extras: {
+            "album": bookModel?.title,
+            "path": bookModel?.id,
+            "chapter": title,
+            "type": bookModel?.type
+          })
     ]);
   }
 }

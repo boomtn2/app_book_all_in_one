@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:audio_youtube/app/data/model/error_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
+import '../file/file_txt.dart';
 import 'model/position_data.dart';
 
 class CAudioHandle extends BaseAudioHandler with QueueHandler {
@@ -15,6 +18,7 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
   StreamSubscription<PositionData>? _positionDataSubscription;
   bool isPause = false;
   AudioSession? session;
+  final FileTXT _fileTXT = FileTXT();
 
   CAudioHandle() {
     init();
@@ -39,11 +43,19 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
       (event) {
         if (event != null) {
           mediaItem.add(queue.value[event]);
+          try {
+            _saveHistory(jsonEncode(queue.value[event].extras));
+          } catch (e) {}
         }
       },
     );
 
     _initSession();
+  }
+
+  void _saveHistory(String data) {
+    debugPrint("[SaveHistory] \n$data");
+    _fileTXT.writeDataToFile(data);
   }
 
   void _initSession() async {

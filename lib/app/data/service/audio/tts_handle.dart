@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../model/error_auth.dart';
+import '../file/file_txt.dart';
 
 class Const {
   static const String customActionSetVoice = 'voice';
@@ -19,6 +21,8 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
   bool _running = false;
   final Sleeper _sleeper = Sleeper();
   final PublishSubject<dynamic> _dataSubject = PublishSubject<dynamic>();
+  final FileTXT _fileTXT = FileTXT();
+
   CTextPlayerHandler() {
     _initSession();
     _initTTS();
@@ -138,6 +142,7 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
         st = queue.value[_index].extras!["number"];
         st = st.trim();
         mediaItem.add(queue.value[_index]);
+        _saveHistory(jsonEncode(queue.value[_index].extras));
       } catch (e) {
         _pushEror(
             'Lỗi danh sách phát \n (Vui lòng kiểm tra lại nội dung danh sách phát)',
@@ -160,6 +165,11 @@ class CTextPlayerHandler extends BaseAudioHandler with QueueHandler {
       }
     }
     _handleCompletion();
+  }
+
+  void _saveHistory(String data) {
+    debugPrint("[SaveHistory] \n$data");
+    _fileTXT.writeDataToFile(data);
   }
 
   void reset() {
