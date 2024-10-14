@@ -9,6 +9,7 @@ import '../../model/models_export.dart';
 
 abstract class ConfigWebsiteRemoteDataSoure {
   Future<ConfigWebsiteModel> fetchDataConfig();
+  Future<ConfigWebsiteModel> fetchDataConfigToAssets();
 }
 
 class ConfigWebsiteRemoteDataSoureImpl extends BaseRemoteSource
@@ -25,10 +26,7 @@ class ConfigWebsiteRemoteDataSoureImpl extends BaseRemoteSource
       return callApiWithErrorParser(dioCall)
           .then((response) => _parseConfigWebsiteResponse(response));
     } catch (e) {
-      final String response =
-          await rootBundle.loadString(Assets.jsons.defaultConfigWebsite);
-      final json = jsonDecode(response);
-      return ConfigWebsiteModel.fromJson(json);
+      rethrow;
     }
   }
 
@@ -37,5 +35,17 @@ class ConfigWebsiteRemoteDataSoureImpl extends BaseRemoteSource
     final json = jsonDecode(data);
 
     return ConfigWebsiteModel.fromJson(json);
+  }
+
+  @override
+  Future<ConfigWebsiteModel> fetchDataConfigToAssets() async {
+    try {
+      final String response =
+          await rootBundle.loadString(Assets.jsons.defaultConfigWebsite);
+      final json = jsonDecode(response);
+      return ConfigWebsiteModel.fromJson(json);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -54,10 +54,10 @@ class PostCardController extends GetxController {
   }
 
   void addALLQueues() {
-    List<MediaItem> _items = [];
+    List<MediaItem> items = [];
     for (var element in playListMp3) {
-      _items.add(getMediaItem(element));
+      items.add(getMediaItem(element));
     }
-    SingletonAudiohanle.instance.audioHandler?.updateQueue(_items);
+    SingletonAudiohanle.instance.audioHandler?.updateQueue(items);
   }
 }

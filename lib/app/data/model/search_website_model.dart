@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class NextPage {
   final String param;
   final int begin;
@@ -80,6 +82,11 @@ class Fill {
   }
 }
 
+List<Fill> adapterListToListFill(List<Map<String, dynamic>> list) {
+  List<Fill> fillList = list.map((i) => Fill.json(i)).toList();
+  return fillList;
+}
+
 List<Fill> getListFill(Map<String, dynamic> json) {
   if (json['fill'] != null) {
     var list = json['fill'] as List;
@@ -107,14 +114,28 @@ class SearchTag {
   static const String cTypePram = "typePram";
   static const String cParams = "params";
 
+  String get id => type ?? '';
   Map<String, Object?> getMapInsertDB() {
     return {
       cId: website,
       cType: type,
       cPath: path,
       cTypePram: typePram,
-      cParams: params.toString()
+      cParams: jsonEncode(params),
     };
+  }
+
+  factory SearchTag.db(Map<String, dynamic> json, Map<String, dynamic>? nextJs,
+      List<Map<String, dynamic>> fills) {
+    return SearchTag(
+      type: json[cType],
+      website: json[cId],
+      path: json[cPath],
+      typePram: json[cTypePram],
+      params: jsonDecode(json[cParams]),
+      nextPage: nextJs != null ? NextPage.json(nextJs) : null,
+      fill: adapterListToListFill(fills),
+    );
   }
 
   static String get querryCreateTable =>
@@ -232,19 +253,21 @@ class SearchName {
   static const String cPath = "path";
   static const String cTypePram = "typePram";
   static const String cParams = "params";
-
+  static const String cParam = "param";
+  String get id => '${type ?? ''}SearchName';
   Map<String, Object?> getMapInsertDB() {
     return {
       cId: website,
       cType: type,
       cPath: path,
       cTypePram: typePram,
-      cParams: params.toString()
+      cParams: jsonEncode(params),
+      cParam: param
     };
   }
 
   static String get querryCreateTable =>
-      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cType TEXT,$cPath TEXT,$cTypePram TEXT,$cParams TEXT)';
+      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cType TEXT,$cPath TEXT,$cTypePram TEXT,$cParams TEXT,$cParam TEXT)';
   SearchName(
       {required this.type,
       required this.website,
@@ -266,6 +289,19 @@ class SearchName {
             json['nextpage'] != null ? NextPage.json(json['nextpage']) : null,
         fill: getListFill(json),
         param: json['param']);
+  }
+
+  factory SearchName.db(Map<String, dynamic> json, Map<String, dynamic>? nextJs,
+      List<Map<String, dynamic>> fills) {
+    return SearchName(
+        type: json[cType],
+        website: json[cId],
+        path: json[cPath],
+        typePram: json[cTypePram],
+        params: jsonDecode(json[cParams]),
+        nextPage: nextJs != null ? NextPage.json(nextJs) : null,
+        fill: adapterListToListFill(fills),
+        param: json[cParam]);
   }
 
   String getLink(String name) {

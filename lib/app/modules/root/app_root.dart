@@ -2,13 +2,14 @@ import 'package:audio_youtube/app/modules/audio/controllers/audio_controller.dar
 import 'package:audio_youtube/app/modules/audio/views/mini_audio_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../data/repository/data_repository.dart';
 import '../../views/navigator/navigator.dart';
 import '../audio/views/audio_view.dart';
 
 class RootApp extends StatelessWidget {
-  final Widget child;
+  final StatefulNavigationShell child;
   const RootApp({
     required this.child,
     super.key,
@@ -52,6 +53,10 @@ class RootApp extends StatelessWidget {
                       topRight: Radius.circular(18.0)),
                   panel: AudioView(controller));
             }),
-        bottomNavigationBar: const AppNavigationBar());
+        bottomNavigationBar: AppNavigationBar(
+          callBack: (p0) {
+            child.goBranch(p0);
+          },
+        ));
   }
 }

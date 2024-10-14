@@ -175,9 +175,9 @@ class YoutubeExplodeRemoteDataSoureImpl extends BaseRemoteSource
     debugPrint(manifest.muxed.toString());
     debugPrint(manifest.audio.toString());
     var streamInfo = manifest.audioOnly;
-    for (var element in streamInfo) {
-      print(element.toJson());
-    }
+    // for (var element in streamInfo) {
+    //   print(element.toJson());
+    // }
     return streamInfo.first;
   }
 

@@ -5,11 +5,13 @@ class WebsiteTag {
 
   //DB
   static const String table = "WebsiteTag";
-  static const String cId = "type"; //idWebsite
+  static const String cId = "json"; //idWebsite
 
-  Map<String, Object?> getMapInsertDB(String id) {
+  String get id => type;
+
+  Map<String, Object?> getMapInsertDB() {
     return {
-      cId: id,
+      cId: type,
     };
   }
 
@@ -29,6 +31,10 @@ class WebsiteTag {
         tags: list);
   }
 
+  factory WebsiteTag.db(String nameWebsite, GroupTag hot, List<GroupTag> list) {
+    return WebsiteTag(type: nameWebsite, hotTag: hot, tags: list);
+  }
+
   @override
   String toString() {
     return "$type \nhotTag: ${hotTag.toString()} \ntags: ${tags.toString()}";
@@ -39,6 +45,8 @@ class GroupTag {
   final String nameGroup;
   final List<Tag> tags;
   final bool multiselect;
+
+  String get id => nameGroup;
 
   GroupTag(
       {required this.nameGroup, required this.tags, required this.multiselect});
@@ -51,6 +59,8 @@ class GroupTag {
   Map<String, Object?> getMapInsertDB(String id) {
     return {cId: id, cNameGroup: nameGroup, cMultiselect: multiselect ? 1 : 0};
   }
+
+  bool get isHotTag => nameGroup.contains('Hot Search');
 
   static String get querryCreateTable =>
       'CREATE TABLE $table($cId TEXT,$cNameGroup TEXT,$cMultiselect INTEGER)';
@@ -72,6 +82,22 @@ class GroupTag {
         multiselect: json["multiselect"] ?? false);
   }
 
+  factory GroupTag.db(Map<String, dynamic> gr, List<Map<String, dynamic>> tags,
+      List<Map<String, dynamic>> tagIDs) {
+    List<Tag> tempTags = [];
+    for (var tag in tags) {
+      List<IDTag> listID = [];
+      for (Map<String, dynamic> id in tagIDs) {
+        listID.add(IDTag.db(id));
+      }
+      tempTags.add(Tag(name: tag[Tag.cName], idTags: listID));
+    }
+    return GroupTag(
+        nameGroup: gr[cNameGroup] ?? 'Hot Search',
+        tags: tempTags,
+        multiselect: gr[cMultiselect] ?? false);
+  }
+
   @override
   String toString() {
     return "$nameGroup \n${tags.toString()}";
@@ -86,13 +112,14 @@ class Tag {
   static const String table = "Tag";
   static const String cId = "id"; //idGRTAG
   static const String cName = "name"; //idIDTAG
+  static const String cWebsite = "website";
 
-  Map<String, Object?> getMapInsertDB(String id) {
-    return {cId: id, cName: name};
+  Map<String, Object?> getMapInsertDB(String id, String website) {
+    return {cId: id, cName: name, cWebsite: website};
   }
 
   static String get querryCreateTable =>
-      'CREATE TABLE $table($cId TEXT, $cName TEXT)';
+      'CREATE TABLE $table($cId TEXT, $cName TEXT,$cWebsite TEXT)';
   Tag({required this.name, required this.idTags});
 
   @override
@@ -110,17 +137,18 @@ class IDTag {
   static const String cTag = "tag";
   static const String cId = "id"; //id
   static const String cCode = "code"; //id
+  static const String cWebsite = "website";
 
-  Map<String, Object?> getMapInsertDB(String idTAG) {
-    return {
-      cId: idTAG,
-      cTag: tag,
-      cCode: id,
-    };
+  Map<String, Object?> getMapInsertDB(String idTAG, String website) {
+    return {cId: idTAG, cTag: tag, cCode: id, cWebsite: website};
+  }
+
+  factory IDTag.db(Map<String, dynamic> json) {
+    return IDTag(id: json[cCode], tag: json[cTag]);
   }
 
   static String get querryCreateTable =>
-      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cTag TEXT )';
+      'CREATE TABLE $table($cId TEXT PRIMARY KEY,$cTag TEXT ,$cWebsite TEXT)';
   IDTag({required this.id, required this.tag});
 
   @override

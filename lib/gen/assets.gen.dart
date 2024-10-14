@@ -114,11 +114,18 @@ class $AssetsImagesGen {
 class $AssetsJsonsGen {
   const $AssetsJsonsGen();
 
+  /// File path: assets/jsons/default_category.json
+  String get defaultCategory => 'assets/jsons/default_category.json';
+
   /// File path: assets/jsons/default_config_website.json
   String get defaultConfigWebsite => 'assets/jsons/default_config_website.json';
 
+  /// File path: assets/jsons/default_search.json
+  String get defaultSearch => 'assets/jsons/default_search.json';
+
   /// List of all assets
-  List<String> get values => [defaultConfigWebsite];
+  List<String> get values =>
+      [defaultCategory, defaultConfigWebsite, defaultSearch];
 }
 
 class $AssetsRivesGen {

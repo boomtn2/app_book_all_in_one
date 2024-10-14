@@ -1,18 +1,17 @@
 import 'package:audio_youtube/app/core/base/base_view.dart';
 import 'package:audio_youtube/app/core/extension/num_extention.dart';
+import 'package:audio_youtube/app/core/utils/icons.dart';
 import 'package:audio_youtube/app/core/widget/loading.dart';
 import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart';
 import 'package:audio_youtube/app/modules/home/widgets/new_view.dart';
 import 'package:audio_youtube/app/modules/home/widgets/sli_expend.dart';
-
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../core/values/text_styles.dart';
 import '../widgets/category_view.dart';
 import '../widgets/intro_view.dart';
 import '../widgets/rss_view.dart';
-import '../widgets/sli_search_view.dart';
 import '../widgets/news_view.dart';
 
 class HomeView extends BaseView<HomeController> {
@@ -27,7 +26,24 @@ class HomeView extends BaseView<HomeController> {
   Widget body(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const SliSearchView(),
+        const SliverToBoxAdapter(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Icon(FluentIcons.book_48_regular),
+                  Text('Truyện hán việt')
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(FluentIcons.book_coins_24_regular),
+                  Text('Truyện dịch việt')
+                ],
+              ),
+            ],
+          ),
+        ),
         Obx(
           () => controller.isLoadingDataSystem.value
               ? SliverToBoxAdapter(

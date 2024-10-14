@@ -31,6 +31,7 @@ part 'app_routes.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final shellRouteNavigatorKey = GlobalKey<NavigatorState>();
+final shellSettingRouteNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppPages {
   AppPages._();
@@ -60,36 +61,6 @@ class AppPages {
                       builder: (controller) => HomeView(),
                     ),
                 routes: [
-                  GoRoute(
-                      parentNavigatorKey: shellRouteNavigatorKey,
-                      path: "search",
-                      name: SearchView.name,
-                      builder: (context, state) => GetBuilder(
-                            init: SearchBookController(),
-                            dispose: (state) {
-                              Get.delete<SearchBookController>();
-                            },
-                            builder: (controller) => const SearchView(),
-                          ),
-                      routes: [
-                        GoRoute(
-                            parentNavigatorKey: shellRouteNavigatorKey,
-                            path: "webview",
-                            name: WebViewBookView.name,
-                            builder: (context, state) {
-                              assert(state.extra is String);
-                              String url = state.extra as String;
-                              debugPrint(url);
-                              return GetBuilder(
-                                init: WebViewBookController(url: url),
-                                dispose: (state) {
-                                  Get.delete<WebViewBookController>();
-                                },
-                                builder: (controller) =>
-                                    const WebViewBookView(),
-                              );
-                            }),
-                      ]),
                   GoRoute(
                       parentNavigatorKey: shellRouteNavigatorKey,
                       path: "detailytb",
@@ -209,7 +180,39 @@ class AppPages {
                         );
                       }),
                 ]),
-          ])
+          ]),
+          StatefulShellBranch(
+              navigatorKey: shellSettingRouteNavigatorKey,
+              routes: [
+                GoRoute(
+                    path: "/search",
+                    name: SearchView.name,
+                    builder: (context, state) => GetBuilder(
+                          init: SearchBookController(),
+                          dispose: (state) {
+                            Get.delete<SearchBookController>();
+                          },
+                          builder: (controller) => const SearchView(),
+                        ),
+                    routes: [
+                      GoRoute(
+                          parentNavigatorKey: shellSettingRouteNavigatorKey,
+                          path: "webview",
+                          name: WebViewBookView.name,
+                          builder: (context, state) {
+                            assert(state.extra is String);
+                            String url = state.extra as String;
+                            debugPrint(url);
+                            return GetBuilder(
+                              init: WebViewBookController(url: url),
+                              dispose: (state) {
+                                Get.delete<WebViewBookController>();
+                              },
+                              builder: (controller) => const WebViewBookView(),
+                            );
+                          }),
+                    ]),
+              ]),
         ]),
     GoRoute(
       path: "/login",

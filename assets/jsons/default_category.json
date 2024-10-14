@@ -1,0 +1,375 @@
+{
+    "tags": [
+        {
+            "type": "wiki",
+            "tag-hot": {
+                "values": [
+                    {
+                        "name": "Quân Hôn - Ngọt Sủn",
+                        "values": [
+                            {
+                                "tag": "5794f03dd7ced228f44191b3"
+                            },
+                            {
+                                "tag": "5794f03ed7ced228f44191df"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Nữ Cường - Huyền Học",
+                        "values": [
+                            {
+                                "tag": "58458dc2d7ced23af03679c5"
+                            },
+                            {
+                                "tag": "58e080fe12fb557dbfcdf1c5"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Điền Văn - Không Gian",
+                        "values": [
+                            {
+                                "tag": "60f3ab4923deea4c3dfee6cf"
+                            },
+                            {
+                                "tag": "5794f03dd7ced228f44191bb"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Không gian- Huyền Học",
+                        "values": [
+                            {
+                                "tag": "5794f03dd7ced228f44191bb"
+                            },
+                            {
+                                "tag": "58458dc2d7ced23af03679c5"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "tags": [
+                {
+                    "multiselect": true,
+                    "group-name": "Lĩnh vực",
+                    "values": [
+                        {
+                            "name": "Huyền học",
+                            "values": [
+                                {
+                                    "tag": "58458dc2d7ced23af03679c5"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Làm ruộng",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191c0"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Y thuật",
+                            "values": [
+                                {
+                                    "tag": "58458dc2d7ced23af03679c0"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Mỹ thực",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191c5"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Phát sóng trực tiếp",
+                            "values": [
+                                {
+                                    "tag": "58d92bd6d7ced220e05d73c5"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Làm giàu",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191ca"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Dưỡng oa",
+                            "values": [
+                                {
+                                    "tag": "603277d223deea60925a9f2c"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Phong thuỷ",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191bc"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Hot",
+                    "values": [
+                        {
+                            "name": "Điền văn",
+                            "values": [
+                                {
+                                    "tag": "60f3ab4923deea4c3dfee6cf"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Nữ cường",
+                            "values": [
+                                {
+                                    "tag": "58e080fe12fb557dbfcdf1c5"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Quân hôn",
+                            "values": [
+                                {
+                                    "tag": "5794f03ed7ced228f44191df"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Xu hướng",
+                    "values": [
+                        {
+                            "name": "Báo thù",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191aa"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Ngược tra",
+                            "values": [
+                                {
+                                    "tag": "58e0815c12fb557dbfcdf1c6"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Nghịch tập",
+                            "values": [
+                                {
+                                    "tag": "595ad7b412fb557cb030fc43"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Vả mặt",
+                            "values": [
+                                {
+                                    "tag": "596be2ce12fb557cb030fc5b"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Bàn tay vàng",
+                    "values": [
+                        {
+                            "name": "Hệ thống",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191b6"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Không gian",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191bb"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Cẩm lý thể chất",
+                            "values": [
+                                {
+                                    "tag": "5eb2b3ab23deea44d852c8c2"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Thời đại",
+                    "values": [
+                        {
+                            "name": "Cổ đại",
+                            "values": [
+                                {
+                                    "age": "5794f03dd7ced228f441919b"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Cận đại",
+                            "values": [
+                                {
+                                    "age": "5794f03dd7ced228f441919c"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Hiện đại",
+                            "values": [
+                                {
+                                    "age": "5794f03dd7ced228f441919d"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Tương lai",
+                            "values": [
+                                {
+                                    "age": "5794f03dd7ced228f441919e"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Giới tính",
+                    "values": [
+                        {
+                            "name": "Ngôn tình",
+                            "values": [
+                                {
+                                    "gender": "5794f03dd7ced228f4419195"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Nữ tôn",
+                            "values": [
+                                {
+                                    "gender": "5794f03dd7ced228f4419199"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Không CP",
+                            "values": [
+                                {
+                                    "gender": "5794f03dd7ced228f441919a"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Thế giới",
+                    "values": [
+                        {
+                            "name": "Dị thế",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191ab"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Mạt thế",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191ac"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Thời không",
+                    "values": [
+                        {
+                            "name": "Xuyên việt",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191af"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Xuyên thư",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191be"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Trọng sinh",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191b4"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "multiselect": true,
+                    "group-name": "Huyền huyễn",
+                    "values": [
+                        {
+                            "name": "Linh dị thần quái",
+                            "values": [
+                                {
+                                    "tag": "58e21cc212fb557dbfcdf1ce"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Dị năng",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191b1"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Thần tiên yêu quái",
+                            "values": [
+                                {
+                                    "tag": "5794f03dd7ced228f44191b7"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

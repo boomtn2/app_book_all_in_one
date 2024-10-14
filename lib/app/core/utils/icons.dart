@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class AppIcons {
   static const IconData appClose =
       FluentIcons.dismiss_square_multiple_20_regular;
+  static const IconData appSearch = FluentIcons.search_48_regular;
+  static const IconData appRank = FluentIcons.rating_mature_24_regular;
   static const IconData appMenu = FluentIcons.more_circle_48_filled;
   static const IconData naviHome = FluentIcons.home_48_regular;
   static const IconData naviAccount = FluentIcons.person_48_regular;
@@ -32,4 +34,5 @@ class AppIcons {
   static const IconData browerReload = Icons.replay_outlined;
   static const IconData browerBack = Icons.arrow_back_ios_new_rounded;
   static const IconData buy = FluentIcons.store_microsoft_24_regular;
+  static const IconData appBooks = FluentIcons.book_compass_24_regular;
 }

@@ -16,22 +16,25 @@ class DatabaseHelper {
   static Database? _db;
 
   DatabaseHelper.internal() {
-    initDb();
+    if (_db == null) {
+      initDb();
+    }
   }
 
-  final String nameDB = 'databaselocal_tts_hit_v2.db';
+  final String nameDB = 'databaselocal_tts_hit_v5.db';
 
   Future<Database?> get db async {
     if (_db != null) return _db;
-    _db = await initDb();
+    await initDb();
     return _db;
   }
 
   Future<Database> initDb() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, nameDB);
+    debugPrint('initDb ${documentsDirectory.path}');
+    String path = join("/storage/emulated/0/Download", nameDB);
     var myDb = await openDatabase(path, version: 1, onCreate: _onCreate);
-
+    _db = myDb;
     return myDb;
   }
 
@@ -65,9 +68,6 @@ class DatabaseHelper {
     await _execute(Fill.querryCreateTable, db);
 
     await _execute(WebsiteTag.querryCreateTable, db);
-    await _execute(GroupTag.querryCreateTable, db);
-    await _execute(Tag.querryCreateTable, db);
-    await _execute(IDTag.querryCreateTable, db);
   }
 
   Future _execute(String query, Database db) async {

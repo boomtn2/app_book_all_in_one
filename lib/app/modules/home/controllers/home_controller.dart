@@ -16,10 +16,8 @@ import 'package:audio_youtube/app/modules/youtube/channel/view/channel_youtube_v
 import 'package:audio_youtube/app/modules/youtube/detail_video/view/detail_video_youtube_view.dart';
 import 'package:audio_youtube/app/modules/youtube/loadmore/view/channel_youtube_view.dart';
 import 'package:audio_youtube/app/modules/youtube/playlist_channels/playlist_channels_view.dart';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import '../../../data/model/models_export.dart';
 import '../../../data/remote/youtube/param_models/youtube_search_param_model.dart';
 
@@ -55,20 +53,17 @@ class HomeController extends BaseController {
 
   @override
   void onInit() async {
+    debugPrint("[onInit] [HomeController]");
     super.onInit();
-    await _loadNews();
-    await Future.delayed(const Duration(seconds: 4));
-    await _loadDtruyen();
-    await Future.delayed(const Duration(seconds: 2));
-    await _loadRSS();
-    await Future.delayed(const Duration(seconds: 1));
-    await _loadHotSearchYoutube();
-    await _getChannel();
-    await Future.delayed(const Duration(seconds: 1));
-    await _getCategory();
-    await _getSearch();
-    await _loadConfigWebsite();
-    _saveData();
+    // await _loadNews();
+    // await Future.delayed(const Duration(seconds: 4));
+    // await _loadDtruyen();
+    // await Future.delayed(const Duration(seconds: 2));
+    // await _loadRSS();
+    // await Future.delayed(const Duration(seconds: 1));
+    // await _loadHotSearchYoutube();
+    // await _getChannel();
+
     isLoadingDataSystem.value = false;
   }
 
@@ -77,20 +72,6 @@ class HomeController extends BaseController {
     _ytbRepository.dispose();
     videoYoutube.clear();
     super.onClose();
-  }
-
-  void _saveData() {
-    _dataRepository.configWebsite = configWebsite;
-    _dataRepository.nameSearch = nameSearch;
-    _dataRepository.tagSearch = tagSearch;
-  }
-
-  Future _loadConfigWebsite() async {
-    try {
-      configWebsite = await _gistRepository.getConfigWebsite();
-    } catch (e) {
-      showErrorMessage("Tải cấu hình website thất bại!");
-    }
   }
 
   Future _loadHotSearchYoutube() async {
@@ -138,47 +119,11 @@ class HomeController extends BaseController {
     }
   }
 
-  Future _getSearch() async {
-    try {
-      final list = await _gistRepository.getConfigSearch();
-
-      if (list[0] is ListSearchTag) {
-        tagSearch = list[0];
-      }
-
-      if (list[1] is ListSearchName) {
-        nameSearch = list[1];
-      }
-    } catch (e) {
-      showErrorMessage("Tải dữ liệu tìm kiếm thất bại!");
-    }
-  }
-
   Future _loadNews() async {
     try {
       newsListBook.value = await _newsRepository.fetchIntroPostCard();
     } catch (e) {
       showErrorMessage("Tải tin tức thất bại!");
-    }
-  }
-
-  Future _getCategory() async {
-    try {
-      final websitesTag = await _gistRepository.getCategorySearch();
-      if (websitesTag.isNotEmpty) {
-        _dataRepository.tagWebsite = websitesTag as List<WebsiteTag>;
-      }
-
-      List<Tag> tag = [];
-      if (websitesTag[0] is WebsiteTag) {
-        tag.addAll(websitesTag[0].hotTag.tags);
-        for (GroupTag item in websitesTag[0].tags) {
-          tag.addAll(item.tags);
-        }
-      }
-      tags.value = tag;
-    } catch (e) {
-      showErrorMessage("Tải dữ liệu thể loại thất bại!");
     }
   }
 

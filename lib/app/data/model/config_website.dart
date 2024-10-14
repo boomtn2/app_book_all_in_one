@@ -79,6 +79,20 @@ class ConfigWebsite {
     );
   }
 
+  factory ConfigWebsite.db(
+      Map<String, dynamic> website,
+      Map<String, dynamic> listbook,
+      Map<String, dynamic> chapter,
+      Map<String, dynamic> jsLeak) {
+    return ConfigWebsite(
+      type: website[cId],
+      website: website[cType],
+      listbookhtml: Listbookhtml.db(listbook),
+      chapterhtml: Chapterhtml.db(chapter),
+      jsleak: Jsleak.db(jsLeak),
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         'type': type,
         'website': website,
@@ -141,6 +155,15 @@ class Chapterhtml {
       querryLinkPre: json['querryLinkPre'],
       querryTextChapter: json['querryTextChapter'],
       querryTitle: json['querryTitle'],
+    );
+  }
+
+  factory Chapterhtml.db(Map<String, dynamic> json) {
+    return Chapterhtml(
+      querryLinkNext: json[cQuerryLinkNext],
+      querryLinkPre: json[cQuerryLinkPre],
+      querryTextChapter: json[cQuerryTextChapter],
+      querryTitle: json[cQuerryTitle],
     );
   }
 
@@ -221,6 +244,17 @@ class Jsleak {
     );
   }
 
+  factory Jsleak.db(Map<String, dynamic> json) {
+    return Jsleak(
+      jsIndexing: json[cJsIndexing],
+      jsListChapter: json[cJsListChapter],
+      jsActionNext: json[cJsActionNext],
+      jsDescription: json[cJsDescription],
+      jsCategory: json[cJsCategory],
+      jsOther: json[cJsOther],
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         'jsIndexing': jsIndexing,
         'jsListChapter': jsListChapter,
@@ -296,6 +330,17 @@ class Listbookhtml {
       queryAuthor: json['queryAuthor'],
       queryview: json['queryview'],
       queryHref: json['queryHref'],
+    );
+  }
+
+  factory Listbookhtml.db(Map<String, dynamic> json) {
+    return Listbookhtml(
+      querryList: json[cQuerryList],
+      queryText: json[cQueryText],
+      queryScr: json[cQueryScr],
+      queryAuthor: json[cQueryAuthor],
+      queryview: json[cQueryview],
+      queryHref: json[cQueryHref],
     );
   }
 

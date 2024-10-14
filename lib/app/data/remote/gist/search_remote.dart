@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:audio_youtube/app/core/base/base_remote_source.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 
+import '../../../../gen/assets.gen.dart';
 import '../../model/search_website_model.dart';
 
 abstract class SearchRemoteDataSoure {
   Future<List<dynamic>> fetchDataSearch();
+  Future<List> fetchAssets();
 }
 
 class SearchRemoteDataSoureImpl extends BaseRemoteSource
@@ -31,5 +34,19 @@ class SearchRemoteDataSoureImpl extends BaseRemoteSource
     ListSearchTag instance = ListSearchTag.json(json);
     ListSearchName instanceName = ListSearchName.json(json);
     return [instance, instanceName];
+  }
+
+  @override
+  Future<List> fetchAssets() async {
+    try {
+      final String response =
+          await rootBundle.loadString(Assets.jsons.defaultSearch);
+      var json = jsonDecode(response);
+      ListSearchTag instance = ListSearchTag.json(json);
+      ListSearchName instanceName = ListSearchName.json(json);
+      return [instance, instanceName];
+    } catch (e) {
+      rethrow;
+    }
   }
 }

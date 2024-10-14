@@ -7,9 +7,8 @@ import 'package:flutter/material.dart';
 const double navigationPanelHeight = 55;
 
 class AppNavigationBar extends StatelessWidget {
-  const AppNavigationBar({
-    super.key,
-  });
+  const AppNavigationBar({super.key, required this.callBack});
+  final Function(int) callBack;
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +31,14 @@ class AppNavigationBar extends StatelessWidget {
                 AppIcons.naviHome,
                 size: 18,
               ),
-              Icon(AppIcons.naviStore, size: 18),
+              Icon(AppIcons.appSearch, size: 18),
+              Icon(AppIcons.appRank, size: 18),
               Icon(AppIcons.naviAccount, size: 18)
             ],
             index: 0,
-            onTap: (i) {},
+            onTap: (i) {
+              callBack(i);
+            },
           ),
         ),
       ),

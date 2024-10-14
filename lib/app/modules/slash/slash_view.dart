@@ -1,9 +1,12 @@
 import 'package:audio_youtube/app/core/utils/util.dart';
 import 'package:audio_youtube/app/core/values/text_styles.dart';
+import 'package:audio_youtube/app/data/repository/database_repository.dart';
 import 'package:audio_youtube/app/modules/home/views/home_view.dart';
 import 'package:audio_youtube/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import '../../data/repository/gist_repository.dart';
 import '../../data/service/audio/custom_audio.dart';
 import '../../data/service/sqlite/sqlite_helper.dart';
 
@@ -23,10 +26,14 @@ class _SlashViewState extends State<SlashView> {
 
   SMINumber? progress;
   SMITrigger? reset;
+  final GistRepository _gistRepository =
+      Get.find(tag: (GistRepository).toString());
+
+  final DatabaseRepository database =
+      Get.find(tag: (DatabaseRepository).toString());
 
   @override
   void initState() {
-    _loadRiveFile();
     init();
     super.initState();
   }
@@ -35,8 +42,34 @@ class _SlashViewState extends State<SlashView> {
     WidgetsFlutterBinding.ensureInitialized();
     await SingletonAudiohanle.instance.init();
     await DatabaseHelper().initDb();
-    await Future.delayed(const Duration(seconds: 5));
+    await _initConfigWebsite();
+    await _initCategory();
+    await _initSearch();
     toHome();
+  }
+
+  Future _initCategory() async {
+    try {
+      await _gistRepository.downloadCategory();
+    } catch (e) {
+      debugPrint("Tải dữ liệu thể loại thất bại!");
+    }
+  }
+
+  Future _initSearch() async {
+    try {
+      await _gistRepository.downloadConfigSearch();
+    } catch (e) {
+      debugPrint("Tải dữ liệu tìm kiếm thất bại!");
+    }
+  }
+
+  Future _initConfigWebsite() async {
+    try {
+      await _gistRepository.downloadConfigWebsite();
+    } catch (e) {
+      debugPrint("[ERROR] [_initConfigWebsite] $e");
+    }
   }
 
   void onInit(Artboard artboard) async {
@@ -45,12 +78,6 @@ class _SlashViewState extends State<SlashView> {
         StateMachineController.fromArtboard(artboard, 'State Machine');
     if (_controller != null) {
       artboard.addController(_controller!);
-
-      //listeners
-      // _controller.addEventListener(onRiveEvent);
-
-      //là cái trigger input
-      //Thay đổi giá trị đầu vào noInternet.value = true
       noInternet = _controller?.findSMI("No Internet");
       chat = _controller?.findSMI("Chat");
       error = _controller?.findSMI("Error");
@@ -75,16 +102,16 @@ class _SlashViewState extends State<SlashView> {
     super.dispose();
   }
 
-  RiveFile? _riveAudioAssetFile;
-  Future<void> _loadRiveFile() async {
-    final riveFile = await RiveFile.asset(
-      Assets.rives.bgrCatbot.path,
-    );
+  // RiveFile? _riveAudioAssetFile;
+  // Future<void> _loadRiveFile() async {
+  //   // final riveFile = await RiveFile.asset(
+  //   //   Assets.rives.bgrCatbot.path,
+  //   // );
 
-    setState(() {
-      _riveAudioAssetFile = riveFile;
-    });
-  }
+  //   // setState(() {
+  //   //   _riveAudioAssetFile = riveFile;
+  //   // });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +119,13 @@ class _SlashViewState extends State<SlashView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _riveAudioAssetFile != null
-              ? Expanded(
-                  child: RiveAnimation.direct(
-                    _riveAudioAssetFile!,
-                    onInit: onInit,
-                  ),
-                )
-              : const SizedBox.shrink(),
+          Expanded(
+            child: RiveAnimation.asset(
+              Assets.rives.bgrCatbot.path,
+              onInit: onInit,
+            ),
+          ),
+
           Text(
             "Đang tải tài nguyên...",
             style: afaca.copyWith(fontWeight: FontWeight.bold),

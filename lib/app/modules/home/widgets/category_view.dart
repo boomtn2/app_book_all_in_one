@@ -6,7 +6,6 @@ import 'package:audio_youtube/app/modules/home/controllers/home_controller.dart'
 import 'package:audio_youtube/app/modules/home/widgets/title.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/values/app_values.dart';
 import 'sli_expend.dart';
 

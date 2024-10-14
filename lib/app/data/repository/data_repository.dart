@@ -24,10 +24,10 @@ class DataRepository {
 
   DataRepository._internal();
 
-  ConfigWebsiteModel? configWebsite;
-  ListSearchTag? tagSearch;
-  ListSearchName? nameSearch;
-  List<WebsiteTag>? tagWebsite;
+  // ConfigWebsiteModel? configWebsite;
+  // ListSearchTag? tagSearch;
+  // ListSearchName? nameSearch;
+  // List<WebsiteTag>? tagWebsite;
   final PanelController panelController = PanelController();
   AnimationController? animationController;
   BookModel? model;
@@ -38,7 +38,7 @@ class DataRepository {
   YoutubeSearchParamModel? youtubeSearchParamModel;
   String? urlDtruyen;
 
-  FlowerRemote _flowerRemote = FlowerRemote();
+  final FlowerRemote _flowerRemote = FlowerRemote();
 
   void flowerTTS() async {
     bool firt = true;

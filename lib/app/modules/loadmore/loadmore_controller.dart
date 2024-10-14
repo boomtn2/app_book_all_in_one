@@ -51,7 +51,6 @@ class LoadMoreController extends GetxController {
     if (isLoading) return;
     isLoading = true;
 
-    print("loadmore");
     List<BookModel> temp = [];
     final data = await _htmlRepository.dtruyenLoadMore(
         "https://dtruyen.net/truyen-nu-cuong-hay/", index);

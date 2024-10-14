@@ -1,31 +1,42 @@
 import 'package:audio_youtube/app/core/base/base_controller.dart';
 import 'package:audio_youtube/app/core/utils/util.dart';
-
-import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:audio_youtube/app/modules/webview/views/webview_book_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-
 import '../../../data/model/models_export.dart';
+import '../../../data/repository/database_repository.dart';
 
 class SearchBookController extends BaseController {
-  DataRepository get _dataRepository => DataRepository.instance;
-  ListSearchTag? get tagSearch => _dataRepository.tagSearch;
-  ListSearchName? get nameSearch => _dataRepository.nameSearch;
+  final DatabaseRepository _databaseRepository =
+      Get.find(tag: (DatabaseRepository).toString());
+  ListSearchTag? tagSearch;
+  ListSearchName? nameSearch;
 
   RxList<GroupTag> grTag = <GroupTag>[].obs;
+  List<WebsiteTag> listWebsiteTag = [];
   RxBool isSearchName = false.obs;
   @override
   void onInit() {
+    debugPrint("[onInit] [SearchController]");
     super.onInit();
     _init();
   }
 
-  void _init() {
-    if (_dataRepository.tagWebsite != null) {
-      grTag.value = _dataRepository.tagWebsite![0].tags;
+  void _init() async {
+    listWebsiteTag = await _databaseRepository.getAllCatregory();
+
+    if (listWebsiteTag.isNotEmpty) {
+      final tags = listWebsiteTag.first;
+      List<GroupTag> temp = [tags.hotTag, ...tags.tags];
+      grTag.value = temp;
     }
+
+    final listSearchName = await _databaseRepository.getAllSearchName();
+
+    nameSearch = ListSearchName(listSearchName: listSearchName);
+
+    final listSearchTag = await _databaseRepository.getAllSearchTag();
+    tagSearch = ListSearchTag(listSearchTag: listSearchTag);
   }
 
   // RxMap<String, List> tagSelected = <String, List>{}.obs;

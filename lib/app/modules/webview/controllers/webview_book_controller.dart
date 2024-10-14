@@ -1,22 +1,14 @@
 import 'dart:convert';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_youtube/app/core/base/base_controller.dart';
-
-import 'package:audio_youtube/app/data/model/config_website.dart';
 import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:audio_youtube/app/data/service/audio/custom_audio.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
 import '../../../core/utils/conver_string.dart';
 
 class WebViewBookController extends BaseController with WidgetsBindingObserver {
-  DataRepository get _dataRepository => DataRepository.instance;
-  ConfigWebsiteModel? get _configWebsite => _dataRepository.configWebsite;
-
   final String url;
 
   WebViewBookController({required this.url});

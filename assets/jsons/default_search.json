@@ -1,0 +1,94 @@
+{
+    "search-tag": [
+        {
+            "type": "wiki",
+            "website": "https://truyenwikidich.net",
+            "path": "/tim-kiem",
+            "param-type": "param",
+            "fill": [
+                {
+                    "sort": {
+                        "name": "Lọc",
+                        "param": "so",
+                        "values": [
+                            {
+                                "Đọc nhiều nhất": "1"
+                            },
+                            {
+                                "Rating cao": "2"
+                            },
+                            {
+                                "Mới nhất": "4"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "year": {
+                        "name": "Năm",
+                        "param": "y",
+                        "values": [
+                            {
+                                "2024": "2024"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "params": {
+                "qs": "1",
+                "m": "3",
+                "vo": "1"
+            },
+            "nextpage": {
+                "param": "start",
+                "begin": 0,
+                "step": 20
+            }
+        },
+        {
+            "type": "dtruyen",
+            "website": "https://dtruyen.com/",
+            "path": "",
+            "param-type": "path",
+            "fill": [],
+            "nextpage": {
+                "param": "start",
+                "begin": 1,
+                "step": 1
+            }
+        }
+    ],
+    "search-name": [
+        {
+            "type": "wiki",
+            "website": "https://truyenwikidich.net",
+            "path": "/tim-kiem",
+            "param-type": "param",
+            "param": "q",
+            "fill": [],
+            "params": {
+                "qs": "1"
+            },
+            "nextpage": {
+                "param": "start",
+                "begin": 0,
+                "step": 20
+            }
+        },
+        {
+            "type": "dtruyen",
+            "website": "https://dtruyen.com/",
+            "path": "/searching",
+            "param-type": "path",
+            "fill": [],
+            "params": {},
+            "param": "q",
+            "nextpage": {
+                "param": "start",
+                "begin": 1,
+                "step": 1
+            }
+        }
+    ]
+}
