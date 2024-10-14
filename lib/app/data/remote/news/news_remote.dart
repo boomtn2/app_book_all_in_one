@@ -35,6 +35,7 @@ class NewsRemoteDataSourceImpl extends BaseRemoteSource
     List<BookModel> list = [];
     final dataList = json["data"] as List;
     for (var element in dataList) {
+      print("${element["podcast"]["path"]}");
       list.add(BookModel(
           id: element["podcast"]["path"],
           title: element["title"] ?? '',

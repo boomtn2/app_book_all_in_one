@@ -103,21 +103,30 @@ class CAudioHandle extends BaseAudioHandler with QueueHandler {
 
   @override
   Future<void> addQueueItem(MediaItem mediaItem) {
-    playlist?.add(
-      _adapterMedia(mediaItem),
-    );
+    if (playlist == null) {
+      updateQueue([mediaItem]);
+    } else {
+      playlist?.add(
+        _adapterMedia(mediaItem),
+      );
+    }
+
     return super.addQueueItem(mediaItem);
   }
 
   @override
   Future<void> addQueueItems(List<MediaItem> mediaItems) {
-    playlist?.addAll(
-      List<AudioSource>.from(mediaItems
-          .map(
-            (e) => _adapterMedia(e),
-          )
-          .toList()),
-    );
+    if (playlist == null) {
+      updateQueue(mediaItems);
+    } else {
+      playlist?.addAll(
+        List<AudioSource>.from(mediaItems
+            .map(
+              (e) => _adapterMedia(e),
+            )
+            .toList()),
+      );
+    }
 
     return super.addQueueItems(mediaItems);
   }

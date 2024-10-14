@@ -42,7 +42,7 @@ class PostCardController extends GetxController {
   void addQueue(int index) {
     try {
       SingletonAudiohanle.instance.audioHandler
-          ?.addQueueItem(getMediaItem(playList[index]));
+          ?.addQueueItem(getMediaItem(playListMp3[index]));
     } catch (e) {
       debugPrint("Debug $e");
     }
