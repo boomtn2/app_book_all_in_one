@@ -27,19 +27,33 @@ class HomeView extends BaseView<HomeController> {
     return CustomScrollView(
       slivers: [
         const SliverToBoxAdapter(
-          child: Column(
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Icon(FluentIcons.book_48_regular),
-                  Text('Truyện hán việt')
-                ],
+              Expanded(
+                child: ListTile(
+                  leading: Icon(AppIcons.appBooks),
+                  title: Text(
+                    'Truyện hán việt',
+                    style: afaca,
+                  ),
+                  subtitle: Text(
+                    'Miễn phí',
+                    style: afaca,
+                  ),
+                ),
               ),
-              Row(
-                children: [
-                  Icon(FluentIcons.book_coins_24_regular),
-                  Text('Truyện dịch việt')
-                ],
+              Expanded(
+                child: ListTile(
+                  leading: Icon(FluentIcons.book_coins_24_regular),
+                  title: Text(
+                    'Truyện dịch việt',
+                    style: afaca,
+                  ),
+                  subtitle: Text(
+                    '> 1000 bộ',
+                    style: afaca,
+                  ),
+                ),
               ),
             ],
           ),

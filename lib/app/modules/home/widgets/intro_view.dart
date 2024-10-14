@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../core/values/app_values.dart';
 import '../../../core/values/text_styles.dart';
 import '../../../data/model/book_model.dart';
+import '../../../views/views/category_dtruyen_view.dart';
 import '../../../views/views/item_card_book_view.dart';
 import '../controllers/home_controller.dart';
 import 'sli_expend.dart';
@@ -27,13 +28,20 @@ class IntroView extends StatelessWidget {
                 child: Column(
                   children: [
                     TitleView(
-                      title: 'Giới thiệu',
+                      title: 'Dịch việt',
                       style: bigTitleStyle.s20,
                       funtion: () {
                         controller.openLoadMore(
                             controller.dtruyenListBook, context);
                       },
                     ),
+                    CategoryDtruyenView(
+                      callBack: (p0) {
+                        controller.openLoadMore([], context,
+                            url: 'https://dtruyen.net$p0');
+                      },
+                    ),
+                    10.h,
                     Obx(() => _body(
                         MediaQuery.sizeOf(context),
                         controller.dtruyenListBook,

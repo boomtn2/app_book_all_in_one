@@ -31,8 +31,8 @@ class DatabaseHelper {
 
   Future<Database> initDb() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    debugPrint('initDb ${documentsDirectory.path}');
-    String path = join("/storage/emulated/0/Download", nameDB);
+
+    String path = join(documentsDirectory.path, nameDB);
     var myDb = await openDatabase(path, version: 1, onCreate: _onCreate);
     _db = myDb;
     return myDb;

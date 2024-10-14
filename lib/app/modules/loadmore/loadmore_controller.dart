@@ -2,12 +2,10 @@ import 'package:audio_youtube/app/data/model/book_model.dart';
 import 'package:audio_youtube/app/data/repository/data_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../core/const.dart';
 import '../../core/utils/util.dart';
 import '../../data/repository/html_repository.dart';
 import '../book/views/book_view.dart';
-import '../webview/views/webview_book_view.dart';
 import '../youtube/detail_video/view/detail_video_youtube_view.dart';
 
 class LoadMoreController extends GetxController {
@@ -18,21 +16,18 @@ class LoadMoreController extends GetxController {
   LoadMoreController({required List<BookModel> books}) {
     list.value = books;
     if (books.isNotEmpty) {
+      index = 2;
+      if (books.first.type != Const.typeRSS) {
+        isLoadMore = false;
+      }
+    } else {
       index = 1;
       loadMore();
-    } else {
-      index = 2;
+      isLoadMore = false;
     }
   }
 
-  String? url;
   int index = 1;
-
-  @override
-  void onInit() {
-    url = DataRepository.instance.urlDtruyen;
-    super.onInit();
-  }
 
   bool listener(ScrollEndNotification notification) {
     if (isLoadMore == false) {
@@ -53,7 +48,7 @@ class LoadMoreController extends GetxController {
 
     List<BookModel> temp = [];
     final data = await _htmlRepository.dtruyenLoadMore(
-        "https://dtruyen.net/truyen-nu-cuong-hay/", index);
+        DataRepository.instance.urlDtruyen ?? '', index);
 
     index += 1;
     temp.addAll(list);
@@ -70,10 +65,8 @@ class LoadMoreController extends GetxController {
     if (context != null) {
       if (book.type == Const.typePlayList) {
         Util.navigateNamed(context, DetailVideoYoutubeView.name, extra: book);
-      } else if (book.type == Const.typeRSS) {
+      } else {
         Util.navigateNamed(context, BookView.name, extra: book);
-      } else if (book.type == Const.typeText) {
-        Util.navigateNamed(context, WebViewBookView.name, extra: book.id);
       }
     }
   }

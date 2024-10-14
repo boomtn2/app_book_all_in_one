@@ -55,14 +55,14 @@ class HomeController extends BaseController {
   void onInit() async {
     debugPrint("[onInit] [HomeController]");
     super.onInit();
-    // await _loadNews();
-    // await Future.delayed(const Duration(seconds: 4));
-    // await _loadDtruyen();
-    // await Future.delayed(const Duration(seconds: 2));
-    // await _loadRSS();
-    // await Future.delayed(const Duration(seconds: 1));
-    // await _loadHotSearchYoutube();
-    // await _getChannel();
+    await _loadNews();
+    await Future.delayed(const Duration(seconds: 1));
+    await _loadDtruyen();
+    await Future.delayed(const Duration(seconds: 1));
+    await _loadRSS();
+    await Future.delayed(const Duration(seconds: 1));
+    await _loadHotSearchYoutube();
+    await _getChannel();
 
     isLoadingDataSystem.value = false;
   }
@@ -186,7 +186,9 @@ class HomeController extends BaseController {
     }
   }
 
-  void openLoadMore(List<BookModel> list, BuildContext context) {
+  void openLoadMore(List<BookModel> list, BuildContext context, {String? url}) {
+    DataRepository.instance.urlDtruyen =
+        url ?? "https://dtruyen.net/truyen-nu-cuong-hay/";
     Util.navigateNamed(context, LoadMoreView.name, extra: list);
   }
 
